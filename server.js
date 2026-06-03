@@ -1,8 +1,27 @@
 require("dotenv").config();
-const express = require("express");
-const cors    = require("cors");
-const admin   = require("firebase-admin");
-const path    = require("path");
+const express  = require("express");
+const cors     = require("cors");
+const admin    = require("firebase-admin");
+const path     = require("path");
+const fetch    = require("node-fetch");
+
+// ========================
+// VERIFICA VARIÁVEIS
+// ========================
+const requiredEnvVars = [
+  "FIREBASE_PROJECT_ID",
+  "FIREBASE_CLIENT_EMAIL",
+  "FIREBASE_PRIVATE_KEY",
+  "FIREBASE_DATABASE_URL",
+  "FIREBASE_API_KEY"
+];
+
+requiredEnvVars.forEach(varName => {
+  if (!process.env[varName]) {
+    console.error(`❌ Variável de ambiente faltando: ${varName}`);
+    process.exit(1);
+  }
+});
 
 // ========================
 // FIREBASE ADMIN
@@ -22,6 +41,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "frontend")));
+
 
 // ========================
 // ROTA: LOGIN
@@ -233,8 +253,6 @@ app.post("/api/rotate-token", async (req, res) => {
         timestamp:   new Date().toISOString()
       }]
     };
-
-    const fetch = (await import("node-fetch")).default;
 
     // Tenta editar mensagem existente
     const msgSnap  = await db.ref("config/tokenMessageId").once("value");
