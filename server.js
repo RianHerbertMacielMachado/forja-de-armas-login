@@ -1,9 +1,9 @@
 require("dotenv").config();
-const express  = require("express");
-const cors     = require("cors");
-const admin    = require("firebase-admin");
-const path     = require("path");
-const fetch    = require("node-fetch");
+const express = require("express");
+const cors    = require("cors");
+const admin   = require("firebase-admin");
+const path    = require("path");
+const fetch   = require("node-fetch");
 
 // ========================
 // VERIFICA VARIÁVEIS
@@ -42,7 +42,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "frontend")));
 
-
 // ========================
 // ROTA: LOGIN
 // ========================
@@ -52,14 +51,9 @@ app.post("/api/login", async (req, res) => {
     return res.status(400).json({ error: "Dados incompletos." });
 
   try {
-    const email    = `${user.toLowerCase()}@forja.rp`;
-    const userRec  = await admin.auth().getUserByEmail(email).catch(() => null);
-    if (!userRec)
-      return res.status(401).json({ error: "Usuário ou senha incorretos." });
+    const email  = `${user.toLowerCase()}@forja.rp`;
+    const apiKey = process.env.FIREBASE_API_KEY;
 
-    // Verifica senha via Firebase Auth REST API
-    const fetch   = (await import("node-fetch")).default;
-    const apiKey  = process.env.FIREBASE_API_KEY;
     const authRes = await fetch(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
       {
@@ -68,19 +62,23 @@ app.post("/api/login", async (req, res) => {
         body:    JSON.stringify({ email, password, returnSecureToken: true })
       }
     );
-    const authData = await authRes.json();
-    if (!authRes.ok)
-      return res.status(401).json({ error: "Usuário ou senha incorretos." });
 
-    const uid         = userRec.uid;
+    const authData = await authRes.json();
+
+    if (!authRes.ok) {
+      console.error("Erro auth Firebase:", authData);
+      return res.status(401).json({ error: "Usuário ou senha incorretos." });
+    }
+
+    const uid         = authData.localId;
     const profileSnap = await db.ref(`smiths/${uid}`).once("value");
+
     if (!profileSnap.exists())
       return res.status(404).json({ error: "Perfil não encontrado. Contate o administrador." });
 
     const profile     = { id: uid, ...profileSnap.val() };
     const customToken = await admin.auth().createCustomToken(uid);
 
-    // Log
     await db.ref("logs").push({
       type:      "login",
       message:   `Forjador "${profile.displayName}" fez login.`,
@@ -106,9 +104,9 @@ app.post("/api/register", async (req, res) => {
     return res.status(400).json({ error: "Preencha todos os campos." });
 
   try {
-    // Verifica token
     const tokenSnap = await db.ref("config/registerToken").once("value");
     const tokenData = tokenSnap.exists() ? tokenSnap.val() : null;
+
     if (!tokenData)
       return res.status(401).json({ error: "Nenhuma chave ativa." });
     if (tokenData.used)
@@ -116,25 +114,24 @@ app.post("/api/register", async (req, res) => {
     if (token.toUpperCase() !== tokenData.token.toUpperCase())
       return res.status(401).json({ error: "Chave inválida." });
 
-    // Verifica duplicatas
     const smithsSnap = await db.ref("smiths").once("value");
     if (smithsSnap.exists()) {
+      let userExists     = false;
+      let passportExists = false;
       smithsSnap.forEach(child => {
         const s = child.val();
-        if (s.user && s.user.toLowerCase() === user.toLowerCase())
-          throw { code: "USER_EXISTS", message: "Usuário já cadastrado." };
-        if (s.passport && s.passport.trim() === passport)
-          throw { code: "PASSPORT_EXISTS", message: `Passaporte "${passport}" já cadastrado.` };
+        if (s.user && s.user.toLowerCase() === user.toLowerCase()) userExists = true;
+        if (s.passport && s.passport.trim() === passport) passportExists = true;
       });
+      if (userExists)     return res.status(409).json({ error: "Usuário já cadastrado." });
+      if (passportExists) return res.status(409).json({ error: `Passaporte "${passport}" já cadastrado.` });
     }
 
-    // Cria usuário no Firebase Auth
-    const email     = `${user.toLowerCase()}@forja.rp`;
-    const userRec   = await admin.auth().createUser({ email, password });
-    const uid       = userRec.uid;
-    const fullName  = `Forjador ${displayName}`;
+    const email    = `${user.toLowerCase()}@forja.rp`;
+    const userRec  = await admin.auth().createUser({ email, password });
+    const uid      = userRec.uid;
+    const fullName = `Forjador ${displayName}`;
 
-    // Salva perfil
     await db.ref(`smiths/${uid}`).set({
       user:        user.toLowerCase(),
       displayName: fullName,
@@ -142,10 +139,8 @@ app.post("/api/register", async (req, res) => {
       createdAt:   new Date().toISOString()
     });
 
-    // Marca token como usado
     await db.ref("config/registerToken").update({ used: true });
 
-    // Log
     await db.ref("logs").push({
       type:      "register",
       message:   `Novo forjador: "${fullName}" (${user})`,
@@ -156,8 +151,6 @@ app.post("/api/register", async (req, res) => {
     res.json({ success: true, displayName: fullName, user: user.toLowerCase() });
 
   } catch (e) {
-    if (e.code === "USER_EXISTS" || e.code === "PASSPORT_EXISTS")
-      return res.status(409).json({ error: e.message });
     if (e.code === "auth/email-already-exists")
       return res.status(409).json({ error: "Usuário já cadastrado no sistema." });
     console.error("Erro registro:", e);
@@ -225,6 +218,7 @@ app.post("/api/admin/login", async (req, res) => {
     res.status(500).json({ error: "Erro interno." });
   }
 });
+
 // ========================
 // ROTA: ROTACIONAR TOKEN
 // ========================
@@ -239,7 +233,6 @@ app.post("/api/rotate-token", async (req, res) => {
       token, used: false, createdAt: new Date().toISOString()
     });
 
-    // Envia ao Discord
     const TOKEN_WEBHOOK = "https://discord.com/api/webhooks/1510332405754499142/IegWcsQp-JSkI1aBJH08B3fN-yifPXdRwmXt1n_cXUwn9L0cCTr905UffrhBxjr9HRum";
     const now     = new Date().toLocaleString("pt-BR");
     const payload = {
@@ -254,9 +247,9 @@ app.post("/api/rotate-token", async (req, res) => {
       }]
     };
 
-    // Tenta editar mensagem existente
-    const msgSnap  = await db.ref("config/tokenMessageId").once("value");
-    const msgId    = msgSnap.exists() ? msgSnap.val() : null;
+    const msgSnap = await db.ref("config/tokenMessageId").once("value");
+    const msgId   = msgSnap.exists() ? msgSnap.val() : null;
+
     if (msgId) {
       const editRes = await fetch(`${TOKEN_WEBHOOK}/messages/${msgId}`, {
         method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
@@ -286,6 +279,8 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
+// ========================
+// INICIA SERVIDOR
+// ========================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => console.log(`✅ Servidor rodando na porta ${PORT}`));
-

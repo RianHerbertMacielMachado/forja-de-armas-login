@@ -4,13 +4,9 @@
 const TOKEN_WEBHOOK = "https://discord.com/api/webhooks/1510332405754499142/IegWcsQp-JSkI1aBJH08B3fN-yifPXdRwmXt1n_cXUwn9L0cCTr905UffrhBxjr9HRum";
 
 let currentSmith = null;
-let _firebaseDB  = null;
-let _firebaseRef = null;
-let _firebaseSet = null;
-let _firebaseGet = null;
 
 // ========================
-// INIT FIREBASE CLIENT (apenas para ações pós-login via customToken)
+// INIT FIREBASE CLIENT (pós-login via customToken)
 // ========================
 async function initFirebaseClient(customToken) {
   const { initializeApp, getApps } =
@@ -21,12 +17,14 @@ async function initFirebaseClient(customToken) {
     await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
 
   const firebaseConfig = {
+    apiKey:      "AIzaSyA2C9_me50ygxsjS_95vQfJ7raRT_1UGlA",
     authDomain:  "forjadores-1a9ce.firebaseapp.com",
     databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
     projectId:   "forjadores-1a9ce"
   };
 
-  const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  const existingApps = getApps();
+  const app  = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
   const db   = getDatabase(app);
   const auth = getAuth(app);
 
@@ -74,7 +72,7 @@ async function sendOrUpdateTokenMessage(token, isUpdate) {
     }]
   };
   try {
-    const snapMsg = await firebaseGet(firebaseRef(firebaseDB, "config/tokenMessageId"));
+    const snapMsg   = await firebaseGet(firebaseRef(firebaseDB, "config/tokenMessageId"));
     const messageId = snapMsg.exists() ? snapMsg.val() : null;
     if (messageId && isUpdate) {
       const editRes = await fetch(
@@ -262,7 +260,6 @@ async function doLogin() {
       return;
     }
 
-    // Autentica o client Firebase com o customToken
     await initFirebaseClient(data.token);
 
     currentSmith = data.smith;
@@ -317,16 +314,16 @@ async function doChangePassword() {
   if (errEl) { errEl.textContent = ""; errEl.classList.add("hidden"); errEl.style.display = "none"; }
   if (sucEl) { sucEl.textContent = ""; sucEl.classList.add("hidden"); sucEl.style.display = "none"; }
 
-  if (!oldPass)                   { showCpError("Preencha a senha atual."); return; }
-  if (!newPass)                   { showCpError("Preencha a nova senha."); return; }
-  if (newPass.length < 6)         { showCpError("A nova senha deve ter ao menos 6 caracteres."); return; }
-  if (newPass !== newConfirm)     { showCpError("As senhas não coincidem."); return; }
-  if (oldPass === newPass)        { showCpError("A nova senha deve ser diferente da atual."); return; }
+  if (!oldPass)               { showCpError("Preencha a senha atual."); return; }
+  if (!newPass)               { showCpError("Preencha a nova senha."); return; }
+  if (newPass.length < 6)     { showCpError("A nova senha deve ter ao menos 6 caracteres."); return; }
+  if (newPass !== newConfirm) { showCpError("As senhas não coincidem."); return; }
+  if (oldPass === newPass)    { showCpError("A nova senha deve ser diferente da atual."); return; }
 
   setLoading(btn, true, "Salvando...");
 
   try {
-    // Verifica senha atual via login
+    // Verifica senha atual
     const checkRes = await fetch(`${window.API_URL}/login`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
@@ -338,7 +335,7 @@ async function doChangePassword() {
       return;
     }
 
-    // Altera senha via API
+    // Altera senha
     const res  = await fetch(`${window.API_URL}/change-password`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
@@ -423,9 +420,7 @@ async function doRegister() {
       return;
     }
 
-    // Rotaciona token via Firebase (após login admin ou via server — aqui dispara notificação Discord)
-    // O server já marcou o token como usado; agora geramos novo token via Firebase direto
-    // Para isso precisamos de acesso ao Firebase. Como não há sessão ainda, usamos a API admin.
+    // Rotaciona token via servidor
     await fetch(`${window.API_URL}/rotate-token`, { method: "POST" });
 
     const sEl = document.getElementById("regSuccess");
