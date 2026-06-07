@@ -41,6 +41,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "frontend")));
+app.use("/images", express.static(path.join(__dirname, "image")));
 
 // ========================
 // ROTA: LOGIN
