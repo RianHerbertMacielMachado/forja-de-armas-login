@@ -272,18 +272,37 @@ app.post("/api/rotate-token", async (req, res) => {
   }
 });
 
-// Adicione temporariamente no server.js para diagnóstico
-// Acesse: https://seu-app.railway.app/api/debug-images
+// ========================
+// ROTA: IMAGENS CASE-INSENSITIVE
+// ========================
 const fs = require("fs");
-app.get("/api/debug-images", (req, res) => {
-  try {
-    const imgDir = path.join(__dirname, "frontend", "image");
-    const files  = fs.readdirSync(imgDir);
-    res.json({ total: files.length, files: files.sort() });
-  } catch (e) {
-    res.json({ error: e.message });
+
+app.get("/image/:filename", (req, res) => {
+  const imgDir    = path.join(__dirname, "frontend", "image");
+  const requested = req.params.filename;
+
+  // Tenta o nome exato primeiro
+  const exactPath = path.join(imgDir, requested);
+  if (fs.existsSync(exactPath)) {
+    return res.sendFile(exactPath);
   }
+
+  // Busca case-insensitive
+  try {
+    const files = fs.readdirSync(imgDir);
+    const match = files.find(
+      f => f.toLowerCase() === requested.toLowerCase()
+    );
+    if (match) {
+      return res.sendFile(path.join(imgDir, match));
+    }
+  } catch (e) {
+    console.error("Erro ao ler pasta de imagens:", e);
+  }
+
+  res.status(404).send("Imagem não encontrada.");
 });
+
 
 
 // ========================

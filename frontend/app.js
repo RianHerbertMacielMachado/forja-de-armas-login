@@ -326,7 +326,7 @@ function buildWeaponGrid(prefix, selectedWeapons, activeCategory, searchVal) {
   grid.innerHTML = list.map(w => {
     const qty         = selectedWeapons[w.name] || 0;
     const isEnchanted = w.category.toLowerCase().includes("encantad");
-    // ✅ CORREÇÃO: sem %20 — o Express decodifica automaticamente espaços na URL
+    // ✅ Sem %20 — o Express e a rota case-insensitive cuidam do resto
     const imgSrc      = `image/${w.name}.png`;
     const imgId       = `${prefix}img-${sanitizeId(w.name)}`;
     const safeName    = w.name.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
@@ -361,8 +361,6 @@ function buildWeaponGrid(prefix, selectedWeapons, activeCategory, searchVal) {
       </div>`;
   }).join("");
 }
-
-
 
 function buildCategoryTabs(prefix, activeCategory) {
   const container = document.getElementById(`${prefix}CategoryTabs`);
