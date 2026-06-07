@@ -220,6 +220,18 @@ function clientUpdateArrows() {
   renderSummary("client", clientSelectedWeapons, clientArrowQtyVal, false);
 }
 
+function clientIncreaseArrows() {
+  clientArrowQtyVal += 100;
+  document.getElementById("clientArrowQty").value = clientArrowQtyVal;
+  clientUpdateArrows();
+}
+
+function clientDecreaseArrows() {
+  clientArrowQtyVal = Math.max(0, clientArrowQtyVal - 100);
+  document.getElementById("clientArrowQty").value = clientArrowQtyVal;
+  clientUpdateArrows();
+}
+
 function clientClearAll() {
   clientSelectedWeapons = {};
   clientArrowQtyVal     = 0;
@@ -448,6 +460,18 @@ function smithUpdateArrows() {
       ? `${smithArrowQtyVal} flechas = ${sets} conjunto(s) de 100 → ${cost.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`
       : "Insira a quantidade desejada de flechas (múltiplos de 100)";
   renderSummary("smith", smithSelectedWeapons, smithArrowQtyVal);
+}
+
+function smithIncreaseArrows() {
+  smithArrowQtyVal += 100;
+  document.getElementById("smithArrowQty").value = smithArrowQtyVal;
+  smithUpdateArrows();
+}
+
+function smithDecreaseArrows() {
+  smithArrowQtyVal = Math.max(0, smithArrowQtyVal - 100);
+  document.getElementById("smithArrowQty").value = smithArrowQtyVal;
+  smithUpdateArrows();
 }
 
 function smithClearAll() {

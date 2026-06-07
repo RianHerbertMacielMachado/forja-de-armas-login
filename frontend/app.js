@@ -5,7 +5,7 @@ window._appLoaded = true;
 const MATERIALS_RECIPE = {
   "Espadas e Machados Encantados": {
     "Pó Estelar": 3, "Elemento Primordial": 1, "Cristal": 3,
-    "Pedra da Lua": 3, "Essência de Luz": 3, "Pedra Rúnica": 1, "Ferro Mágico": 1
+    "Pedra da Lua": 3, "Essência de Luz": 1, "Pedra Rúnica": 1, "Ferro Mágico": 1
   },
   "Espadas e Machados Básicos": {
     "Cristal": 3, "Ferro Mágico": 1, "Pedra Rúnica": 1, "Elemento Primordial": 1
@@ -43,11 +43,11 @@ const MATERIALS_RECIPE = {
   "Arcos Encantados": {
     "Pena de Anjo": 3, "Elemento Primordial": 3, "Cristal": 3,
     "Madeira Mágica": 3, "Essência de Luz": 1, "Meteorito": 1,
-    "Ferro Mágico": 1, "Linha Mágica": 1
+    "Ferro Mágico": 1
   },
   "Arcos Básicos": {
-    "Pena de Anjo": 3, "Elemento Primordial": 3, "Cristal": 3,
-    "Madeira Mágica": 3, "Linha Mágica": 1
+    "Pena de Anjo": 3, "Elemento Primordial": 2, "Cristal": 3,
+    "Madeira Mágica": 3
   },
   "Flechas": {
     "Pena de Anjo": 10, "Pedra Rúnica": 10, "Linha Mágica": 10
@@ -60,7 +60,7 @@ const WEAPON_DATA = [
   { name: "Leviatabow",      category: "Arcos Encantados",              icon: "🏹", price: 37000 },
   { name: "Wingbow",         category: "Arcos Encantados",              icon: "🏹", price: 37000 },
   { name: "Vulkanbow",       category: "Arcos Encantados",              icon: "🏹", price: 37000 },
-  { name: "Herritt",         category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  // { name: "Herritt",         category: "Arcos Encantados",              icon: "🏹", price: 37000 },
   { name: "Bloodbow",        category: "Arcos Encantados",              icon: "🏹", price: 37000 },
   { name: "Colorbow",        category: "Arcos Encantados",              icon: "🏹", price: 37000 },
   { name: "Glowybow",        category: "Arcos Básicos",                 icon: "🏹", price: 25000 },

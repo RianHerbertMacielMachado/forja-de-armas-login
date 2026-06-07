@@ -320,7 +320,11 @@
           <h3>Quantidade de Flechas</h3>
           <div class="arrow-input-row">
             <label>Quantidade:</label>
-            <input type="number" id="clientArrowQty" min="0" step="100" value="0" oninput="clientUpdateArrows()"/>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button class="qty-btn" onclick="clientDecreaseArrows()">−</button>
+              <input type="number" id="clientArrowQty" min="0" step="100" value="0" oninput="clientUpdateArrows()" style="width:80px;text-align:center;"/>
+              <button class="qty-btn" onclick="clientIncreaseArrows()">+</button>
+            </div>
           </div>
           <div class="arrow-info" id="clientArrowInfo">Insira a quantidade desejada de flechas (múltiplos de 100)</div>
         </div>
@@ -429,7 +433,11 @@
           <h3>Quantidade de Flechas</h3>
           <div class="arrow-input-row">
             <label>Quantidade:</label>
-            <input type="number" id="smithArrowQty" min="0" step="100" value="0" oninput="smithUpdateArrows()"/>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button class="qty-btn" onclick="smithDecreaseArrows()">−</button>
+              <input type="number" id="smithArrowQty" min="0" step="100" value="0" oninput="smithUpdateArrows()" style="width:80px;text-align:center;"/>
+              <button class="qty-btn" onclick="smithIncreaseArrows()">+</button>
+            </div>
           </div>
           <div class="arrow-info" id="smithArrowInfo">Insira a quantidade desejada de flechas (múltiplos de 100)</div>
         </div>
