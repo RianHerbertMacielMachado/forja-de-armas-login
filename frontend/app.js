@@ -324,24 +324,25 @@ function buildWeaponGrid(prefix, selectedWeapons, activeCategory, searchVal) {
   }
 
   grid.innerHTML = list.map(w => {
-    const qty        = selectedWeapons[w.name] || 0;
+    const qty         = selectedWeapons[w.name] || 0;
     const isEnchanted = w.category.toLowerCase().includes("encantad");
-    const imgName    = w.name.replace(/ /g, "%20");
-    const imgId      = `${prefix}img-${sanitizeId(w.name)}`;
+    // ✅ CORREÇÃO: sem %20 — o Express decodifica automaticamente espaços na URL
+    const imgSrc      = `image/${w.name}.png`;
+    const imgId       = `${prefix}img-${sanitizeId(w.name)}`;
+    const safeName    = w.name.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     return `
       <div class="weapon-card ${qty > 0 ? "selected" : ""}" id="${prefix}card-${sanitizeId(w.name)}">
         ${isEnchanted ? '<div class="enchanted-badge"></div>' : ""}
-        <div class="weapon-img-wrap" onclick="openWeaponPreview('${w.name.replace(/'/g,"\\'")}', document.getElementById('${imgId}') ? document.getElementById('${imgId}').src : '', '${w.icon}')" title="Clique para ampliar">
+        <div class="weapon-img-wrap"
+          onclick="openWeaponPreview('${safeName}', '${imgSrc}', '${w.icon}')"
+          title="Clique para ampliar">
           <img
             id="${imgId}"
-            src="image/${imgName}.png"
+            src="${imgSrc}"
             alt="${w.name}"
             class="weapon-img"
-            onerror="
-              this.style.display='none';
-              document.getElementById('${imgId}-fallback').style.display='flex';
-            "
+            onerror="this.style.display='none';document.getElementById('${imgId}-fallback').style.display='flex';"
           />
           <div
             id="${imgId}-fallback"
@@ -353,13 +354,14 @@ function buildWeaponGrid(prefix, selectedWeapons, activeCategory, searchVal) {
         <div class="category-tag">${w.category}</div>
         <div class="price-tag">${formatCurrency(w.price)}</div>
         <div class="qty-controls">
-          <button class="qty-btn" onclick="${prefix}ChangeQty('${w.name.replace(/'/g,"\\'")}', -1, event)">−</button>
+          <button class="qty-btn" onclick="${prefix}ChangeQty('${safeName}', -1, event)">−</button>
           <span class="qty-display">${qty}</span>
-          <button class="qty-btn" onclick="${prefix}ChangeQty('${w.name.replace(/'/g,"\\'")}', 1, event)">+</button>
+          <button class="qty-btn" onclick="${prefix}ChangeQty('${safeName}', 1, event)">+</button>
         </div>
       </div>`;
   }).join("");
 }
+
 
 
 function buildCategoryTabs(prefix, activeCategory) {

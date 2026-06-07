@@ -272,6 +272,20 @@ app.post("/api/rotate-token", async (req, res) => {
   }
 });
 
+// Adicione temporariamente no server.js para diagnóstico
+// Acesse: https://seu-app.railway.app/api/debug-images
+const fs = require("fs");
+app.get("/api/debug-images", (req, res) => {
+  try {
+    const imgDir = path.join(__dirname, "frontend", "image");
+    const files  = fs.readdirSync(imgDir);
+    res.json({ total: files.length, files: files.sort() });
+  } catch (e) {
+    res.json({ error: e.message });
+  }
+});
+
+
 // ========================
 // ROTA PADRÃO — FRONTEND
 // ========================
@@ -284,3 +298,4 @@ app.get("*", (req, res) => {
 // ========================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => console.log(`✅ Servidor rodando na porta ${PORT}`));
+
