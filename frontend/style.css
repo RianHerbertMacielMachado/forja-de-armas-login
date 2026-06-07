@@ -1439,6 +1439,169 @@ header p {
   z-index: 9999;
 }
 
+/* ========================
+   TRANSFERÊNCIA DE PEDIDOS
+======================== */
+
+/* Botão de transferir no card do forjador */
+.transfer-actions-row {
+  margin-top: 10px;
+}
+
+.transfer-btn {
+  width: 100%;
+  padding: 9px 14px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.transfer-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.45);
+}
+
+/* Badge de transferência no card "Meus Pedidos" */
+.my-order-transfer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(124, 58, 237, 0.18);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: #c4b5fd;
+  margin-bottom: 8px;
+}
+
+/* Badge de transferência na fila de pedidos */
+.order-transfer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(124, 58, 237, 0.14);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: #c4b5fd;
+  margin-bottom: 8px;
+}
+
+/* Badge de transferência na consulta do cliente */
+.status-transfer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(124, 58, 237, 0.14);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: #c4b5fd;
+  margin-bottom: 8px;
+}
+
+/* Modal de transferência */
+.transfer-modal-box {
+  max-width: 460px !important;
+}
+
+/* Lista de forjadores no modal de transferência */
+.transfer-smiths-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  padding-right: 4px;
+}
+.transfer-smiths-list::-webkit-scrollbar       { width: 5px; }
+.transfer-smiths-list::-webkit-scrollbar-thumb { background: #7b2fff; border-radius: 4px; }
+
+/* Cada opção de forjador */
+.smith-transfer-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #1a1a3a;
+  border: 1px solid #2e2e5e;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.smith-transfer-option:hover {
+  border-color: #7b2fff55;
+  background: #22224a;
+}
+.smith-transfer-option.selected {
+  border-color: #7b2fff;
+  background: #2a1a4a;
+  box-shadow: 0 0 0 2px rgba(123, 47, 255, 0.25);
+}
+
+.smith-transfer-option input[type="radio"] {
+  accent-color: #7b2fff;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.smith-transfer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.smith-transfer-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #c084fc;
+}
+.smith-transfer-user {
+  font-size: 0.75rem;
+  color: #6d6d9a;
+}
+
+/* Botão confirmar transferência */
+.transfer-confirm-btn {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+}
+.transfer-confirm-btn:hover {
+  background: linear-gradient(135deg, #4338ca, #6d28d9) !important;
+}
+
+/* Campo de observação da transferência */
+.transfer-note-row {
+  margin-bottom: 4px;
+}
+.transfer-note-row input:focus {
+  border-color: #7b2fff !important;
+}
+
+/* Entrada de histórico de transferência nos cards */
+.my-order-history-item.transfer-history {
+  color: #c4b5fd;
+}
+
+/* Log de transferência no painel admin */
+.admin-log-card.log-transfer {
+  border-left-color: #7c3aed;
+}
+
 
 /* ========================
    RESPONSIVE

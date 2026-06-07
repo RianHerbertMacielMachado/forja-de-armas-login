@@ -57,6 +57,25 @@ function notifyNewOrder(order) {
 }
 
 // ========================
+// DELETAR MENSAGEM DO DISCORD VIA WEBHOOK
+// ========================
+async function deleteDiscordMessage(webhookUrl, messageId) {
+  if (!webhookUrl || !messageId) return;
+  try {
+    const res = await fetch(`${webhookUrl}/messages/${messageId}`, {
+      method: "DELETE"
+    });
+    if (res.ok || res.status === 204) {
+      console.log("🗑️ Mensagem do Discord deletada:", messageId);
+    } else {
+      console.warn("⚠️ Não foi possível deletar mensagem do Discord. Status:", res.status);
+    }
+  } catch (e) {
+    console.error("❌ Erro ao deletar mensagem do Discord:", e);
+  }
+}
+
+// ========================
 // ENVIAR/EDITAR MENSAGEM DE STATUS NO DISCORD DO FORJADOR
 // ========================
 async function sendOrUpdateStatusMessage(order, webhookUrl) {
@@ -69,7 +88,6 @@ async function sendOrUpdateStatusMessage(order, webhookUrl) {
     style: "currency", currency: "BRL"
   });
 
-  // ✅ Calcula materiais necessários
   const entries  = Object.entries(order.weapons || {});
   const mats     = calculateMaterials(entries, order.arrows || 0);
   const matsLines = Object.entries(mats).length
@@ -80,14 +98,20 @@ async function sendOrUpdateStatusMessage(order, webhookUrl) {
     .map(h => `${h.emoji} **${h.label}** — ${h.time}`)
     .join("\n") || `${statusInfo.emoji} **${statusInfo.label}**`;
 
+  // Badge de transferência no título e na descrição
+  const transferBadge = order.transferredFrom
+    ? `\n\n> 🔄 **Pedido Transferido** — recebido de **${order.transferredFrom}**`
+    : "";
+
   const payload = {
     username:   "⚔️ Forja de Armas",
     avatar_url: "https://i.imgur.com/AfFp7pu.png",
     embeds: [{
-      title: `${statusInfo.emoji} Pedido #${order.shortId} — ${statusInfo.label}`,
+      title: `${statusInfo.emoji} Pedido #${order.shortId} — ${statusInfo.label}${order.transferredFrom ? "  🔄" : ""}`,
       description:
         `**👤 Cliente:** ${order.clientName}\n` +
-        `**🪪 Passaporte:** ${order.passport}\n\n` +
+        `**🪪 Passaporte:** ${order.passport}\n` +
+        `${transferBadge}\n\n` +
         `**📦 Itens do Pedido:**\n${weaponLines}\n${arrowLine}\n` +
         `**⚗️ Materiais Necessários:**\n${matsLines}\n\n` +
         `**💰 Total:** ${totalFormatted}\n\n` +
@@ -258,6 +282,10 @@ async function consultarStatusPedido() {
         ? `<div class="status-smith">🔨 Forjador: <strong>${order.smithName}</strong></div>`
         : `<div class="status-smith">⏳ Aguardando forjador...</div>`;
 
+      const transferBadge = order.transferredFrom
+        ? `<div class="status-transfer-badge">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
+        : "";
+
       const historyHtml = (order.statusHistory || []).map(h =>
         `<div class="status-history-item">${h.emoji} <strong>${h.label}</strong> <span>${h.time}</span></div>`
       ).join("");
@@ -271,6 +299,7 @@ async function consultarStatusPedido() {
             <span class="status-order-id">#${order.shortId || order.id.slice(-6).toUpperCase()}</span>
           </div>
           ${smithLine}
+          ${transferBadge}
           <div class="status-items-row">${weaponLines}${arrowLine}</div>
           <div class="status-total">💰 ${totalFormatted}</div>
           ${historyHtml ? `<div class="status-history">${historyHtml}</div>` : ""}
@@ -484,6 +513,10 @@ function listenOrders() {
         style: "currency", currency: "BRL"
       });
 
+      const transferBadge = order.transferredFrom
+        ? `<div class="order-transfer-badge">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
+        : "";
+
       return `
         <div class="order-card" id="order-${order.id}">
           <div class="order-header">
@@ -493,6 +526,7 @@ function listenOrders() {
             </div>
             <span class="order-time">🕐 ${order.timestamp}</span>
           </div>
+          ${transferBadge}
           <div class="order-items">${weaponLines}${arrowLine}</div>
           <div class="order-total">💰 ${totalFormatted}</div>
           <div class="order-actions">
@@ -520,12 +554,10 @@ async function smithTakeOrder(id, resumeText, clientName) {
   }
 
   try {
-    // Busca dados completos do pedido
     const snap = await firebaseGet(firebaseRef(firebaseDB, `orders/${id}`));
     if (!snap.exists()) { showNotif("❌ Pedido não encontrado.", "#f87171"); return; }
     const order = { id, ...snap.val() };
 
-    // Atualiza pedido no Firebase — vincula ao forjador
     const takenAt = new Date().toLocaleString("pt-BR");
     const updatedOrder = {
       ...order,
@@ -541,7 +573,6 @@ async function smithTakeOrder(id, resumeText, clientName) {
 
     await firebaseSet(firebaseRef(firebaseDB, `orders/${id}`), updatedOrder);
 
-    // Envia mensagem no Discord do forjador e salva o messageId
     const msgId = await sendOrUpdateStatusMessage(updatedOrder, webhook);
     if (msgId) {
       await firebaseSet(
@@ -602,7 +633,6 @@ async function loadMyOrders() {
         style: "currency", currency: "BRL"
       });
 
-      // Calcula materiais necessários
       const entries  = Object.entries(order.weapons || {});
       const mats     = calculateMaterials(entries, order.arrows || 0);
       const matsHtml = Object.entries(mats).length
@@ -611,7 +641,6 @@ async function loadMyOrders() {
           ).join("")
         : "";
 
-      // Botões de status
       const statusButtons = ORDER_STATUSES
         .filter(s => s.key !== "queue")
         .map(s => `
@@ -628,6 +657,11 @@ async function loadMyOrders() {
         `<div class="my-order-history-item">${h.emoji} <strong>${h.label}</strong> — ${h.time}</div>`
       ).join("");
 
+      // Badge de transferência
+      const transferBadge = order.transferredFrom
+        ? `<div class="my-order-transfer-badge">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
+        : "";
+
       return `
         <div class="my-order-card" id="myorder-${order.id}">
           <div class="my-order-header">
@@ -639,11 +673,17 @@ async function loadMyOrders() {
               ${statusInfo.emoji} ${statusInfo.label}
             </span>
           </div>
+          ${transferBadge}
           <div class="order-items">${weaponLines}${arrowLine}</div>
           ${matsHtml ? `<div class="mats-row">${matsHtml}</div>` : ""}
           <div class="order-total">💰 ${totalFormatted}</div>
           ${historyHtml ? `<div class="my-order-history">${historyHtml}</div>` : ""}
           <div class="status-buttons-row">${statusButtons}</div>
+          <div class="transfer-actions-row">
+            <button class="transfer-btn" onclick="openTransferModal('${order.id}', '${escapeQuotes(order.clientName)}')">
+              🔄 Transferir Pedido
+            </button>
+          </div>
           ${order.status === "done" ? `
             <button class="order-dismiss-btn" style="margin-top:8px;width:100%;"
               onclick="confirmRemoveOrder('${order.id}', '${escapeQuotes(order.clientName)}')">
@@ -655,6 +695,228 @@ async function loadMyOrders() {
   } catch (e) {
     console.error(e);
     container.innerHTML = `<div class="empty-state">Erro ao carregar pedidos.</div>`;
+  }
+}
+
+// ========================
+// MODAL DE TRANSFERÊNCIA
+// ========================
+async function openTransferModal(orderId, clientName) {
+  // Remove modal anterior se existir
+  const existing = document.getElementById("transferModal");
+  if (existing) existing.remove();
+
+  // Busca todos os forjadores exceto o atual
+  let smithsList = [];
+  try {
+    const snap = await firebaseGet(firebaseRef(firebaseDB, "smiths"));
+    if (snap.exists()) {
+      snap.forEach(child => {
+        if (child.key !== currentSmith.id) {
+          smithsList.push({ id: child.key, ...child.val() });
+        }
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    showNotif("❌ Erro ao carregar forjadores.", "#f87171");
+    return;
+  }
+
+  if (!smithsList.length) {
+    showNotif("⚠️ Nenhum outro forjador disponível para transferência.", "#f59e0b");
+    return;
+  }
+
+  const smithOptions = smithsList.map(s => `
+    <label class="smith-transfer-option" id="transfer-opt-${s.id}">
+      <input type="radio" name="transferTarget" value="${s.id}" data-name="${escapeQuotes(s.displayName)}"/>
+      <div class="smith-transfer-info">
+        <span class="smith-transfer-name">${s.displayName}</span>
+        <span class="smith-transfer-user">👤 ${s.user} · 🪪 ${s.passport || "—"}</span>
+      </div>
+    </label>`).join("");
+
+  const modal = document.createElement("div");
+  modal.id = "transferModal";
+  modal.innerHTML = `
+    <div class="modal-overlay" id="transferOverlay">
+      <div class="modal-box transfer-modal-box">
+        <h3>🔄 Transferir Pedido</h3>
+        <p class="modal-subtitle">
+          Selecione o forjador que receberá o pedido de
+          <strong style="color:#c084fc;">${clientName}</strong>.
+        </p>
+        <div class="transfer-smiths-list" id="transferSmithsList">
+          ${smithOptions}
+        </div>
+        <div class="transfer-note-row">
+          <label style="font-size:0.82rem;color:#a78bfa;display:block;margin-bottom:6px;">
+            📝 Observação (opcional)
+          </label>
+          <input
+            type="text"
+            id="transferNote"
+            placeholder="Ex: Saindo agora, você pode continuar."
+            style="
+              width:100%;padding:9px 12px;
+              background:#1a1a3a;border:1px solid #3d3d7a;
+              border-radius:8px;color:#e0e0ff;font-size:0.85rem;outline:none;
+            "
+          />
+        </div>
+        <div class="login-error hidden" id="transferError" style="display:none;"></div>
+        <div class="modal-actions" style="margin-top:18px;">
+          <button class="modal-cancel-btn"  onclick="closeTransferModal()">Cancelar</button>
+          <button class="modal-confirm-btn transfer-confirm-btn" id="transferConfirmBtn"
+            onclick="confirmTransfer('${orderId}', '${escapeQuotes(clientName)}')">
+            🔄 Transferir
+          </button>
+        </div>
+      </div>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  // Highlight ao selecionar forjador
+  modal.querySelectorAll("input[name='transferTarget']").forEach(radio => {
+    radio.addEventListener("change", () => {
+      modal.querySelectorAll(".smith-transfer-option").forEach(opt =>
+        opt.classList.remove("selected")
+      );
+      radio.closest(".smith-transfer-option").classList.add("selected");
+    });
+  });
+
+  document.getElementById("transferOverlay").addEventListener("click", function (e) {
+    if (e.target === this) closeTransferModal();
+  });
+
+  document.addEventListener("keydown", function escTransfer(e) {
+    if (e.key === "Escape") {
+      closeTransferModal();
+      document.removeEventListener("keydown", escTransfer);
+    }
+  });
+}
+
+function closeTransferModal() {
+  const modal = document.getElementById("transferModal");
+  if (modal) {
+    const box = modal.querySelector(".modal-box");
+    if (box) box.style.animation = "modalOut 0.18s ease forwards";
+    setTimeout(() => modal.remove(), 180);
+  }
+}
+
+// ========================
+// CONFIRMAR TRANSFERÊNCIA
+// ========================
+async function confirmTransfer(orderId, clientName) {
+  const selected = document.querySelector("input[name='transferTarget']:checked");
+  const errEl    = document.getElementById("transferError");
+  const btn      = document.getElementById("transferConfirmBtn");
+  const note     = document.getElementById("transferNote")?.value.trim() || "";
+
+  if (errEl) { errEl.textContent = ""; errEl.classList.add("hidden"); errEl.style.display = "none"; }
+
+  if (!selected) {
+    if (errEl) {
+      errEl.textContent = "⚠️ Selecione um forjador para transferir.";
+      errEl.classList.remove("hidden");
+      errEl.style.display = "";
+    }
+    return;
+  }
+
+  const targetSmithId   = selected.value;
+  const targetSmithName = selected.getAttribute("data-name");
+
+  if (btn) { btn.disabled = true; btn.textContent = "Transferindo..."; btn.style.opacity = "0.7"; }
+
+  try {
+    // Busca dados completos do pedido
+    const snap = await firebaseGet(firebaseRef(firebaseDB, `orders/${orderId}`));
+    if (!snap.exists()) {
+      showNotif("❌ Pedido não encontrado.", "#f87171");
+      closeTransferModal();
+      return;
+    }
+
+    const order = { id: orderId, ...snap.val() };
+
+    // ── 1. Deleta a mensagem do Discord do forjador atual ──────────────────
+    if (order.discordMessageId) {
+      const oldWebhook = await getWebhook(); // webhook do forjador ATUAL
+      if (oldWebhook) {
+        await deleteDiscordMessage(oldWebhook, order.discordMessageId);
+      }
+    }
+
+    // ── 2. Busca a webhook do forjador de destino ──────────────────────────
+    const targetWebhookSnap = await firebaseGet(
+      firebaseRef(firebaseDB, `webhooks/${targetSmithId}`)
+    );
+    const targetWebhook = targetWebhookSnap.exists() ? targetWebhookSnap.val() : "";
+
+    const now = new Date().toLocaleString("pt-BR");
+
+    // ── 3. Monta o pedido atualizado ───────────────────────────────────────
+    const transferNote = note
+      ? `\n📝 Obs: "${note}"`
+      : "";
+
+    const updatedOrder = {
+      ...order,
+      smithId:         targetSmithId,
+      smithName:       targetSmithName,
+      discordMessageId: null,           // zera — nova mensagem será criada
+      transferredFrom: currentSmith.displayName,
+      transferNote:    note || null,
+      statusHistory:   [
+        ...(order.statusHistory || []),
+        {
+          key:   "transfer",
+          label: `Transferido por ${currentSmith.displayName} → ${targetSmithName}${transferNote}`,
+          emoji: "🔄",
+          time:  now
+        }
+      ]
+    };
+
+    await firebaseSet(firebaseRef(firebaseDB, `orders/${orderId}`), updatedOrder);
+
+    // ── 4. Cria nova mensagem no Discord do forjador de destino ────────────
+    if (targetWebhook) {
+      const newMsgId = await sendOrUpdateStatusMessage(updatedOrder, targetWebhook);
+      if (newMsgId) {
+        await firebaseSet(
+          firebaseRef(firebaseDB, `orders/${orderId}/discordMessageId`),
+          newMsgId
+        );
+      }
+    } else {
+      console.warn("⚠️ Forjador de destino não tem webhook configurada.");
+    }
+
+    // ── 5. Log ─────────────────────────────────────────────────────────────
+    if (typeof addLog === "function") {
+      addLog(
+        "order",
+        `Forjador "${currentSmith.displayName}" transferiu pedido #${order.shortId} ` +
+        `de "${clientName}" para "${targetSmithName}".` +
+        (note ? ` Obs: "${note}"` : "")
+      );
+    }
+
+    closeTransferModal();
+    showNotif(`🔄 Pedido transferido para ${targetSmithName}!`, "#7b2fff");
+    loadMyOrders();
+
+  } catch (e) {
+    console.error("Erro ao transferir pedido:", e);
+    showNotif("❌ Erro ao transferir pedido.", "#f87171");
+    if (btn) { btn.disabled = false; btn.textContent = "🔄 Transferir"; btn.style.opacity = "1"; }
   }
 }
 
@@ -684,7 +946,6 @@ async function updateOrderStatus(orderId, newStatusKey) {
       ]
     };
 
-    // Se concluído, agenda remoção automática em 24h
     if (newStatusKey === "done") {
       updatedOrder.doneAt      = new Date().toISOString();
       updatedOrder.removeAfter = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
@@ -692,7 +953,6 @@ async function updateOrderStatus(orderId, newStatusKey) {
 
     await firebaseSet(firebaseRef(firebaseDB, `orders/${orderId}`), updatedOrder);
 
-    // Edita a mensagem no Discord do forjador
     const msgId = await sendOrUpdateStatusMessage(updatedOrder, webhook);
     if (msgId && msgId !== order.discordMessageId) {
       await firebaseSet(firebaseRef(firebaseDB, `orders/${orderId}/discordMessageId`), msgId);
@@ -716,7 +976,6 @@ async function updateOrderStatus(orderId, newStatusKey) {
 // REMOVER PEDIDO CONCLUÍDO
 // ========================
 function confirmRemoveOrder(id, clientName) {
-  // Remove modal anterior se existir
   const existing = document.getElementById("confirmRemoveModal");
   if (existing) existing.remove();
 
@@ -770,12 +1029,10 @@ function confirmRemoveOrder(id, clientName) {
 
   document.body.appendChild(modal);
 
-  // Fecha ao clicar no fundo
   modal.addEventListener("click", function (e) {
     if (e.target === modal) closeConfirmRemoveModal();
   });
 
-  // Fecha com Escape
   document.addEventListener("keydown", function escHandler(e) {
     if (e.key === "Escape") {
       closeConfirmRemoveModal();
