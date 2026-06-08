@@ -8,23 +8,74 @@ const DEFAULT_ADMIN_PASS = "admin123";
 let currentAdmin = null;
 
 // ========================
+// INIT FIREBASE PARA O ADMIN
+// ========================
+async function initFirebaseAdmin() {
+  // Se já foi inicializado (forjador logou antes), reutiliza
+  if (window.firebaseDB) return true;
+
+  try {
+    const { initializeApp, getApps } =
+      await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getDatabase, ref, set, get, push, remove, onValue } =
+      await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+    const firebaseConfig = {
+      apiKey:      "AIzaSyA2C9_me50ygxsjS_95vQfJ7raRT_1UGlA",
+      authDomain:  "forjadores-1a9ce.firebaseapp.com",
+      databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
+      projectId:   "forjadores-1a9ce"
+    };
+
+    const existingApps = getApps();
+    const app = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+
+    window.firebaseDB     = db;
+    window.firebaseRef    = ref;
+    window.firebaseSet    = set;
+    window.firebaseGet    = get;
+    window.firebasePush   = push;
+    window.firebaseRemove = remove;
+    window.firebaseOnValue = onValue;
+
+    console.log("✅ Firebase admin inicializado (sem auth).");
+    return true;
+  } catch (e) {
+    console.error("❌ Erro ao inicializar Firebase admin:", e);
+    return false;
+  }
+}
+
+// ========================
 // LOGIN ADMIN
 // ========================
 async function doAdminLogin() {
-  const btn  = document.querySelector("#screen-admin-login .btn-primary");
-  const user = document.getElementById("adminLoginUser").value.trim();
-  const pass = document.getElementById("adminLoginPass").value.trim();
+  const btn   = document.querySelector("#screen-admin-login .btn-primary");
+  const user  = document.getElementById("adminLoginUser").value.trim();
+  const pass  = document.getElementById("adminLoginPass").value.trim();
   const errEl = document.getElementById("adminLoginError");
 
   if (!user || !pass) {
     errEl.textContent = "Preencha usuário e senha.";
     errEl.classList.remove("hidden");
+    errEl.style.display = "";
     return;
   }
 
   setLoading(btn, true, "Verificando...");
 
   try {
+    // ✅ Garante que o Firebase está pronto antes de qualquer operação
+    const ready = await initFirebaseAdmin();
+    if (!ready) {
+      errEl.textContent = "Erro ao conectar ao banco de dados.";
+      errEl.classList.remove("hidden");
+      errEl.style.display = "";
+      setLoading(btn, false, "Entrar");
+      return;
+    }
+
     const snap = await firebaseGet(firebaseRef(firebaseDB, "config/admin"));
     let adminUser = DEFAULT_ADMIN_USER;
     let adminPass = DEFAULT_ADMIN_PASS;
@@ -37,17 +88,20 @@ async function doAdminLogin() {
     if (user === adminUser && pass === adminPass) {
       currentAdmin = { user: adminUser };
       errEl.classList.add("hidden");
+      errEl.style.display = "none";
       setLoading(btn, false, "Entrar");
       await addLog("login", `Admin "${user}" fez login.`);
       goTo("admin");
     } else {
       errEl.textContent = "Credenciais inválidas.";
       errEl.classList.remove("hidden");
+      errEl.style.display = "";
       setLoading(btn, false, "Entrar");
     }
   } catch (e) {
     errEl.textContent = "Erro ao verificar credenciais.";
     errEl.classList.remove("hidden");
+    errEl.style.display = "";
     setLoading(btn, false, "Entrar");
     console.error(e);
   }
@@ -234,9 +288,7 @@ async function saveEditSmith() {
       passport,
       updatedAt: new Date().toISOString()
     };
-    // ⚠️ Senha não é editável pelo admin — fica no Firebase Auth
-    // Para redefinir senha de um forjador, use o Firebase Console
-    delete updated.pass; // remove campo legado se ainda existir
+    delete updated.pass;
 
     await firebaseSet(firebaseRef(firebaseDB, `smiths/${id}`), updated);
     await addLog("edit", `Admin editou forjador: "${current.displayName}" → "${displayName}" (ID: ${id})`);
@@ -281,6 +333,10 @@ async function loadAdminOrders() {
         style: "currency", currency: "BRL"
       });
 
+      const transferBadge = order.transferredFrom
+        ? `<div style="font-size:0.75rem;color:#c4b5fd;margin-bottom:6px;">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
+        : "";
+
       return `
         <div class="admin-order-card">
           <div class="admin-order-header">
@@ -290,6 +346,7 @@ async function loadAdminOrders() {
             </div>
             <span class="admin-order-time">🕐 ${order.timestamp}</span>
           </div>
+          ${transferBadge}
           <div class="admin-order-items">${weaponLines}${arrowLine}</div>
           <div class="admin-order-total">💰 ${total}</div>
           <div class="order-actions">
@@ -323,6 +380,11 @@ async function adminDeleteOrder(id, clientName) {
 // LOGS
 // ========================
 async function addLog(type, message) {
+  // ✅ Verifica se o Firebase está pronto antes de tentar gravar
+  if (!window.firebaseDB || !window.firebasePush || !window.firebaseSet) {
+    console.warn("⚠️ addLog ignorado — Firebase não inicializado.");
+    return;
+  }
   try {
     const logRef = firebasePush(firebaseRef(firebaseDB, "logs"));
     await firebaseSet(logRef, {
@@ -340,6 +402,12 @@ async function loadAdminLogs() {
   const container = document.getElementById("adminLogsList");
   container.innerHTML = `<div class="empty-state">Carregando...</div>`;
 
+  // ✅ Garante Firebase pronto antes de carregar logs
+  if (!window.firebaseDB) {
+    container.innerHTML = `<div class="empty-state">❌ Firebase não inicializado.</div>`;
+    return;
+  }
+
   try {
     const snap = await firebaseGet(firebaseRef(firebaseDB, "logs"));
 
@@ -352,13 +420,15 @@ async function loadAdminLogs() {
     snap.forEach(child => logs.push({ id: child.key, ...child.val() }));
     logs.reverse();
 
+    // ✅ Adicionado ícone para "transfer"
     const icons = {
       register: "✅",
       login:    "🔐",
       order:    "🛒",
       delete:   "🗑️",
       token:    "🔑",
-      edit:     "✏️"
+      edit:     "✏️",
+      transfer: "🔄"
     };
 
     container.innerHTML = logs.map(log => `
@@ -442,7 +512,7 @@ async function adminChangePassword() {
   }
 
   try {
-    const snap = await firebaseGet(firebaseRef(firebaseDB, "config/admin"));
+    const snap        = await firebaseGet(firebaseRef(firebaseDB, "config/admin"));
     const currentPass = snap.exists() ? (snap.val().pass || DEFAULT_ADMIN_PASS) : DEFAULT_ADMIN_PASS;
     const currentUser = snap.exists() ? (snap.val().user || DEFAULT_ADMIN_USER) : DEFAULT_ADMIN_USER;
 
@@ -461,8 +531,8 @@ async function adminChangePassword() {
 
     sucEl.textContent = "✅ Senha alterada com sucesso!";
     sucEl.classList.remove("hidden");
-    document.getElementById("adminOldPass").value    = "";
-    document.getElementById("adminNewPass").value    = "";
+    document.getElementById("adminOldPass").value        = "";
+    document.getElementById("adminNewPass").value        = "";
     document.getElementById("adminNewPassConfirm").value = "";
 
   } catch (e) {
@@ -471,3 +541,5 @@ async function adminChangePassword() {
     console.error(e);
   }
 }
+
+window._appLoaded = true;
