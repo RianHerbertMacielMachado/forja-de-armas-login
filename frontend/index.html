@@ -1,542 +1,338 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Forja de Armas - RP Shop</title>
+  <title>Forja</title>
   <link rel="stylesheet" href="style.css"/>
   <link rel="stylesheet" href="themes.css"/>
-  <link rel="icon" href="data:,"/>
 </head>
-<body>
+<body data-theme="arcana">
 
-<!-- ======================== TELA DE SELEÇÃO ======================== -->
-<div id="screen-selector" class="screen-selector">
-  <div class="selector-box">
-    <h1>⚔️ Forja de Armas</h1>
-    <p>Quem é você?</p>
-    <div class="selector-buttons">
-      <button class="sel-btn client-btn" onclick="goTo('client')">
-        🧑 Sou Cliente
-      </button>
-      <button class="sel-btn smith-btn" onclick="goTo('login')">
-        🔨 Sou Forjador
-      </button>
-      <button class="sel-btn admin-btn" onclick="goTo('admin-login')">
-        🛡️ Administrativo
-      </button>
-    </div>
-  </div>
+<!-- ── Loading Global ── -->
+<div id="global-loading" style="display:none">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Carregando...</div>
 </div>
 
-<!-- ======================== TELA DE LOGIN DO FORJADOR ======================== -->
-<div id="screen-login" class="screen hidden">
-  <div class="login-box">
-    <button class="back-btn" onclick="goTo('selector')">← Voltar</button>
-    <h2>🔨 Acesso do Forjador</h2>
-    <p>Entre com suas credenciais</p>
-    <div class="form-group">
-      <label>Usuário</label>
-      <input type="text" id="loginUser" placeholder="Seu usuário" autocomplete="off"/>
-    </div>
-    <div class="form-group">
-      <label>Senha</label>
-      <div class="pass-row">
-        <input type="password" id="loginPass" placeholder="Sua senha"/>
-        <button class="toggle-pass-btn" onclick="toggleRegPassword('loginPass','toggleLoginPass')" id="toggleLoginPass" type="button">👁️</button>
+<!-- ════════════════════════════════════════════
+     SELETOR DE PAPEL
+═════════════════════════════════════════════ -->
+<div id="screen-selector" class="screen active">
+  <div class="selector-container">
+    <div class="selector-logo">⚔ FORJA</div>
+    <h1 class="selector-title">Bem-vindo à Forja</h1>
+    <p class="selector-subtitle">Selecione como deseja acessar</p>
+    <div class="selector-cards">
+      <div class="role-card" onclick="selectRole('client')">
+        <div class="role-icon">📦</div>
+        <div class="role-label">Fazer Pedido</div>
+        <div class="role-desc">Consultar status ou criar novo pedido</div>
+      </div>
+      <div class="role-card" onclick="selectRole('smith')">
+        <div class="role-icon">⚒️</div>
+        <div class="role-label">Forjador</div>
+        <div class="role-desc">Acessar painel de produção</div>
+      </div>
+      <div class="role-card" onclick="selectRole('admin')">
+        <div class="role-icon">🛡️</div>
+        <div class="role-label">Admin</div>
+        <div class="role-desc">Gerenciar forjadores e configurações</div>
       </div>
     </div>
-    <div class="login-error hidden" id="loginError" style="display:none;">Usuário ou senha incorretos.</div>
-    <button class="btn-primary" onclick="doLogin()">🔨 Entrar</button>
-    <div style="text-align:center; margin-top:14px;">
-      <p class="register-link-text">
-        Cadastrar? <span class="register-link" onclick="goTo('register')">Clique aqui</span>
-      </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     LOGIN ADMIN
+═════════════════════════════════════════════ -->
+<div id="screen-admin-login" class="screen">
+  <div class="auth-container">
+    <div class="auth-card">
+      <h2>🛡️ Acesso Administrativo</h2>
+      <input type="text"     id="admin-user" class="input-field" placeholder="Usuário"/>
+      <input type="password" id="admin-pass" class="input-field" placeholder="Senha"/>
+      <div id="admin-login-error" class="error-msg"></div>
+      <button class="btn-primary" onclick="doAdminLogin()">Entrar</button>
+      <button class="btn-ghost" onclick="goTo('selector')">← Voltar</button>
     </div>
   </div>
 </div>
 
-<!-- ======================== TELA DE LOGIN ADMIN ======================== -->
-<div id="screen-admin-login" class="screen hidden">
-  <div class="login-box">
-    <button class="back-btn" onclick="goTo('selector')">← Voltar</button>
-    <h2>🛡️ Acesso Administrativo</h2>
-    <p>Credenciais de administrador necessárias</p>
-    <div class="form-group">
-      <label>Usuário Admin</label>
-      <input type="text" id="adminLoginUser" placeholder="Usuário"/>
+<!-- ════════════════════════════════════════════
+     LOGIN FORJADOR
+═════════════════════════════════════════════ -->
+<div id="screen-login" class="screen">
+  <div class="auth-container">
+    <div class="auth-card">
+      <h2>⚒️ Acesso do Forjador</h2>
+      <input type="text"     id="login-user" class="input-field" placeholder="Usuário"/>
+      <input type="password" id="login-pass" class="input-field" placeholder="Senha"/>
+      <div id="login-error" class="error-msg"></div>
+      <button class="btn-primary" onclick="doLogin()">Entrar</button>
+      <button class="btn-ghost"   onclick="goTo('register')">Registrar com Chave</button>
+      <button class="btn-ghost"   onclick="goTo('selector')">← Voltar</button>
     </div>
-    <div class="form-group">
-      <label>Senha</label>
-      <div class="pass-row">
-        <input type="password" id="adminLoginPass" placeholder="Senha"/>
-        <button class="toggle-pass-btn" onclick="toggleRegPassword('adminLoginPass','toggleAdminPass')" id="toggleAdminPass" type="button">👁️</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     REGISTRO
+═════════════════════════════════════════════ -->
+<div id="screen-register" class="screen">
+  <div class="auth-container">
+    <div class="auth-card">
+      <h2>📝 Registrar Forjador</h2>
+      <input type="text"     id="reg-name"     class="input-field" placeholder="Nome de exibição"/>
+      <input type="text"     id="reg-passport" class="input-field" placeholder="Passaporte"/>
+      <input type="text"     id="reg-user"     class="input-field" placeholder="Usuário"/>
+      <input type="password" id="reg-pass"     class="input-field" placeholder="Senha"/>
+      <input type="text"     id="reg-token"    class="input-field" placeholder="Chave de cadastro"/>
+      <div id="reg-error"   class="error-msg"></div>
+      <div id="reg-success" class="success-msg" style="display:none">✅ Registrado com sucesso!</div>
+      <button class="btn-primary" onclick="doRegister()">Registrar</button>
+      <button class="btn-ghost"   onclick="goTo('login')">← Voltar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CLIENTE
+═════════════════════════════════════════════ -->
+<div id="screen-client" class="screen">
+  <div class="client-container">
+
+    <header class="client-header">
+      <h1>⚔ Forja</h1>
+      <button class="btn-ghost btn-sm" onclick="goTo('selector')">← Voltar</button>
+    </header>
+
+    <!-- Consulta de status -->
+    <section class="client-section">
+      <h2>🔍 Consultar Status do Pedido</h2>
+      <div class="client-query-row">
+        <input type="text" id="client-passport" class="input-field"
+               placeholder="Seu passaporte" onkeydown="if(event.key==='Enter') consultarStatusPedido()"/>
+        <button class="btn-primary" onclick="consultarStatusPedido()">Consultar</button>
       </div>
-    </div>
-    <div class="login-error hidden" id="adminLoginError" style="display:none;">Credenciais inválidas.</div>
-    <button class="btn-primary" onclick="doAdminLogin()">Entrar</button>
+      <div id="client-error" class="error-msg"></div>
+      <div id="status-result" class="status-result"></div>
+    </section>
+
+    <!-- Novo pedido -->
+    <section class="client-section">
+      <h2>📦 Novo Pedido</h2>
+      <div class="new-order-form">
+        <input type="text" id="order-client-name"     class="input-field" placeholder="Seu nome"/>
+        <input type="text" id="order-client-passport" class="input-field" placeholder="Seu passaporte"/>
+      </div>
+
+      <!-- Tabs de categorias -->
+      <div id="client-cat-tabs" class="cat-tabs"></div>
+
+      <!-- Grid de armas -->
+      <div id="client-weapons-grid" class="weapons-grid"></div>
+
+      <!-- Flechas -->
+      <div class="arrows-row">
+        <label>🏹 Flechas:
+          <input type="number" id="order-arrows" class="input-field input-number"
+                 min="0" value="0" oninput="renderOrderSummary()"/>
+        </label>
+      </div>
+
+      <!-- Resumo -->
+      <div class="order-summary-box">
+        <h3>📋 Resumo do Pedido</h3>
+        <div id="order-summary-items"></div>
+        <div id="order-summary-total" class="order-total-line">Total: R$ 0,00</div>
+      </div>
+
+      <div id="order-submit-error" class="error-msg"></div>
+      <div id="order-success"      class="success-msg" style="display:none"></div>
+      <button class="btn-primary btn-full" onclick="submitOrder()">📤 Enviar Pedido</button>
+    </section>
+
   </div>
 </div>
 
-<!-- ======================== TELA ADMIN ======================== -->
-<div id="screen-admin" class="screen hidden">
-  <header>
-    <h1>🛡️ Painel Administrativo</h1>
-    <p>Forja de Armas — Gerenciamento</p>
-    <button class="back-btn-header" onclick="doAdminLogout()">🚪 Sair</button>
-  </header>
+<!-- ════════════════════════════════════════════
+     FORJADOR
+═════════════════════════════════════════════ -->
+<div id="screen-smith" class="screen">
+  <div class="smith-container">
 
+    <header class="smith-header">
+      <div class="smith-header-left">
+        <h1>⚒️ Painel do Forjador</h1>
+        <span id="smith-display-name" class="smith-name-badge"></span>
+      </div>
+      <div class="smith-header-right">
+        <button class="btn-ghost btn-sm" onclick="openChangePasswordModal()">🔐 Senha</button>
+        <button class="btn-ghost btn-sm" onclick="doLogout()">Sair</button>
+      </div>
+    </header>
+
+    <div id="smith-orders-list" class="smith-orders-list">
+      <div class="empty-state">📭 Carregando pedidos...</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     ADMIN
+═════════════════════════════════════════════ -->
+<div id="screen-admin" class="screen">
   <div class="admin-container">
 
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="switchAdminTab('smiths')"   id="tab-smiths">👥 Forjadores</button>
-      <button class="admin-tab"        onclick="switchAdminTab('orders')"   id="tab-orders">📬 Pedidos</button>
-      <button class="admin-tab"        onclick="switchAdminTab('logs')"     id="tab-logs">📋 Logs</button>
-      <button class="admin-tab"        onclick="switchAdminTab('settings')" id="tab-settings">⚙️ Configurações</button>
+    <header class="admin-header">
+      <h1>🛡️ Painel Administrativo</h1>
+      <button class="btn-ghost btn-sm" onclick="doAdminLogout()">Sair</button>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="admin-tabs">
+      <button class="admin-tab active" onclick="switchAdminTab('smiths')">⚒️ Forjadores</button>
+      <button class="admin-tab"        onclick="switchAdminTab('orders')">📦 Pedidos</button>
+      <button class="admin-tab"        onclick="switchAdminTab('logs')">📋 Logs</button>
+      <button class="admin-tab"        onclick="switchAdminTab('settings')">⚙️ Configurações</button>
+    </nav>
+
+    <!-- Painel Forjadores -->
+    <div id="admin-panel-smiths" class="admin-panel active">
+      <button class="btn-primary" onclick="openAddSmithModal()">➕ Novo Forjador</button>
+      <div id="admin-smiths-list" class="admin-list"></div>
     </div>
 
-    <!-- PAINEL: FORJADORES -->
-    <div class="admin-panel" id="admin-panel-smiths">
-      <div class="admin-panel-header">
-        <h3>👥 Forjadores Cadastrados</h3>
-        <div class="admin-search">
-          <input type="text" id="smithSearchAdmin" placeholder="🔍 Pesquisar forjador..." oninput="renderAdminSmiths()"/>
-        </div>
-      </div>
-      <div id="adminSmithsList" class="admin-list">
-        <div class="empty-state">Carregando...</div>
-      </div>
+    <!-- Painel Pedidos -->
+    <div id="admin-panel-orders" class="admin-panel">
+      <div id="admin-orders-list" class="admin-list"></div>
     </div>
 
-    <!-- PAINEL: PEDIDOS -->
-    <div class="admin-panel hidden" id="admin-panel-orders">
-      <div class="admin-panel-header">
-        <h3>📬 Pedidos na Fila</h3>
-        <button class="admin-refresh-btn" onclick="loadAdminOrders()">🔄 Atualizar</button>
+    <!-- Painel Logs -->
+    <div id="admin-panel-logs" class="admin-panel">
+      <div class="logs-toolbar">
+        <button class="btn-danger btn-sm" onclick="clearAllLogs()">🗑️ Limpar Logs</button>
       </div>
-      <div id="adminOrdersList" class="admin-list">
-        <div class="empty-state">Carregando...</div>
-      </div>
+      <div id="admin-logs-list" class="admin-logs-list"></div>
     </div>
 
-    <!-- PAINEL: LOGS -->
-    <div class="admin-panel hidden" id="admin-panel-logs">
-      <div class="admin-panel-header">
-        <h3>📋 Logs do Sistema</h3>
-        <div style="display:flex;gap:8px;">
-          <button class="admin-refresh-btn" onclick="loadAdminLogs()">🔄 Atualizar</button>
-          <button class="admin-danger-btn"  onclick="clearAllLogs()">🗑️ Limpar Logs</button>
-        </div>
-      </div>
-      <div id="adminLogsList" class="admin-list">
-        <div class="empty-state">Carregando...</div>
-      </div>
-    </div>
+    <!-- Painel Configurações -->
+    <div id="admin-panel-settings" class="admin-panel">
 
-    <!-- PAINEL: CONFIGURAÇÕES -->
-    <div class="admin-panel hidden" id="admin-panel-settings">
-      <div class="admin-panel-header">
-        <h3>⚙️ Configurações do Sistema</h3>
-      </div>
-      <div class="settings-grid">
-
-        <!-- CARD: TEMA -->
-        <div class="settings-card" style="grid-column: 1 / -1;">
-          <h4>🎨 Tema do Site</h4>
-          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">
-            Escolha o visual do sistema. A mudança é aplicada imediatamente para todos os usuários.
-          </p>
-          <div id="adminThemeSelector"></div>
-        </div>
-
-        <div class="settings-card">
-          <h4>🔑 Token de Cadastro Atual</h4>
-          <div class="token-display" id="adminTokenDisplay">Carregando...</div>
-          <button class="admin-action-btn" onclick="adminRotateToken()">🔄 Gerar Novo Token</button>
-        </div>
-
-        <div class="settings-card">
-          <h4>🛡️ Alterar Senha do Admin</h4>
-          <div class="form-group">
-            <label>Senha atual</label>
-            <input type="password" id="adminOldPass" placeholder="Senha atual"/>
-          </div>
-          <div class="form-group">
-            <label>Nova senha</label>
-            <input type="password" id="adminNewPass" placeholder="Nova senha"/>
-          </div>
-          <div class="form-group">
-            <label>Confirmar nova senha</label>
-            <input type="password" id="adminNewPassConfirm" placeholder="Confirmar senha"/>
-          </div>
-          <div class="login-error hidden" id="adminPassError" style="display:none;"></div>
-          <div class="reg-success hidden" id="adminPassSuccess" style="display:none;"></div>
-          <button class="admin-action-btn" onclick="adminChangePassword()">💾 Salvar Nova Senha</button>
-        </div>
-
-      </div>
-    </div>
-
-
-  </div>
-</div>
-
-<!-- MODAL EDITAR FORJADOR -->
-<div id="editSmithModal" style="display:none;">
-  <div class="modal-overlay" id="editSmithOverlay">
-    <div class="modal-box">
-      <h3>✏️ Editar Forjador</h3>
-      <input type="hidden" id="editSmithId"/>
-      <div class="form-group">
-        <label>Nome (Display) <span class="required">*</span></label>
-        <input type="text" id="editSmithDisplayName" placeholder="Nome do forjador"/>
-      </div>
-      <div class="form-group">
-        <label>Usuário <span class="required">*</span></label>
-        <input type="text" id="editSmithUser" placeholder="Usuário de login"/>
-      </div>
-      <div class="form-group">
-        <label>ID / Passaporte <span class="required">*</span></label>
-        <input type="text" id="editSmithPassport" placeholder="Passaporte"/>
-      </div>
-      <div class="form-group">
-        <label>Nova Senha <span style="color:#6d6d9a;font-size:0.75rem;">(deixe em branco para não alterar)</span></label>
-        <div class="pass-row">
-          <input type="password" id="editSmithPass" placeholder="Nova senha"/>
-          <button class="toggle-pass-btn" onclick="toggleRegPassword('editSmithPass','toggleEditPass')" id="toggleEditPass" type="button">👁️</button>
-        </div>
-      </div>
-      <div class="login-error hidden" id="editSmithError" style="display:none;"></div>
-      <div class="modal-actions">
-        <button class="modal-cancel-btn"  onclick="closeEditSmithModal()">Cancelar</button>
-        <button class="modal-confirm-btn" onclick="saveEditSmith()">💾 Salvar Alterações</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL ALTERAR SENHA DO FORJADOR -->
-<div id="changePassModal" style="display:none;">
-  <div class="modal-overlay" id="changePassOverlay">
-    <div class="modal-box">
-      <h3>🔑 Alterar Senha</h3>
-      <p class="modal-subtitle">Digite sua senha atual e a nova senha desejada.</p>
-      <div class="form-group">
-        <label>Senha atual <span class="required">*</span></label>
-        <div class="pass-row">
-          <input type="password" id="cpOldPass" placeholder="Senha atual"/>
-          <button class="toggle-pass-btn" onclick="toggleRegPassword('cpOldPass','toggleCpOld')" id="toggleCpOld" type="button">👁️</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Nova senha <span class="required">*</span></label>
-        <div class="pass-row">
-          <input type="password" id="cpNewPass" placeholder="Mínimo 6 caracteres"/>
-          <button class="toggle-pass-btn" onclick="toggleRegPassword('cpNewPass','toggleCpNew')" id="toggleCpNew" type="button">👁️</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Confirmar nova senha <span class="required">*</span></label>
-        <div class="pass-row">
-          <input type="password" id="cpNewPassConfirm" placeholder="Repita a nova senha"/>
-          <button class="toggle-pass-btn" onclick="toggleRegPassword('cpNewPassConfirm','toggleCpConfirm')" id="toggleCpConfirm" type="button">👁️</button>
-        </div>
-      </div>
-      <div class="login-error hidden" id="cpError" style="display:none;"></div>
-      <div class="reg-success hidden"  id="cpSuccess" style="display:none;"></div>
-      <div class="modal-actions">
-        <button class="modal-cancel-btn"  onclick="closeChangePassModal()">Cancelar</button>
-        <button class="modal-confirm-btn" id="cpSaveBtn" onclick="doChangePassword()">💾 Salvar Nova Senha</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ======================== TELA DE CADASTRO ======================== -->
-<div id="screen-register" class="screen hidden">
-  <div class="login-box register-box">
-    <button class="back-btn" onclick="goTo('login')">← Voltar ao Login</button>
-    <h2>📝 Cadastro de Forjador</h2>
-    <p>Preencha os dados e insira a chave de acesso para se cadastrar</p>
-
-    <div class="form-group">
-      <label>Nome na cidade (RP) <span class="required">*</span></label>
-      <input type="text" id="regDisplayName" placeholder="Ex: Ragnar Ferreiro"/>
-    </div>
-    <div class="form-group">
-      <label>ID / Passaporte <span class="required">*</span></label>
-      <input type="text" id="regPassport" placeholder="Ex: 123456"/>
-    </div>
-
-    <div class="register-divider"><span>Dados de acesso ao sistema</span></div>
-
-    <div class="form-group">
-      <label>Usuário de login <span class="required">*</span></label>
-      <input type="text" id="regUser" placeholder="Ex: ragnar_smith" autocomplete="off"/>
-    </div>
-    <div class="form-group">
-      <label>Senha <span class="required">*</span></label>
-      <div class="pass-row">
-        <input type="password" id="regPass" placeholder="Mínimo 4 caracteres" autocomplete="new-password"/>
-        <button class="toggle-pass-btn" id="toggleRegPass" onclick="toggleRegPassword('regPass','toggleRegPass')" type="button">👁️</button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Confirmar senha <span class="required">*</span></label>
-      <div class="pass-row">
-        <input type="password" id="regPassConfirm" placeholder="Repita a senha" autocomplete="new-password"/>
-        <button class="toggle-pass-btn" id="toggleRegPassConfirm" onclick="toggleRegPassword('regPassConfirm','toggleRegPassConfirm')" type="button">👁️</button>
-      </div>
-    </div>
-
-    <div class="register-divider"><span>Chave de acesso</span></div>
-
-    <div class="form-group">
-      <label>Chave de cadastro <span class="required">*</span></label>
-      <div class="pass-row">
-        <input type="password" id="regToken" placeholder="Chave fornecida pelo administrador" autocomplete="off"/>
-        <button class="toggle-pass-btn" id="toggleRegToken" onclick="toggleRegPassword('regToken','toggleRegToken')" type="button">👁️</button>
-      </div>
-    </div>
-
-    <div class="login-error hidden" id="regError" style="display:none;"></div>
-    <div class="reg-success hidden"  id="regSuccess" style="display:none;"></div>
-
-    <button class="btn-primary" id="regBtn" onclick="doRegister()">📝 Cadastrar</button>
-  </div>
-</div>
-
-<!-- ======================== TELA DO CLIENTE ======================== -->
-<div id="screen-client" class="screen hidden">
-  <header>
-    <h1>⚔️ Forja de Armas</h1>
-    <p>Faça seu pedido de armas</p>
-    <button class="back-btn-header" onclick="goTo('selector')">← Voltar</button>
-  </header>
-
-  <div class="container">
-    <div class="left-col">
-      <div class="panel">
-        <h2>🗡️ Selecione as Armas</h2>
-        <div class="search-bar">
-          <input type="text" id="clientSearchInput" placeholder="Pesquisar arma..." oninput="clientFilterWeapons()"/>
-        </div>
-        <div class="category-tabs" id="clientCategoryTabs"></div>
-        <div class="weapons-grid" id="clientWeaponsGrid"></div>
+      <!-- Token -->
+      <div class="settings-card">
+        <h3>🔑 Chave de Cadastro</h3>
+        <button class="btn-primary" onclick="adminRotateToken()">🔄 Gerar Nova Chave</button>
+        <div id="admin-token-result" class="token-result"></div>
       </div>
 
-      <div class="panel arrow-panel">
-        <h2>🏹 Flechas</h2>
-        <div class="arrow-section">
-          <h3>Quantidade de Flechas</h3>
-          <div class="arrow-input-row">
-            <label>Quantidade:</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <button class="qty-btn" onclick="clientDecreaseArrows()">−</button>
-              <input type="number" id="clientArrowQty" min="0" step="100" value="0" oninput="clientUpdateArrows()" style="width:80px;text-align:center;"/>
-              <button class="qty-btn" onclick="clientIncreaseArrows()">+</button>
-            </div>
-          </div>
-          <div class="arrow-info" id="clientArrowInfo">Insira a quantidade desejada de flechas (múltiplos de 100)</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="summary-panel">
-
-      <!-- CARD: SEUS DADOS -->
-      <div class="panel" style="margin-bottom:20px;">
-        <h2>📋 Seus Dados</h2>
-        <div class="form-group">
-          <label>Nome na cidade (RP) <span class="required">*</span></label>
-          <input type="text" id="clientName" placeholder="Ex: João Silva"/>
-        </div>
-        <div class="form-group" style="margin-bottom:4px;">
-          <label>Passaporte <span class="required">*</span></label>
-          <input type="text" id="clientPassport" placeholder="Ex: 123456"/>
-        </div>
+      <!-- Tema -->
+      <div class="settings-card">
+        <h3>🎨 Tema do Site</h3>
+        <div id="adminThemeSelector" class="theme-selector-grid"></div>
       </div>
 
-      <!-- CARD: RESUMO DO PEDIDO -->
-      <div class="panel" style="margin-bottom:20px;">
-        <h2>🧾 Resumo do Pedido</h2>
-        <div class="selected-items-list" id="clientSelectedList">
-          <div class="empty-state">Nenhum item selecionado.<br/>Clique nas armas para adicionar.</div>
-        </div>
-        <div class="total-box">
-          <div class="label">💰 Valor Total</div>
-          <div class="value" id="clientTotalValue">R$ 0,00</div>
-          <div class="item-count" id="clientItemCount">0 itens selecionados</div>
-        </div>
-        <button class="send-btn" onclick="clientSendOrder()">📨 Enviar Pedido</button>
-        <button class="clear-btn" onclick="clientClearAll()">🗑️ Limpar Seleção</button>
-      </div>
-
-      <!-- CARD: CONSULTAR STATUS -->
-      <div class="panel">
-        <h2>🔍 Consultar Status do Pedido</h2>
-        <p style="color:#a0a0c0;font-size:0.9rem;margin-bottom:12px;">
-          Digite seu passaporte para ver o status do seu pedido.
-        </p>
-        <div class="form-group">
-          <label>Passaporte</label>
-          <input type="text" id="statusPassportInput" placeholder="Ex: 123456"/>
-        </div>
-        <button class="btn-primary" onclick="consultarStatusPedido()">🔍 Consultar</button>
-        <div id="statusResult" style="margin-top:16px;"></div>
+      <!-- Alterar senha admin -->
+      <div class="settings-card">
+        <h3>🔐 Alterar Senha do Admin</h3>
+        <input type="password" id="admin-cp-old"     class="input-field" placeholder="Senha atual"/>
+        <input type="password" id="admin-cp-new"     class="input-field" placeholder="Nova senha"/>
+        <input type="password" id="admin-cp-confirm" class="input-field" placeholder="Confirmar nova senha"/>
+        <div id="admin-cp-error"   class="error-msg"></div>
+        <div id="admin-cp-success" class="success-msg" style="display:none"></div>
+        <button class="btn-primary" onclick="adminChangePassword()">Salvar</button>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- ======================== TELA DO FORJADOR ======================== -->
-<div id="screen-smith" class="screen hidden">
-  <header>
-    <div>
-      <h1>⚔️ Forja de Armas</h1>
-    </div>
-    <div class="header-center">
-      <p>Bem-vindo, <span id="smithName"></span>!</p>
-    </div>
-    <div class="header-right">
-      <button class="change-pass-btn" onclick="openChangePassModal()">🔑 Alterar Senha</button>
-      <button class="change-pass-btn" onclick="doLogout()">🚪 Sair</button>
-    </div>
-  </header>
+<!-- ════════════════════════════════════════════
+     MODAIS
+═════════════════════════════════════════════ -->
 
-  <div class="container">
-    <div class="left-col">
-
-      <!-- FILA DE PEDIDOS -->
-      <div class="panel orders-panel">
-        <h2>📬 Fila de Pedidos</h2>
-        <div id="ordersQueue">
-          <div class="empty-state">Nenhum pedido na fila no momento.</div>
-        </div>
-      </div>
-
-      <!-- MEUS PEDIDOS EM ANDAMENTO -->
-      <div class="panel" id="myOrdersPanel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-          <h2>📦 Meus Pedidos em Andamento</h2>
-          <button class="admin-refresh-btn" onclick="loadMyOrders()">🔄 Atualizar</button>
-        </div>
-        <div id="myOrdersList">
-          <div class="empty-state">Nenhum pedido em andamento.</div>
-        </div>
-      </div>
-
-      <!-- MONTAR PEDIDO MANUAL -->
-      <div class="panel">
-        <h2>🗡️ Montar Pedido Manual</h2>
-        <div class="search-bar">
-          <input type="text" id="smithSearchInput" placeholder="Pesquisar arma..." oninput="smithFilterWeapons()"/>
-        </div>
-        <div class="category-tabs" id="smithCategoryTabs"></div>
-        <div class="weapons-grid" id="smithWeaponsGrid"></div>
-      </div>
-
-      <!-- FLECHAS -->
-      <div class="panel arrow-panel">
-        <h2>🏹 Flechas</h2>
-        <div class="arrow-section">
-          <h3>Quantidade de Flechas</h3>
-          <div class="arrow-input-row">
-            <label>Quantidade:</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <button class="qty-btn" onclick="smithDecreaseArrows()">−</button>
-              <input type="number" id="smithArrowQty" min="0" step="100" value="0" oninput="smithUpdateArrows()" style="width:80px;text-align:center;"/>
-              <button class="qty-btn" onclick="smithIncreaseArrows()">+</button>
-            </div>
-          </div>
-          <div class="arrow-info" id="smithArrowInfo">Insira a quantidade desejada de flechas (múltiplos de 100)</div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="summary-panel">
-      <div class="panel">
-
-        <!-- WEBHOOK -->
-        <div class="webhook-config">
-          <h3>🔗 Webhook do Discord</h3>
-          <div class="webhook-row">
-            <input type="text" id="webhookInput" placeholder="https://discord.com/api/webhooks/..."/>
-            <button class="webhook-save-btn" onclick="saveWebhook()">💾 Salvar</button>
-          </div>
-          <div class="webhook-status" id="webhookStatus"></div>
-        </div>
-
-        <!-- RESUMO MANUAL -->
-        <h2 style="margin-top:16px;">🧾 Resumo do Pedido</h2>
-        <div class="selected-items-list" id="smithSelectedList">
-          <div class="empty-state">Nenhum item selecionado.<br/>Clique nas armas para adicionar.</div>
-        </div>
-        <div class="materials-section" id="smithMaterialsSection" style="display:none;">
-          <h3>⚗️ Materiais Necessários</h3>
-          <div class="material-grid" id="smithMaterialGrid"></div>
-        </div>
-        <div class="total-box">
-          <div class="label">💰 Valor Total</div>
-          <div class="value" id="smithTotalValue">R$ 0,00</div>
-          <div class="item-count" id="smithItemCount">0 itens selecionados</div>
-        </div>
-        <button class="send-btn"  onclick="smithSendToDiscord()">📨 Enviar para Discord</button>
-        <button class="copy-btn"  onclick="smithCopyResume()">📋 Copiar Resumo</button>
-        <button class="clear-btn" onclick="smithClearAll()">🗑️ Limpar Seleção</button>
-
-      </div>
+<!-- Alterar Senha Forjador -->
+<div id="modal-change-password" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <h3>🔐 Alterar Senha</h3>
+    <input type="password" id="cp-old"     class="input-field" placeholder="Senha atual"/>
+    <input type="password" id="cp-new"     class="input-field" placeholder="Nova senha"/>
+    <input type="password" id="cp-confirm" class="input-field" placeholder="Confirmar nova senha"/>
+    <div id="cp-error" class="error-msg"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="doChangePassword()">Salvar</button>
+      <button class="btn-ghost"   onclick="closeChangePasswordModal()">Cancelar</button>
     </div>
   </div>
 </div>
 
-<!-- ======================== NOTIFICAÇÃO ======================== -->
-<div class="notif" id="notif"></div>
+<!-- Transferir Pedido -->
+<div id="modal-transfer" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <h3>🔄 Transferir Pedido</h3>
+    <select id="transfer-target" class="input-field">
+      <option value="">Selecione o forjador...</option>
+    </select>
+    <textarea id="transfer-note" class="input-field" placeholder="Observação (opcional)" rows="3"></textarea>
+    <div id="transfer-error" class="error-msg"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="confirmTransfer()">Confirmar</button>
+      <button class="btn-ghost"   onclick="closeTransferModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
 
-<!-- ======================== SCRIPTS ======================== -->
-<script type="module" src="firebase.js"></script>
+<!-- Preview de Arma -->
+<div id="modal-weapon-preview" class="modal-overlay" style="display:none"
+     onclick="if(event.target===this) closeWeaponPreview()">
+  <div class="modal-box modal-preview">
+    <h3 id="preview-title"></h3>
+    <div class="preview-img-wrap">
+      <img  id="preview-img"      src="" alt=""/>
+      <div  id="preview-fallback" class="preview-fallback"></div>
+    </div>
+    <button class="btn-ghost" onclick="closeWeaponPreview()">Fechar</button>
+  </div>
+</div>
 
+<!-- Modal Editar Forjador (Admin) -->
+<div id="modal-edit-smith" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <h3>✏️ Editar Forjador</h3>
+    <input type="hidden"   id="edit-smith-id"/>
+    <input type="text"     id="edit-smith-name"     class="input-field" placeholder="Nome de exibição"/>
+    <input type="text"     id="edit-smith-passport" class="input-field" placeholder="Passaporte"/>
+    <input type="text"     id="edit-smith-user"     class="input-field" placeholder="Usuário"/>
+    <div id="edit-smith-error" class="error-msg"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="saveEditSmith()">Salvar</button>
+      <button class="btn-ghost"   onclick="closeEditSmithModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Firebase SDK ───────────────────────────────────────── -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="firebase.js"></script>
+
+<!-- ── Scripts da aplicação ──────────────────────────────── -->
 <script>
-  function loadAppScripts() {
-    var files = ["app.js", "auth.js", "orders.js", "webhook.js", "admin.js"];
-
-    function loadNext(index) {
-      if (index >= files.length) {
-        console.log("✅ Todos os scripts carregados.");
-        return;
-      }
-      var s = document.createElement("script");
-      s.src = files[index];
-      s.onload = function () {
-        console.log("✅ Carregado:", files[index]);
-        loadNext(index + 1);
-      };
-      s.onerror = function () {
-        console.error("❌ Erro ao carregar:", files[index]);
-        loadNext(index + 1);
-      };
-      document.body.appendChild(s);
+  const _scripts = ["app.js","auth.js","orders.js","webhook.js","admin.js"];
+  let   _loaded  = 0;
+  function loadNext(i) {
+    if (i >= _scripts.length) {
+      console.log("✅ Todos os scripts carregados.");
+      return;
     }
-
-    loadNext(0);
+    const s  = document.createElement("script");
+    s.src    = _scripts[i];
+    s.onload = () => { console.log(`✅ Carregado: ${_scripts[i]}`); loadNext(i + 1); };
+    s.onerror= () => { console.error(`❌ Erro ao carregar: ${_scripts[i]}`); loadNext(i + 1); };
+    document.body.appendChild(s);
   }
-
-  if (window._firebaseReady) {
-    loadAppScripts();
-  } else {
-    document.addEventListener("firebaseReady", function () {
-      loadAppScripts();
-    }, { once: true });
-
-    setTimeout(function () {
-      if (!window._appLoaded) {
-        console.warn("⚠️ Timeout — forçando carregamento.");
-        loadAppScripts();
-      }
-    }, 4000);
-  }
+  loadNext(0);
 </script>
 
 </body>

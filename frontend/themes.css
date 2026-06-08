@@ -1,418 +1,342 @@
-/* ========================
-   SISTEMA DE TEMAS
-   Aplica variáveis CSS por data-theme no <body>
-======================== */
+/* ================================================
+   SISTEMA DE TEMAS — FORJA DE ARMAS
+   Cada tema redefine layout, tipografia e cores
+================================================ */
 
-/* ========================
-   TEMA 1 — FORJA ARCANA (padrão)
-======================== */
-[data-theme="arcana"],
-:root {
-  --bg-base:        #0d0d1a;
-  --bg-panel:       #12122a;
-  --bg-input:       #1a1a3a;
-  --bg-card:        #1a1a3a;
-  --bg-hover:       #2a1a4a;
-  --bg-selector:    radial-gradient(ellipse at center, #1a0033 0%, #0d0d1a 70%);
-
-  --border-default: #2e2e5e;
-  --border-focus:   #7b2fff;
-  --border-muted:   #3d3d7a;
-
+/* ================================================
+   TEMA 1 — FORJA ARCANA (padrão — roxo místico)
+================================================ */
+[data-theme="arcana"], :root {
+  --bg-base:          #0d0d1a;
+  --bg-panel:         #12122a;
+  --bg-input:         #1a1a3a;
+  --bg-card:          #1a1a3a;
+  --bg-hover:         #2a1a4a;
+  --bg-selector:      radial-gradient(ellipse at center, #1a0033 0%, #0d0d1a 70%);
+  --border-default:   #2e2e5e;
+  --border-focus:     #7b2fff;
+  --border-muted:     #3d3d7a;
   --accent-primary:   #7b2fff;
   --accent-secondary: #a855f7;
   --accent-glow:      rgba(123,47,255,0.35);
   --accent-glow-soft: rgba(123,47,255,0.15);
-
-  --text-primary:   #e0e0ff;
-  --text-secondary: #a78bfa;
-  --text-muted:     #6d6d9a;
-  --text-heading:   #c084fc;
-  --text-price:     #4ade80;
-  --text-total:     #4ade80;
-  --text-warning:   #f59e0b;
-  --text-error:     #f87171;
-  --text-success:   #4ade80;
-
-  --header-bg:      linear-gradient(135deg, #1a0033, #0d0d1a);
-  --header-border:  #7b2fff;
-
-  --btn-primary-bg: linear-gradient(135deg, #7b2fff, #a855f7);
+  --text-primary:     #e0e0ff;
+  --text-secondary:   #a78bfa;
+  --text-muted:       #6d6d9a;
+  --text-heading:     #c084fc;
+  --text-price:       #4ade80;
+  --text-total:       #4ade80;
+  --text-warning:     #f59e0b;
+  --text-error:       #f87171;
+  --text-success:     #4ade80;
+  --header-bg:        linear-gradient(135deg, #1a0033, #0d0d1a);
+  --header-border:    #7b2fff;
+  --btn-primary-bg:   linear-gradient(135deg, #7b2fff, #a855f7);
   --btn-primary-shadow: rgba(123,47,255,0.35);
-  --btn-success-bg: linear-gradient(135deg, #059669, #10b981);
+  --btn-success-bg:   linear-gradient(135deg, #059669, #10b981);
   --btn-danger-border: #f87171;
   --btn-danger-color:  #f87171;
-
-  --total-box-bg:   linear-gradient(135deg, #1a0033, #0d1a33);
+  --total-box-bg:     linear-gradient(135deg, #1a0033, #0d1a33);
   --total-box-border: #7b2fff;
-
-  --enchanted-color: #f59e0b;
-  --notif-bg:        #7b2fff;
-
-  --tab-active-bg:  linear-gradient(135deg, #7b2fff, #a855f7);
-
-  --scrollbar-thumb: #7b2fff;
-  --scrollbar-track: #1a1a3a;
-
-  --modal-bg:       #12122a;
-  --modal-border:   #3d3d7a;
-  --modal-shadow:   rgba(123,47,255,0.35);
-
+  --enchanted-color:  #f59e0b;
+  --notif-bg:         #7b2fff;
+  --tab-active-bg:    linear-gradient(135deg, #7b2fff, #a855f7);
+  --scrollbar-thumb:  #7b2fff;
+  --scrollbar-track:  #1a1a3a;
+  --modal-bg:         #12122a;
+  --modal-border:     #3d3d7a;
+  --modal-shadow:     rgba(123,47,255,0.35);
   --selector-h1-shadow: 0 0 20px #7b2fff;
-  --selector-btn-smith: linear-gradient(135deg, #7b2fff, #a855f7);
-  --selector-btn-client: linear-gradient(135deg, #0ea5e9, #38bdf8);
-  --selector-btn-admin: linear-gradient(135deg, #374151, #4b5563);
-
-  --font-main: 'Segoe UI', sans-serif;
-  --radius-card: 16px;
-  --radius-btn:  10px;
-  --radius-input: 10px;
+  --font-main:        'Segoe UI', sans-serif;
+  --radius-card:      16px;
+  --radius-btn:       10px;
+  --radius-input:     10px;
 }
 
-/* ========================
+/* ================================================
    TEMA 2 — CYBERPUNK
-======================== */
+   Layout: terminal/dashboard, sidebar vertical,
+   barra lateral de nav, visual HUD futurista
+================================================ */
 [data-theme="cyberpunk"] {
-  --bg-base:        #050510;
-  --bg-panel:       #0a0a1a;
-  --bg-input:       #0f0f25;
-  --bg-card:        #0f0f25;
-  --bg-hover:       #1a0a2a;
-  --bg-selector:    radial-gradient(ellipse at center, #00ffff11 0%, #050510 70%);
-
-  --border-default: #00ffff33;
-  --border-focus:   #00ffff;
-  --border-muted:   #00ffff44;
-
+  --bg-base:          #050510;
+  --bg-panel:         #0a0a1a;
+  --bg-input:         #0f0f25;
+  --bg-card:          #0f0f25;
+  --bg-hover:         #1a0a2a;
+  --bg-selector:      linear-gradient(135deg, #050510 0%, #000520 50%, #050510 100%);
+  --border-default:   #00ffff33;
+  --border-focus:     #00ffff;
+  --border-muted:     #00ffff44;
   --accent-primary:   #00ffff;
   --accent-secondary: #ff00ff;
   --accent-glow:      rgba(0,255,255,0.35);
   --accent-glow-soft: rgba(0,255,255,0.1);
-
-  --text-primary:   #e0ffff;
-  --text-secondary: #00ffff;
-  --text-muted:     #006666;
-  --text-heading:   #00ffff;
-  --text-price:     #ffff00;
-  --text-total:     #ffff00;
-  --text-warning:   #ff9900;
-  --text-error:     #ff0055;
-  --text-success:   #00ff88;
-
-  --header-bg:      linear-gradient(135deg, #000022, #050510);
-  --header-border:  #00ffff;
-
-  --btn-primary-bg: linear-gradient(135deg, #00cccc, #00ffff);
+  --text-primary:     #e0ffff;
+  --text-secondary:   #00ffff;
+  --text-muted:       #006666;
+  --text-heading:     #00ffff;
+  --text-price:       #ffff00;
+  --text-total:       #ffff00;
+  --text-warning:     #ff9900;
+  --text-error:       #ff0055;
+  --text-success:     #00ff88;
+  --header-bg:        linear-gradient(90deg, #000022, #001133, #000022);
+  --header-border:    #00ffff;
+  --btn-primary-bg:   linear-gradient(135deg, #00cccc, #00ffff);
   --btn-primary-shadow: rgba(0,255,255,0.4);
-  --btn-success-bg: linear-gradient(135deg, #00aa55, #00ff88);
+  --btn-success-bg:   linear-gradient(135deg, #00aa55, #00ff88);
   --btn-danger-border: #ff0055;
   --btn-danger-color:  #ff0055;
-
-  --total-box-bg:   linear-gradient(135deg, #000022, #001122);
+  --total-box-bg:     linear-gradient(135deg, #000022, #001122);
   --total-box-border: #00ffff;
-
-  --enchanted-color: #ff00ff;
-  --notif-bg:        #00cccc;
-
-  --tab-active-bg:  linear-gradient(135deg, #00cccc, #00ffff);
-
-  --scrollbar-thumb: #00ffff;
-  --scrollbar-track: #0a0a1a;
-
-  --modal-bg:       #0a0a1a;
-  --modal-border:   #00ffff44;
-  --modal-shadow:   rgba(0,255,255,0.25);
-
+  --enchanted-color:  #ff00ff;
+  --notif-bg:         #00cccc;
+  --tab-active-bg:    linear-gradient(135deg, #00cccc, #00ffff);
+  --scrollbar-thumb:  #00ffff;
+  --scrollbar-track:  #0a0a1a;
+  --modal-bg:         #0a0a1a;
+  --modal-border:     #00ffff44;
+  --modal-shadow:     rgba(0,255,255,0.25);
   --selector-h1-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff55;
-  --selector-btn-smith: linear-gradient(135deg, #00cccc, #00ffff);
-  --selector-btn-client: linear-gradient(135deg, #ff00aa, #ff00ff);
-  --selector-btn-admin: linear-gradient(135deg, #333355, #444477);
-
-  --font-main: 'Courier New', monospace;
-  --radius-card: 4px;
-  --radius-btn:  2px;
-  --radius-input: 2px;
+  --font-main:        'Courier New', monospace;
+  --radius-card:      2px;
+  --radius-btn:       2px;
+  --radius-input:     2px;
 }
 
-/* ========================
+/* ================================================
    TEMA 3 — SANGUE & TREVAS
-======================== */
+   Layout: vertical pesado, cards dramáticos,
+   visual grimório, full-width items, bordas góticas
+================================================ */
 [data-theme="blood"] {
-  --bg-base:        #080308;
-  --bg-panel:       #100810;
-  --bg-input:       #180a10;
-  --bg-card:        #180a10;
-  --bg-hover:       #280a18;
-  --bg-selector:    radial-gradient(ellipse at center, #330011 0%, #080308 70%);
-
-  --border-default: #3d0a1a;
-  --border-focus:   #cc0033;
-  --border-muted:   #550022;
-
+  --bg-base:          #080308;
+  --bg-panel:         #100810;
+  --bg-input:         #180a10;
+  --bg-card:          #180a10;
+  --bg-hover:         #280a18;
+  --bg-selector:      radial-gradient(ellipse at center, #330011 0%, #080308 70%);
+  --border-default:   #3d0a1a;
+  --border-focus:     #cc0033;
+  --border-muted:     #550022;
   --accent-primary:   #cc0033;
   --accent-secondary: #ff3366;
   --accent-glow:      rgba(204,0,51,0.4);
   --accent-glow-soft: rgba(204,0,51,0.15);
-
-  --text-primary:   #ffe0e8;
-  --text-secondary: #ff6688;
-  --text-muted:     #662233;
-  --text-heading:   #ff3366;
-  --text-price:     #ff6600;
-  --text-total:     #ff6600;
-  --text-warning:   #ff6600;
-  --text-error:     #ff0022;
-  --text-success:   #cc4400;
-
-  --header-bg:      linear-gradient(135deg, #1a0008, #080308);
-  --header-border:  #cc0033;
-
-  --btn-primary-bg: linear-gradient(135deg, #990022, #cc0033);
+  --text-primary:     #ffe0e8;
+  --text-secondary:   #ff6688;
+  --text-muted:       #662233;
+  --text-heading:     #ff3366;
+  --text-price:       #ff6600;
+  --text-total:       #ff6600;
+  --text-warning:     #ff6600;
+  --text-error:       #ff0022;
+  --text-success:     #cc4400;
+  --header-bg:        linear-gradient(180deg, #1a0008, #080308);
+  --header-border:    #cc0033;
+  --btn-primary-bg:   linear-gradient(135deg, #990022, #cc0033);
   --btn-primary-shadow: rgba(204,0,51,0.4);
-  --btn-success-bg: linear-gradient(135deg, #882200, #cc3300);
+  --btn-success-bg:   linear-gradient(135deg, #882200, #cc3300);
   --btn-danger-border: #ff0022;
   --btn-danger-color:  #ff0022;
-
-  --total-box-bg:   linear-gradient(135deg, #1a0008, #110008);
+  --total-box-bg:     linear-gradient(180deg, #1a0008, #110008);
   --total-box-border: #cc0033;
-
-  --enchanted-color: #ff6600;
-  --notif-bg:        #990022;
-
-  --tab-active-bg:  linear-gradient(135deg, #990022, #cc0033);
-
-  --scrollbar-thumb: #cc0033;
-  --scrollbar-track: #180a10;
-
-  --modal-bg:       #100810;
-  --modal-border:   #550022;
-  --modal-shadow:   rgba(204,0,51,0.35);
-
+  --enchanted-color:  #ff6600;
+  --notif-bg:         #990022;
+  --tab-active-bg:    linear-gradient(135deg, #990022, #cc0033);
+  --scrollbar-thumb:  #cc0033;
+  --scrollbar-track:  #180a10;
+  --modal-bg:         #100810;
+  --modal-border:     #550022;
+  --modal-shadow:     rgba(204,0,51,0.35);
   --selector-h1-shadow: 0 0 25px #cc0033, 0 0 50px #66001155;
-  --selector-btn-smith: linear-gradient(135deg, #990022, #cc0033);
-  --selector-btn-client: linear-gradient(135deg, #882200, #cc3300);
-  --selector-btn-admin: linear-gradient(135deg, #221122, #332233);
-
-  --font-main: 'Georgia', serif;
-  --radius-card: 8px;
-  --radius-btn:  6px;
-  --radius-input: 6px;
+  --font-main:        'Georgia', serif;
+  --radius-card:      4px;
+  --radius-btn:       4px;
+  --radius-input:     4px;
 }
 
-/* ========================
+/* ================================================
    TEMA 4 — FLORESTA ÉLFICA
-======================== */
+   Layout: orgânico, arredondado, centralizado,
+   visual pergaminho/natureza, fluido e harmonioso
+================================================ */
 [data-theme="forest"] {
-  --bg-base:        #060e08;
-  --bg-panel:       #0a1a0c;
-  --bg-input:       #0f2212;
-  --bg-card:        #0f2212;
-  --bg-hover:       #1a3320;
-  --bg-selector:    radial-gradient(ellipse at center, #0a2a10 0%, #060e08 70%);
-
-  --border-default: #1a3d20;
-  --border-focus:   #22cc55;
-  --border-muted:   #224d2a;
-
+  --bg-base:          #060e08;
+  --bg-panel:         #0a1a0c;
+  --bg-input:         #0f2212;
+  --bg-card:          #0f2212;
+  --bg-hover:         #1a3320;
+  --bg-selector:      radial-gradient(ellipse at center, #0a2a10 0%, #060e08 70%);
+  --border-default:   #1a3d20;
+  --border-focus:     #22cc55;
+  --border-muted:     #224d2a;
   --accent-primary:   #22aa44;
   --accent-secondary: #44dd66;
   --accent-glow:      rgba(34,170,68,0.35);
   --accent-glow-soft: rgba(34,170,68,0.12);
-
-  --text-primary:   #e0ffe8;
-  --text-secondary: #88dd99;
-  --text-muted:     #336644;
-  --text-heading:   #66cc77;
-  --text-price:     #aadd44;
-  --text-total:     #aadd44;
-  --text-warning:   #ddaa22;
-  --text-error:     #cc4444;
-  --text-success:   #44cc66;
-
-  --header-bg:      linear-gradient(135deg, #061408, #060e08);
-  --header-border:  #22aa44;
-
-  --btn-primary-bg: linear-gradient(135deg, #1a8833, #22aa44);
+  --text-primary:     #e0ffe8;
+  --text-secondary:   #88dd99;
+  --text-muted:       #336644;
+  --text-heading:     #66cc77;
+  --text-price:       #aadd44;
+  --text-total:       #aadd44;
+  --text-warning:     #ddaa22;
+  --text-error:       #cc4444;
+  --text-success:     #44cc66;
+  --header-bg:        linear-gradient(135deg, #061408, #060e08);
+  --header-border:    #22aa44;
+  --btn-primary-bg:   linear-gradient(135deg, #1a8833, #22aa44);
   --btn-primary-shadow: rgba(34,170,68,0.35);
-  --btn-success-bg: linear-gradient(135deg, #228833, #33aa55);
+  --btn-success-bg:   linear-gradient(135deg, #228833, #33aa55);
   --btn-danger-border: #cc4444;
   --btn-danger-color:  #cc4444;
-
-  --total-box-bg:   linear-gradient(135deg, #061408, #081808);
+  --total-box-bg:     linear-gradient(135deg, #061408, #081808);
   --total-box-border: #22aa44;
-
-  --enchanted-color: #aadd44;
-  --notif-bg:        #1a8833;
-
-  --tab-active-bg:  linear-gradient(135deg, #1a8833, #22aa44);
-
-  --scrollbar-thumb: #22aa44;
-  --scrollbar-track: #0a1a0c;
-
-  --modal-bg:       #0a1a0c;
-  --modal-border:   #224d2a;
-  --modal-shadow:   rgba(34,170,68,0.3);
-
+  --enchanted-color:  #aadd44;
+  --notif-bg:         #1a8833;
+  --tab-active-bg:    linear-gradient(135deg, #1a8833, #22aa44);
+  --scrollbar-thumb:  #22aa44;
+  --scrollbar-track:  #0a1a0c;
+  --modal-bg:         #0a1a0c;
+  --modal-border:     #224d2a;
+  --modal-shadow:     rgba(34,170,68,0.3);
   --selector-h1-shadow: 0 0 25px #22aa44, 0 0 50px #11552255;
-  --selector-btn-smith: linear-gradient(135deg, #1a8833, #22aa44);
-  --selector-btn-client: linear-gradient(135deg, #226633, #338844);
-  --selector-btn-admin: linear-gradient(135deg, #1a2a1a, #223322);
-
-  --font-main: 'Palatino Linotype', 'Book Antiqua', serif;
-  --radius-card: 20px;
-  --radius-btn:  14px;
-  --radius-input: 14px;
+  --font-main:        'Palatino Linotype', 'Book Antiqua', serif;
+  --radius-card:      24px;
+  --radius-btn:       20px;
+  --radius-input:     20px;
 }
 
-/* ========================
+/* ================================================
    TEMA 5 — OURO IMPERIAL
-======================== */
+   Layout: cardápio real/taverna medieval,
+   elementos horizontais, bordas elaboradas,
+   visual de menu de estabelecimento nobre
+================================================ */
 [data-theme="gold"] {
-  --bg-base:        #0e0a04;
-  --bg-panel:       #1a1206;
-  --bg-input:       #221808;
-  --bg-card:        #221808;
-  --bg-hover:       #332210;
-  --bg-selector:    radial-gradient(ellipse at center, #2a1a05 0%, #0e0a04 70%);
-
-  --border-default: #4a3010;
-  --border-focus:   #cc9900;
-  --border-muted:   #553a14;
-
+  --bg-base:          #0e0a04;
+  --bg-panel:         #1a1206;
+  --bg-input:         #221808;
+  --bg-card:          #221808;
+  --bg-hover:         #332210;
+  --bg-selector:      radial-gradient(ellipse at center, #2a1a05 0%, #0e0a04 70%);
+  --border-default:   #4a3010;
+  --border-focus:     #cc9900;
+  --border-muted:     #553a14;
   --accent-primary:   #cc9900;
   --accent-secondary: #ffcc33;
   --accent-glow:      rgba(204,153,0,0.4);
   --accent-glow-soft: rgba(204,153,0,0.15);
-
-  --text-primary:   #fff5cc;
-  --text-secondary: #ddaa44;
-  --text-muted:     #665522;
-  --text-heading:   #ffcc44;
-  --text-price:     #ffaa00;
-  --text-total:     #ffaa00;
-  --text-warning:   #ff8800;
-  --text-error:     #cc3300;
-  --text-success:   #88aa00;
-
-  --header-bg:      linear-gradient(135deg, #1a1004, #0e0a04);
-  --header-border:  #cc9900;
-
-  --btn-primary-bg: linear-gradient(135deg, #aa7700, #cc9900);
+  --text-primary:     #fff5cc;
+  --text-secondary:   #ddaa44;
+  --text-muted:       #665522;
+  --text-heading:     #ffcc44;
+  --text-price:       #ffaa00;
+  --text-total:       #ffaa00;
+  --text-warning:     #ff8800;
+  --text-error:       #cc3300;
+  --text-success:     #88aa00;
+  --header-bg:        linear-gradient(135deg, #1a1004, #0e0a04);
+  --header-border:    #cc9900;
+  --btn-primary-bg:   linear-gradient(135deg, #aa7700, #cc9900);
   --btn-primary-shadow: rgba(204,153,0,0.4);
-  --btn-success-bg: linear-gradient(135deg, #667700, #889900);
+  --btn-success-bg:   linear-gradient(135deg, #667700, #889900);
   --btn-danger-border: #cc3300;
   --btn-danger-color:  #cc3300;
-
-  --total-box-bg:   linear-gradient(135deg, #1a1004, #120e04);
+  --total-box-bg:     linear-gradient(135deg, #1a1004, #120e04);
   --total-box-border: #cc9900;
-
-  --enchanted-color: #ffcc33;
-  --notif-bg:        #aa7700;
-
-  --tab-active-bg:  linear-gradient(135deg, #aa7700, #cc9900);
-
-  --scrollbar-thumb: #cc9900;
-  --scrollbar-track: #1a1206;
-
-  --modal-bg:       #1a1206;
-  --modal-border:   #553a14;
-  --modal-shadow:   rgba(204,153,0,0.35);
-
-  --selector-h1-shadow: 0 0 25px #cc9900, 0 0 50px #66440011;
-  --selector-btn-smith: linear-gradient(135deg, #aa7700, #cc9900);
-  --selector-btn-client: linear-gradient(135deg, #886600, #aa8800);
-  --selector-btn-admin: linear-gradient(135deg, #2a2010, #3a2a14);
-
-  --font-main: 'Times New Roman', 'Georgia', serif;
-  --radius-card: 12px;
-  --radius-btn:  8px;
-  --radius-input: 8px;
+  --enchanted-color:  #ffcc33;
+  --notif-bg:         #aa7700;
+  --tab-active-bg:    linear-gradient(135deg, #aa7700, #cc9900);
+  --scrollbar-thumb:  #cc9900;
+  --scrollbar-track:  #1a1206;
+  --modal-bg:         #1a1206;
+  --modal-border:     #553a14;
+  --modal-shadow:     rgba(204,153,0,0.35);
+  --selector-h1-shadow: 0 0 25px #cc9900;
+  --font-main:        'Times New Roman', 'Georgia', serif;
+  --radius-card:      0px;
+  --radius-btn:       0px;
+  --radius-input:     0px;
 }
 
-/* ========================
+/* ================================================
    TEMA 6 — GELO ETERNO
-======================== */
+   Layout: dashboard minimalista, cards grid uniforme,
+   clean e espaçado, visual corporativo/moderno frio
+================================================ */
 [data-theme="ice"] {
-  --bg-base:        #020810;
-  --bg-panel:       #050f1e;
-  --bg-input:       #081525;
-  --bg-card:        #081525;
-  --bg-hover:       #102030;
-  --bg-selector:    radial-gradient(ellipse at center, #081830 0%, #020810 70%);
-
-  --border-default: #0e2a44;
-  --border-focus:   #44aadd;
-  --border-muted:   #103355;
-
+  --bg-base:          #f0f4f8;
+  --bg-panel:         #ffffff;
+  --bg-input:         #e8f0f8;
+  --bg-card:          #ffffff;
+  --bg-hover:         #ddeeff;
+  --bg-selector:      linear-gradient(135deg, #c8dff0 0%, #e8f4ff 100%);
+  --border-default:   #c0d8ee;
+  --border-focus:     #2299cc;
+  --border-muted:     #b0cce0;
   --accent-primary:   #2299cc;
   --accent-secondary: #55bbee;
-  --accent-glow:      rgba(34,153,204,0.35);
-  --accent-glow-soft: rgba(34,153,204,0.12);
-
-  --text-primary:   #ddf0ff;
-  --text-secondary: #88ccee;
-  --text-muted:     #2a5577;
-  --text-heading:   #aaddff;
-  --text-price:     #55eebb;
-  --text-total:     #55eebb;
-  --text-warning:   #aaccff;
-  --text-error:     #ee4477;
-  --text-success:   #33bbaa;
-
-  --header-bg:      linear-gradient(135deg, #021020, #020810);
-  --header-border:  #2299cc;
-
-  --btn-primary-bg: linear-gradient(135deg, #1177aa, #2299cc);
-  --btn-primary-shadow: rgba(34,153,204,0.4);
-  --btn-success-bg: linear-gradient(135deg, #117766, #229988);
-  --btn-danger-border: #ee4477;
-  --btn-danger-color:  #ee4477;
-
-  --total-box-bg:   linear-gradient(135deg, #021020, #031525);
+  --accent-glow:      rgba(34,153,204,0.2);
+  --accent-glow-soft: rgba(34,153,204,0.08);
+  --text-primary:     #1a3a55;
+  --text-secondary:   #336688;
+  --text-muted:       #6699bb;
+  --text-heading:     #114466;
+  --text-price:       #117755;
+  --text-total:       #117755;
+  --text-warning:     #886600;
+  --text-error:       #cc2244;
+  --text-success:     #117755;
+  --header-bg:        linear-gradient(90deg, #ffffff, #f0f8ff);
+  --header-border:    #c0d8ee;
+  --btn-primary-bg:   linear-gradient(135deg, #1177aa, #2299cc);
+  --btn-primary-shadow: rgba(34,153,204,0.3);
+  --btn-success-bg:   linear-gradient(135deg, #117766, #229988);
+  --btn-danger-border: #cc2244;
+  --btn-danger-color:  #cc2244;
+  --total-box-bg:     linear-gradient(135deg, #e8f4ff, #f0f8ff);
   --total-box-border: #2299cc;
-
-  --enchanted-color: #aaddff;
-  --notif-bg:        #1177aa;
-
-  --tab-active-bg:  linear-gradient(135deg, #1177aa, #2299cc);
-
-  --scrollbar-thumb: #2299cc;
-  --scrollbar-track: #050f1e;
-
-  --modal-bg:       #050f1e;
-  --modal-border:   #103355;
-  --modal-shadow:   rgba(34,153,204,0.3);
-
-  --selector-h1-shadow: 0 0 25px #2299cc, 0 0 50px #11446655;
-  --selector-btn-smith: linear-gradient(135deg, #1177aa, #2299cc);
-  --selector-btn-client: linear-gradient(135deg, #115577, #226688);
-  --selector-btn-admin: linear-gradient(135deg, #0a1a2a, #102030);
-
-  --font-main: 'Segoe UI', 'Arial', sans-serif;
-  --radius-card: 18px;
-  --radius-btn:  12px;
-  --radius-input: 12px;
+  --enchanted-color:  #2299cc;
+  --notif-bg:         #1177aa;
+  --tab-active-bg:    linear-gradient(135deg, #1177aa, #2299cc);
+  --scrollbar-thumb:  #2299cc;
+  --scrollbar-track:  #e0eef8;
+  --modal-bg:         #ffffff;
+  --modal-border:     #c0d8ee;
+  --modal-shadow:     rgba(34,153,204,0.15);
+  --selector-h1-shadow: 0 2px 8px rgba(34,153,204,0.3);
+  --font-main:        'Segoe UI', 'Arial', sans-serif;
+  --radius-card:      12px;
+  --radius-btn:       8px;
+  --radius-input:     8px;
 }
 
-/* ========================
-   APLICAÇÃO DAS VARIÁVEIS NO CSS BASE
-   Substitui todas as cores hardcoded pelo sistema de temas
-======================== */
-
+/* ================================================
+   BASE — aplica variáveis em todos os elementos
+================================================ */
 body {
   font-family: var(--font-main) !important;
-  background:  var(--bg-base) !important;
+  background:  var(--bg-base)  !important;
   color:       var(--text-primary) !important;
 }
 
-/* Selector */
-#screen-selector {
-  background: var(--bg-selector) !important;
-}
+/* Scrollbars */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track) !important; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb) !important; border-radius: 4px; }
+
+/* ================================================
+   SELECTOR SCREEN — todos os temas
+================================================ */
+#screen-selector { background: var(--bg-selector) !important; }
+
 .selector-box {
-  background:    var(--bg-panel) !important;
-  border-color:  var(--border-default) !important;
-  box-shadow:    0 0 60px var(--accent-glow-soft) !important;
+  background:   var(--bg-panel)      !important;
+  border-color: var(--border-default) !important;
+  box-shadow:   0 0 60px var(--accent-glow-soft) !important;
 }
 .selector-box h1 {
   color:       var(--text-heading) !important;
@@ -420,28 +344,141 @@ body {
 }
 .selector-box p { color: var(--text-secondary) !important; }
 
-.smith-btn  { background: var(--selector-btn-smith)  !important; }
-.client-btn { background: var(--selector-btn-client) !important; }
-.admin-btn  { background: var(--selector-btn-admin)  !important; }
-
-/* Login screens */
-#screen-login,
-#screen-register,
-#screen-admin-login {
-  background: var(--bg-selector) !important;
+/* ================================================
+   CYBERPUNK — SELECTOR: terminal estilo HUD
+================================================ */
+[data-theme="cyberpunk"] .selector-box {
+  border: 1px solid var(--accent-primary) !important;
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px)) !important;
+  position: relative !important;
 }
-.login-box {
-  background:   var(--bg-panel)   !important;
+[data-theme="cyberpunk"] .selector-box::before {
+  content: "// FORJA_SYS v2.077 — ACESSO REQUERIDO" !important;
+  display: block !important;
+  font-size: 0.65rem !important;
+  color: var(--accent-primary) !important;
+  margin-bottom: 20px !important;
+  letter-spacing: 3px !important;
+  opacity: 0.7 !important;
+}
+[data-theme="cyberpunk"] .selector-box h1 {
+  font-size: 1.8rem !important;
+  letter-spacing: 8px !important;
+  text-transform: uppercase !important;
+}
+[data-theme="cyberpunk"] .sel-btn {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  font-size: 0.9rem !important;
+  border: 1px solid var(--accent-primary) !important;
+}
+
+/* ================================================
+   BLOOD — SELECTOR: grimório sombrio
+================================================ */
+[data-theme="blood"] .selector-box {
+  border: 2px solid var(--accent-primary) !important;
+  border-top: 4px solid var(--accent-primary) !important;
+  border-bottom: 4px solid var(--accent-primary) !important;
+}
+[data-theme="blood"] .selector-box::before {
+  content: "⛧ ⛧ ⛧" !important;
+  display: block !important;
+  text-align: center !important;
+  color: var(--accent-primary) !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 10px !important;
+  letter-spacing: 20px !important;
+}
+[data-theme="blood"] .selector-box h1 {
+  font-size: 2.2rem !important;
+  letter-spacing: 5px !important;
+}
+
+/* ================================================
+   FOREST — SELECTOR: portal élfico
+================================================ */
+[data-theme="forest"] .selector-box {
+  border-radius: 50px !important;
+  border: 2px solid var(--accent-primary) !important;
+  padding: 50px 70px !important;
+}
+[data-theme="forest"] .selector-box::before {
+  content: "🌿 ✦ 🌿" !important;
+  display: block !important;
+  text-align: center !important;
+  font-size: 1.3rem !important;
+  margin-bottom: 10px !important;
+  letter-spacing: 10px !important;
+}
+[data-theme="forest"] .selector-buttons {
+  gap: 20px !important;
+}
+[data-theme="forest"] .sel-btn {
+  border-radius: 30px !important;
+  padding: 20px 40px !important;
+}
+
+/* ================================================
+   GOLD — SELECTOR: entrada de taverna nobre
+================================================ */
+[data-theme="gold"] .selector-box {
+  border: 3px double var(--accent-primary) !important;
+  position: relative !important;
+  padding: 50px 60px !important;
+}
+[data-theme="gold"] .selector-box::before {
+  content: "— ✦ ESTABELECIMENTO REAL ✦ —" !important;
+  display: block !important;
+  text-align: center !important;
+  color: var(--accent-primary) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 4px !important;
+  margin-bottom: 16px !important;
+  text-transform: uppercase !important;
+}
+[data-theme="gold"] .selector-box::after {
+  content: "— ✦ DESDE O ANO 477 DO REINO ✦ —" !important;
+  display: block !important;
+  text-align: center !important;
+  color: var(--accent-primary) !important;
+  font-size: 0.65rem !important;
+  letter-spacing: 3px !important;
+  margin-top: 20px !important;
+  text-transform: uppercase !important;
+}
+[data-theme="gold"] .selector-box h1 {
+  letter-spacing: 6px !important;
+  font-size: 2rem !important;
+}
+[data-theme="gold"] .sel-btn {
+  border: 2px solid var(--accent-primary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  font-size: 0.88rem !important;
+}
+
+/* ================================================
+   ICE — SELECTOR: login card clean
+================================================ */
+[data-theme="ice"] #screen-selector {
+  background: linear-gradient(135deg, #c8dff0, #e8f4ff) !important;
+}
+[data-theme="ice"] .selector-box {
+  box-shadow: 0 8px 32px rgba(34,153,204,0.15), 0 2px 8px rgba(0,0,0,0.08) !important;
   border-color: var(--border-default) !important;
-  box-shadow:   0 0 60px var(--accent-glow-soft) !important;
 }
-.login-box h2  { color: var(--text-heading)   !important; }
-.login-box p   { color: var(--text-muted)     !important; }
+[data-theme="ice"] .selector-box h1 { color: var(--text-heading) !important; }
+[data-theme="ice"] .selector-box p  { color: var(--text-secondary) !important; }
 
-/* Header */
+/* ================================================
+   HEADER — base
+================================================ */
 header {
-  background:    var(--header-bg)     !important;
-  border-color:  var(--header-border) !important;
+  background:   var(--header-bg)     !important;
+  border-color: var(--header-border) !important;
+  border-bottom-width: 2px !important;
 }
 header h1 {
   color:       var(--text-heading) !important;
@@ -449,39 +486,455 @@ header h1 {
 }
 header p { color: var(--text-secondary) !important; }
 
-/* Panels */
+/* CYBERPUNK header */
+[data-theme="cyberpunk"] header {
+  border-bottom: 2px solid var(--accent-primary) !important;
+  border-top: 1px solid var(--accent-primary) !important;
+}
+[data-theme="cyberpunk"] header::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -4px !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent) !important;
+}
+[data-theme="cyberpunk"] header h1 {
+  letter-spacing: 6px !important;
+  text-transform: uppercase !important;
+  font-size: 1.2rem !important;
+}
+
+/* BLOOD header */
+[data-theme="blood"] header {
+  border-bottom: 3px solid var(--accent-primary) !important;
+  text-align: center !important;
+}
+
+/* GOLD header */
+[data-theme="gold"] header {
+  border-bottom: 3px double var(--accent-primary) !important;
+  justify-content: space-between !important;
+}
+[data-theme="gold"] header h1 {
+  letter-spacing: 5px !important;
+  text-transform: uppercase !important;
+}
+
+/* ICE header */
+[data-theme="ice"] header {
+  border-bottom: 1px solid var(--border-default) !important;
+  box-shadow: 0 2px 8px rgba(34,153,204,0.1) !important;
+}
+[data-theme="ice"] header h1 { color: var(--text-heading) !important; }
+
+/* ================================================
+   LAYOUT PRINCIPAL — .container
+================================================ */
+
+/* ARCANA: padrão 2 colunas */
+[data-theme="arcana"] .container {
+  grid-template-columns: 1fr 380px !important;
+}
+
+/* CYBERPUNK: dashboard com sidebar */
+[data-theme="cyberpunk"] .container {
+  grid-template-columns: 260px 1fr !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+[data-theme="cyberpunk"] .left-col {
+  order: 2 !important;
+  padding: 16px !important;
+  border-left: 1px solid var(--accent-primary) !important;
+}
+[data-theme="cyberpunk"] .summary-panel {
+  order: 1 !important;
+  position: sticky !important;
+  top: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+  background: var(--bg-panel) !important;
+  border-right: 2px solid var(--accent-primary) !important;
+  padding: 16px !important;
+}
+
+/* BLOOD: coluna única full-width */
+[data-theme="blood"] .container {
+  grid-template-columns: 1fr !important;
+  max-width: 860px !important;
+}
+[data-theme="blood"] .summary-panel {
+  order: -1 !important;
+  position: static !important;
+}
+
+/* FOREST: coluna central orgânica */
+[data-theme="forest"] .container {
+  grid-template-columns: 1fr 400px !important;
+  gap: 24px !important;
+}
+
+/* GOLD: layout de cardápio */
+[data-theme="gold"] .container {
+  grid-template-columns: 1fr !important;
+  max-width: 900px !important;
+}
+[data-theme="gold"] .summary-panel {
+  position: static !important;
+}
+
+/* ICE: grid limpo */
+[data-theme="ice"] .container {
+  grid-template-columns: 1fr 360px !important;
+  gap: 20px !important;
+}
+
+/* ================================================
+   PANELS
+================================================ */
 .panel {
   background:   var(--bg-panel)      !important;
   border-color: var(--border-default) !important;
+  border-radius: var(--radius-card)  !important;
 }
 .panel h2 {
   color:        var(--text-heading)   !important;
   border-color: var(--border-default) !important;
+  font-family:  var(--font-main)      !important;
 }
 
-/* Form */
-.form-group label { color: var(--text-secondary) !important; }
+/* CYBERPUNK panels */
+[data-theme="cyberpunk"] .panel {
+  border: 1px solid var(--accent-primary) !important;
+  border-radius: 0 !important;
+  position: relative !important;
+}
+[data-theme="cyberpunk"] .panel::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0; left: 0 !important;
+  width: 20px; height: 2px !important;
+  background: var(--accent-secondary) !important;
+}
+[data-theme="cyberpunk"] .panel::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0; right: 0 !important;
+  width: 20px; height: 2px !important;
+  background: var(--accent-secondary) !important;
+}
+[data-theme="cyberpunk"] .panel h2 {
+  font-size: 0.75rem !important;
+  letter-spacing: 4px !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid var(--accent-primary) !important;
+  padding-bottom: 8px !important;
+}
+
+/* BLOOD panels */
+[data-theme="blood"] .panel {
+  border-left: 3px solid var(--accent-primary) !important;
+  border-right: 3px solid var(--accent-primary) !important;
+}
+[data-theme="blood"] .panel h2 {
+  text-align: center !important;
+  font-size: 1.4rem !important;
+  letter-spacing: 4px !important;
+  border-bottom: 1px solid var(--accent-primary) !important;
+}
+
+/* FOREST panels */
+[data-theme="forest"] .panel {
+  border: 2px solid var(--border-default) !important;
+  box-shadow: 0 4px 20px var(--accent-glow-soft) !important;
+}
+[data-theme="forest"] .panel h2 {
+  text-align: center !important;
+  font-size: 1.15rem !important;
+}
+
+/* GOLD panels */
+[data-theme="gold"] .panel {
+  border: 2px double var(--accent-primary) !important;
+  border-radius: 0 !important;
+  padding: 28px 32px !important;
+}
+[data-theme="gold"] .panel h2 {
+  text-align: center !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 5px !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid var(--accent-primary) !important;
+  padding-bottom: 12px !important;
+}
+
+/* ICE panels */
+[data-theme="ice"] .panel {
+  border: 1px solid var(--border-default) !important;
+  box-shadow: 0 2px 12px rgba(34,153,204,0.08) !important;
+}
+[data-theme="ice"] .panel h2 {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--text-heading) !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ================================================
+   WEAPONS GRID
+================================================ */
+.weapons-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+}
+
+/* CYBERPUNK: grade de terminais */
+[data-theme="cyberpunk"] .weapons-grid {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+  gap: 6px !important;
+}
+
+/* BLOOD: cards grandes e verticais */
+[data-theme="blood"] .weapons-grid {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  gap: 14px !important;
+}
+
+/* FOREST: cards médios arredondados */
+[data-theme="forest"] .weapons-grid {
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)) !important;
+  gap: 12px !important;
+}
+
+/* GOLD: lista de cardápio horizontal */
+[data-theme="gold"] .weapons-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+  gap: 0 !important;
+}
+
+/* ICE: grid uniforme clean */
+[data-theme="ice"] .weapons-grid {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+  gap: 10px !important;
+}
+
+/* ================================================
+   WEAPON CARDS
+================================================ */
+.weapon-card {
+  background:    var(--bg-card)        !important;
+  border-color:  var(--border-default) !important;
+  border-radius: var(--radius-card)    !important;
+  transition: all 0.2s !important;
+}
+.weapon-card:hover {
+  border-color: var(--accent-primary) !important;
+  box-shadow:   0 4px 15px var(--accent-glow-soft) !important;
+}
+.weapon-card.selected {
+  border-color: var(--accent-secondary) !important;
+  background:   var(--bg-hover)         !important;
+  box-shadow:   0 0 15px var(--accent-glow) !important;
+}
+.weapon-card .name         { color: var(--text-secondary) !important; font-family: var(--font-main) !important; }
+.weapon-card .category-tag { color: var(--text-muted)     !important; }
+.weapon-card .price-tag    { color: var(--text-price)     !important; }
+.weapon-card .enchanted-badge {
+  background: var(--enchanted-color) !important;
+  box-shadow: 0 0 6px var(--enchanted-color) !important;
+}
+
+/* CYBERPUNK cards: terminal scanline */
+[data-theme="cyberpunk"] .weapon-card {
+  border: 1px solid var(--accent-primary) !important;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
+  padding: 10px 8px !important;
+}
+[data-theme="cyberpunk"] .weapon-card .name {
+  font-size: 0.7rem !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+}
+[data-theme="cyberpunk"] .weapon-card .price-tag {
+  font-size: 0.7rem !important;
+  letter-spacing: 1px !important;
+}
+[data-theme="cyberpunk"] .weapon-card:hover {
+  box-shadow: 0 0 10px var(--accent-primary), inset 0 0 10px rgba(0,255,255,0.03) !important;
+}
+
+/* BLOOD cards: grimório pesado */
+[data-theme="blood"] .weapon-card {
+  border: 1px solid var(--border-default) !important;
+  border-top: 2px solid var(--accent-primary) !important;
+  padding: 16px 12px !important;
+}
+[data-theme="blood"] .weapon-card .name {
+  font-size: 0.85rem !important;
+  letter-spacing: 1px !important;
+}
+[data-theme="blood"] .weapon-card:hover {
+  box-shadow: 0 0 20px var(--accent-glow), 0 0 0 1px var(--accent-primary) !important;
+}
+
+/* FOREST cards: pergaminho arredondado */
+[data-theme="forest"] .weapon-card {
+  border: 1px solid var(--border-default) !important;
+  border-radius: 20px !important;
+  padding: 14px 10px !important;
+}
+[data-theme="forest"] .weapon-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 24px var(--accent-glow) !important;
+}
+
+/* GOLD cards: itens de cardápio */
+[data-theme="gold"] .weapon-card {
+  border: none !important;
+  border-bottom: 1px solid var(--border-default) !important;
+  border-radius: 0 !important;
+  padding: 16px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px !important;
+  text-align: left !important;
+}
+[data-theme="gold"] .weapon-card .weapon-img-wrap {
+  flex-shrink: 0 !important;
+  width: 60px !important;
+  height: 60px !important;
+}
+[data-theme="gold"] .weapon-card .qty-controls {
+  margin-left: auto !important;
+  margin-top: 0 !important;
+}
+[data-theme="gold"] .weapon-card .name {
+  font-size: 0.95rem !important;
+  font-weight: bold !important;
+}
+[data-theme="gold"] .weapon-card .category-tag {
+  font-size: 0.72rem !important;
+  font-style: italic !important;
+}
+
+/* ICE cards: tiles clean */
+[data-theme="ice"] .weapon-card {
+  border: 1px solid var(--border-default) !important;
+  box-shadow: 0 1px 4px rgba(34,153,204,0.06) !important;
+}
+[data-theme="ice"] .weapon-card:hover {
+  box-shadow: 0 4px 16px rgba(34,153,204,0.15) !important;
+  border-color: var(--accent-primary) !important;
+}
+[data-theme="ice"] .weapon-card .name         { color: var(--text-primary)   !important; }
+[data-theme="ice"] .weapon-card .category-tag { color: var(--text-muted)     !important; }
+[data-theme="ice"] .weapon-card .price-tag    { color: var(--text-price)     !important; font-weight: 700 !important; }
+
+/* ================================================
+   QTY BUTTONS
+================================================ */
+.qty-btn {
+  border-color: var(--accent-primary) !important;
+  background:   var(--bg-hover)       !important;
+  color:        var(--text-heading)   !important;
+  border-radius: 50% !important;
+}
+.qty-btn:hover { background: var(--accent-primary) !important; color: #fff !important; }
+.qty-display   { color: var(--text-primary) !important; }
+
+[data-theme="cyberpunk"] .qty-btn { border-radius: 0 !important; }
+[data-theme="gold"]      .qty-btn { border-radius: 0 !important; }
+
+/* ================================================
+   CATEGORY TABS
+================================================ */
+.tab-btn {
+  border-color:  var(--border-muted)   !important;
+  background:    var(--bg-input)       !important;
+  color:         var(--text-secondary) !important;
+  border-radius: 20px !important;
+  font-family:   var(--font-main)      !important;
+}
+.tab-btn:hover, .tab-btn.active {
+  background:   var(--accent-primary) !important;
+  border-color: var(--accent-primary) !important;
+  color: #fff !important;
+}
+
+[data-theme="cyberpunk"] .tab-btn {
+  border-radius: 0 !important;
+  border: 1px solid var(--accent-primary) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+}
+[data-theme="blood"] .tab-btn {
+  border-radius: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  background: transparent !important;
+}
+[data-theme="blood"] .tab-btn.active {
+  background: transparent !important;
+  border-bottom-color: var(--accent-primary) !important;
+  color: var(--accent-primary) !important;
+}
+[data-theme="forest"] .tab-btn { border-radius: 30px !important; }
+[data-theme="gold"] .tab-btn {
+  border-radius: 0 !important;
+  border: 1px solid var(--border-muted) !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+}
+[data-theme="ice"] .tab-btn {
+  color: var(--text-secondary) !important;
+  background: var(--bg-input) !important;
+  border-color: var(--border-default) !important;
+}
+
+/* ================================================
+   FORM INPUTS
+================================================ */
+.form-group label {
+  color:       var(--text-secondary) !important;
+  font-family: var(--font-main)      !important;
+}
 .form-group input {
-  background:   var(--bg-input)      !important;
-  border-color: var(--border-muted)  !important;
-  color:        var(--text-primary)  !important;
-  border-radius: var(--radius-input) !important;
+  background:    var(--bg-input)      !important;
+  border-color:  var(--border-muted)  !important;
+  color:         var(--text-primary)  !important;
+  border-radius: var(--radius-input)  !important;
+  font-family:   var(--font-main)     !important;
 }
 .form-group input:focus { border-color: var(--border-focus) !important; }
 
-/* Buttons */
+[data-theme="ice"] .form-group input {
+  background:   #f8fbff !important;
+  border-color: var(--border-default) !important;
+  color:        var(--text-primary) !important;
+  box-shadow:   inset 0 1px 3px rgba(34,153,204,0.08) !important;
+}
+
+/* ================================================
+   BUTTONS
+================================================ */
 .btn-primary {
   background:    var(--btn-primary-bg) !important;
   border-radius: var(--radius-btn)     !important;
   color: #fff !important;
+  font-family: var(--font-main) !important;
 }
-.btn-primary:hover {
-  box-shadow: 0 4px 20px var(--btn-primary-shadow) !important;
-}
-
 .send-btn {
   background:    var(--btn-success-bg) !important;
   border-radius: var(--radius-btn)     !important;
+  font-family:   var(--font-main)      !important;
 }
 .copy-btn {
   background:    var(--btn-primary-bg) !important;
@@ -497,81 +950,50 @@ header p { color: var(--text-secondary) !important; }
   color: #fff !important;
 }
 
-/* Category tabs */
-.tab-btn {
-  border-color:  var(--border-muted)   !important;
-  background:    var(--bg-input)       !important;
-  color:         var(--text-secondary) !important;
-  border-radius: 20px !important;
+[data-theme="cyberpunk"] .btn-primary,
+[data-theme="cyberpunk"] .send-btn,
+[data-theme="cyberpunk"] .copy-btn {
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
 }
-.tab-btn:hover,
-.tab-btn.active {
-  background: var(--accent-primary) !important;
-  border-color: var(--accent-primary) !important;
-  color: #fff !important;
-}
-
-/* Weapon cards */
-.weapon-card {
-  background:    var(--bg-card)        !important;
-  border-color:  var(--border-default) !important;
-  border-radius: var(--radius-card)    !important;
-}
-.weapon-card:hover {
-  border-color: var(--accent-primary) !important;
-  box-shadow:   0 4px 15px var(--accent-glow-soft) !important;
-}
-.weapon-card.selected {
-  border-color: var(--accent-secondary) !important;
-  background:   var(--bg-hover)         !important;
-  box-shadow:   0 0 15px var(--accent-glow) !important;
-}
-.weapon-card .name         { color: var(--text-secondary) !important; }
-.weapon-card .category-tag { color: var(--text-muted)     !important; }
-.weapon-card .price-tag    { color: var(--text-price)     !important; }
-.weapon-card .enchanted-badge {
-  background: var(--enchanted-color) !important;
-  box-shadow: 0 0 6px var(--enchanted-color) !important;
+[data-theme="gold"] .btn-primary,
+[data-theme="gold"] .send-btn,
+[data-theme="gold"] .copy-btn {
+  border: 1px solid var(--accent-primary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  font-size: 0.8rem !important;
 }
 
-.qty-btn {
-  border-color: var(--accent-primary) !important;
-  background:   var(--bg-hover)       !important;
-  color:        var(--text-heading)   !important;
+/* ================================================
+   TOTAL BOX
+================================================ */
+.total-box {
+  background:    var(--total-box-bg)    !important;
+  border-color:  var(--total-box-border) !important;
+  border-radius: var(--radius-card)     !important;
 }
-.qty-btn:hover {
-  background: var(--accent-primary) !important;
-  color: #fff !important;
-}
-.qty-display { color: var(--text-primary) !important; }
+.total-box .label      { color: var(--text-secondary) !important; }
+.total-box .value      { color: var(--text-total)     !important; }
+.total-box .item-count { color: var(--text-muted)     !important; }
 
-/* Search bar */
-.search-bar input {
-  background:    var(--bg-input)     !important;
-  border-color:  var(--border-muted) !important;
-  color:         var(--text-primary) !important;
-  border-radius: var(--radius-input) !important;
+[data-theme="blood"] .total-box {
+  border: 2px solid var(--accent-primary) !important;
+  text-align: center !important;
 }
-.search-bar input:focus { border-color: var(--border-focus) !important; }
+[data-theme="gold"] .total-box {
+  border: 2px double var(--accent-primary) !important;
+  text-align: center !important;
+}
+[data-theme="ice"] .total-box {
+  background: var(--bg-input) !important;
+  border: 2px solid var(--accent-primary) !important;
+}
 
-/* Arrow section */
-.arrow-section {
-  background:   var(--bg-input)       !important;
-  border-color: var(--border-muted)   !important;
-  border-style: dashed !important;
-  border-radius: var(--radius-card)   !important;
-}
-.arrow-section h3      { color: var(--text-secondary) !important; }
-.arrow-input-row label { color: var(--text-secondary) !important; }
-.arrow-input-row input {
-  background:   var(--bg-panel)    !important;
-  border-color: var(--border-muted) !important;
-  color:        var(--text-primary) !important;
-  border-radius: var(--radius-input) !important;
-}
-.arrow-info { color: var(--text-muted) !important; }
-
-/* Selected items */
+/* ================================================
+   SELECTED ITEMS
+================================================ */
 .selected-item-row {
   background:    var(--bg-card)   !important;
   border-radius: var(--radius-btn) !important;
@@ -580,45 +1002,132 @@ header p { color: var(--text-secondary) !important; }
 .selected-item-row .item-price { color: var(--text-price)     !important; }
 .remove-btn { color: var(--text-error) !important; }
 
-/* Total box */
-.total-box {
-  background:   var(--total-box-bg)     !important;
-  border-color: var(--total-box-border) !important;
-  border-radius: var(--radius-card)     !important;
+[data-theme="gold"] .selected-item-row {
+  border-bottom: 1px solid var(--border-muted) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
 }
-.total-box .label      { color: var(--text-secondary) !important; }
-.total-box .value      { color: var(--text-total)     !important; }
-.total-box .item-count { color: var(--text-muted)     !important; }
 
-/* Materials */
+/* ================================================
+   MATERIALS
+================================================ */
 .material-item {
   background:    var(--bg-card)   !important;
   border-radius: var(--radius-btn) !important;
 }
 .material-item .mat-name { color: var(--text-secondary) !important; }
-.material-item .mat-qty  {
-  background: var(--accent-primary) !important;
-  color: #fff !important;
-}
+.material-item .mat-qty  { background: var(--accent-primary) !important; color: #fff !important; }
 .mat-tag {
   background:   var(--accent-glow-soft) !important;
   border-color: var(--accent-glow)      !important;
   color:        var(--text-secondary)   !important;
 }
 
-/* Order cards */
+/* ================================================
+   LOGIN BOXES
+================================================ */
+#screen-login,
+#screen-register,
+#screen-admin-login {
+  background: var(--bg-selector) !important;
+}
+.login-box {
+  background:   var(--bg-panel)      !important;
+  border-color: var(--border-default) !important;
+  box-shadow:   0 0 60px var(--accent-glow-soft) !important;
+  border-radius: var(--radius-card)  !important;
+}
+.login-box h2  { color: var(--text-heading)   !important; font-family: var(--font-main) !important; }
+.login-box p   { color: var(--text-muted)     !important; }
+
+[data-theme="cyberpunk"] .login-box {
+  border: 1px solid var(--accent-primary) !important;
+  border-radius: 0 !important;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)) !important;
+}
+[data-theme="cyberpunk"] .login-box h2 {
+  letter-spacing: 6px !important;
+  text-transform: uppercase !important;
+  font-size: 1.2rem !important;
+}
+[data-theme="blood"] .login-box {
+  border: 2px solid var(--accent-primary) !important;
+  border-top: 4px solid var(--accent-primary) !important;
+}
+[data-theme="forest"] .login-box {
+  border-radius: 30px !important;
+}
+[data-theme="gold"] .login-box {
+  border: 3px double var(--accent-primary) !important;
+}
+[data-theme="ice"] .login-box {
+  background: #fff !important;
+  border: 1px solid var(--border-default) !important;
+  box-shadow: 0 8px 32px rgba(34,153,204,0.12) !important;
+}
+[data-theme="ice"] .login-box h2 { color: var(--text-heading) !important; }
+[data-theme="ice"] .login-box p  { color: var(--text-secondary) !important; }
+
+/* ================================================
+   ORDER CARDS — fila e meus pedidos
+================================================ */
 .order-card {
   background:    var(--bg-card)        !important;
   border-color:  var(--border-default) !important;
   border-radius: var(--radius-card)    !important;
 }
-.order-card:hover { border-color: var(--accent-primary) !important; }
-.order-client-name { color: var(--text-heading) !important; }
-.order-passport    { color: var(--text-muted)   !important; }
-.order-time        { color: var(--text-muted)   !important; }
-.order-items       { color: var(--text-secondary) !important; }
-.order-total       { color: var(--text-price)   !important; }
+.order-card:hover        { border-color: var(--accent-primary) !important; }
+.order-client-name       { color: var(--text-heading)   !important; }
+.order-passport          { color: var(--text-muted)     !important; }
+.order-time              { color: var(--text-muted)     !important; }
+.order-items             { color: var(--text-secondary) !important; }
+.order-total             { color: var(--text-price)     !important; }
+.my-order-card {
+  background:    var(--bg-card)          !important;
+  border-color:  var(--accent-glow-soft) !important;
+  border-radius: var(--radius-card)      !important;
+}
+.my-order-card:hover { border-color: var(--accent-glow) !important; }
 
+[data-theme="blood"] .order-card,
+[data-theme="blood"] .my-order-card {
+  border-left: 3px solid var(--accent-primary) !important;
+}
+[data-theme="gold"] .order-card,
+[data-theme="gold"] .my-order-card {
+  border: 1px solid var(--border-default) !important;
+  border-left: 3px solid var(--accent-primary) !important;
+  border-radius: 0 !important;
+}
+[data-theme="ice"] .order-card,
+[data-theme="ice"] .my-order-card {
+  border: 1px solid var(--border-default) !important;
+  box-shadow: 0 1px 4px rgba(34,153,204,0.06) !important;
+}
+
+/* ================================================
+   STATUS BUTTONS
+================================================ */
+.status-btn {
+  border-color:  var(--border-muted) !important;
+  background:    var(--bg-input)     !important;
+  color:         var(--text-muted)   !important;
+  border-radius: var(--radius-btn)   !important;
+}
+.status-btn:hover:not(:disabled) {
+  background:   var(--accent-glow-soft) !important;
+  border-color: var(--accent-primary)   !important;
+  color:        var(--text-primary)     !important;
+}
+.status-btn-active {
+  background:   var(--accent-glow)    !important;
+  border-color: var(--accent-primary) !important;
+  color: #fff !important;
+}
+
+/* ================================================
+   BUTTONS DE AÇÃO
+================================================ */
 .order-take-btn {
   background:    var(--btn-success-bg) !important;
   border-radius: var(--radius-btn)     !important;
@@ -632,86 +1141,16 @@ header p { color: var(--text-secondary) !important; }
   background: var(--btn-danger-border) !important;
   color: #fff !important;
 }
-
-/* My order cards */
-.my-order-card {
-  background:    var(--bg-card)             !important;
-  border-color:  var(--accent-glow-soft)    !important;
-  border-radius: var(--radius-card)         !important;
-}
-.my-order-card:hover { border-color: var(--accent-glow) !important; }
-
-.status-btn {
-  border-color:  var(--border-muted)   !important;
-  background:    var(--bg-input)       !important;
-  color:         var(--text-muted)     !important;
-  border-radius: var(--radius-btn)     !important;
-}
-.status-btn:hover:not(:disabled) {
-  background:   var(--accent-glow-soft) !important;
-  border-color: var(--accent-primary)   !important;
-  color:        var(--text-primary)     !important;
-}
-.status-btn-active {
-  background:   var(--accent-glow)    !important;
-  border-color: var(--accent-primary) !important;
-  color: #fff !important;
-}
-
-/* Webhook config */
-.webhook-config {
-  background:   var(--bg-input)     !important;
-  border-color: var(--border-muted) !important;
-  border-style: dashed !important;
-  border-radius: var(--radius-card) !important;
-}
-.webhook-config h3 { color: var(--text-secondary) !important; }
-.webhook-row input {
-  background:   var(--bg-panel)    !important;
-  border-color: var(--border-muted) !important;
-  color:        var(--text-primary) !important;
-  border-radius: var(--radius-btn)  !important;
-}
-.webhook-save-btn {
-  background:    var(--btn-primary-bg) !important;
-  border-radius: var(--radius-btn)     !important;
-}
-.webhook-status.ok  { color: var(--text-success) !important; }
-.webhook-status.err { color: var(--text-error)   !important; }
-
-/* Modals */
-.modal-overlay { background: rgba(0,0,0,0.75) !important; }
-.modal-box {
-  background:    var(--modal-bg)     !important;
-  border-color:  var(--modal-border) !important;
-  box-shadow:    0 0 60px var(--modal-shadow) !important;
-  border-radius: var(--radius-card)  !important;
-}
-.modal-box h3       { color: var(--text-heading)   !important; }
-.modal-subtitle     { color: var(--text-muted)     !important; }
-.modal-cancel-btn {
-  border-color:  var(--border-muted)   !important;
-  color:         var(--text-secondary) !important;
-  border-radius: var(--radius-btn)     !important;
-}
-.modal-cancel-btn:hover { border-color: var(--accent-primary) !important; }
-.modal-confirm-btn {
-  background:    var(--btn-success-bg) !important;
-  border-radius: var(--radius-btn)     !important;
-}
-
-/* Back buttons */
 .back-btn {
   border-color:  var(--border-muted)   !important;
   color:         var(--text-secondary) !important;
   border-radius: var(--radius-btn)     !important;
 }
 .back-btn:hover { border-color: var(--accent-primary) !important; }
-
 .back-btn-header {
   border-color: var(--btn-danger-border) !important;
   color:        var(--btn-danger-color)  !important;
-  background:   rgba(255,0,0,0.1)       !important;
+  background:   rgba(255,0,0,0.08)       !important;
   border-radius: var(--radius-btn)       !important;
 }
 .change-pass-btn {
@@ -726,47 +1165,74 @@ header p { color: var(--text-secondary) !important; }
   color: #fff !important;
 }
 
-/* Register */
-.register-divider::before,
-.register-divider::after { background: var(--border-default) !important; }
-.register-divider span   { color: var(--text-muted) !important; }
-.pass-row .toggle-pass-btn {
-  background:   var(--bg-input)      !important;
-  border-color: var(--border-muted)  !important;
-  color:        var(--text-secondary) !important;
+/* ================================================
+   WEBHOOK CONFIG
+================================================ */
+.webhook-config {
+  background:    var(--bg-input)     !important;
+  border-color:  var(--border-muted) !important;
+  border-style:  dashed              !important;
+  border-radius: var(--radius-card)  !important;
+}
+.webhook-config h3 { color: var(--text-secondary) !important; }
+.webhook-row input {
+  background:    var(--bg-panel)    !important;
+  border-color:  var(--border-muted) !important;
+  color:         var(--text-primary) !important;
   border-radius: var(--radius-btn)   !important;
 }
-.toggle-pass-btn:hover {
-  border-color: var(--accent-primary) !important;
-  background:   var(--bg-hover)       !important;
+.webhook-save-btn {
+  background:    var(--btn-primary-bg) !important;
+  border-radius: var(--radius-btn)     !important;
+}
+.webhook-status.ok  { color: var(--text-success) !important; }
+.webhook-status.err { color: var(--text-error)   !important; }
+
+/* ================================================
+   MODALS
+================================================ */
+.modal-overlay { background: rgba(0,0,0,0.75) !important; }
+.modal-box {
+  background:    var(--modal-bg)     !important;
+  border-color:  var(--modal-border) !important;
+  box-shadow:    0 0 60px var(--modal-shadow) !important;
+  border-radius: var(--radius-card)  !important;
+  font-family:   var(--font-main)    !important;
+}
+.modal-box h3   { color: var(--text-heading) !important; }
+.modal-subtitle { color: var(--text-muted)   !important; }
+.modal-cancel-btn {
+  border-color:  var(--border-muted)   !important;
+  color:         var(--text-secondary) !important;
+  border-radius: var(--radius-btn)     !important;
+}
+.modal-cancel-btn:hover { border-color: var(--accent-primary) !important; }
+.modal-confirm-btn {
+  background:    var(--btn-success-bg) !important;
+  border-radius: var(--radius-btn)     !important;
 }
 
-.login-error {
-  background:   rgba(255,0,0,0.1)  !important;
-  border-color: var(--text-error)  !important;
-  color:        var(--text-error)  !important;
-  border-radius: var(--radius-btn) !important;
+[data-theme="cyberpunk"] .modal-box {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)) !important;
+  border-radius: 0 !important;
 }
-.reg-success {
-  background:   rgba(0,200,0,0.1)   !important;
-  border-color: var(--text-success) !important;
-  color:        var(--text-success) !important;
-  border-radius: var(--radius-btn)  !important;
+[data-theme="gold"] .modal-box {
+  border: 3px double var(--accent-primary) !important;
 }
-
-/* Notification */
-.notif {
-  background:    var(--notif-bg)   !important;
-  border-radius: var(--radius-btn) !important;
+[data-theme="ice"] .modal-box {
+  background: #fff !important;
+  border: 1px solid var(--border-default) !important;
 }
 
-/* Admin */
-.admin-container { background: transparent !important; }
+/* ================================================
+   ADMIN PANEL
+================================================ */
 .admin-tab {
   border-color:  var(--border-default) !important;
   background:    var(--bg-panel)       !important;
   color:         var(--text-secondary) !important;
   border-radius: var(--radius-btn)     !important;
+  font-family:   var(--font-main)      !important;
 }
 .admin-tab:hover  { border-color: var(--accent-primary) !important; }
 .admin-tab.active {
@@ -779,42 +1245,25 @@ header p { color: var(--text-secondary) !important; }
   border-color:  var(--border-default) !important;
   border-radius: var(--radius-card)    !important;
 }
-.admin-panel-header h3 { color: var(--text-heading) !important; }
-.admin-panel-header    { border-color: var(--border-default) !important; }
-
+.admin-panel-header h3  { color: var(--text-heading) !important; }
+.admin-panel-header     { border-color: var(--border-default) !important; }
 .admin-search input {
-  background:   var(--bg-input)     !important;
-  border-color: var(--border-muted) !important;
-  color:        var(--text-primary) !important;
-  border-radius: var(--radius-btn)  !important;
+  background:    var(--bg-input)     !important;
+  border-color:  var(--border-muted) !important;
+  color:         var(--text-primary) !important;
+  border-radius: var(--radius-btn)   !important;
 }
-.admin-refresh-btn {
-  background:   var(--bg-input)     !important;
-  border-color: var(--border-muted) !important;
-  color:        var(--text-secondary) !important;
-  border-radius: var(--radius-btn)  !important;
-}
-.admin-refresh-btn:hover { border-color: var(--accent-primary) !important; }
-
-.admin-danger-btn {
-  border-color: var(--btn-danger-border) !important;
-  color:        var(--btn-danger-color)  !important;
-  border-radius: var(--radius-btn)       !important;
-}
-.admin-danger-btn:hover {
-  background: var(--btn-danger-border) !important;
-  color: #fff !important;
-}
-
 .admin-smith-card,
 .admin-order-card {
   background:    var(--bg-card)        !important;
   border-color:  var(--border-default) !important;
   border-radius: var(--radius-card)    !important;
 }
-.smith-card-name    { color: var(--text-heading)   !important; }
-.smith-card-meta    { color: var(--text-muted)     !important; }
-
+.smith-card-name  { color: var(--text-heading)   !important; }
+.smith-card-meta  { color: var(--text-muted)     !important; }
+.admin-order-client { color: var(--text-heading) !important; }
+.admin-order-items  { color: var(--text-secondary) !important; }
+.admin-order-total  { color: var(--text-price)   !important; }
 .admin-edit-btn {
   background:    var(--btn-primary-bg) !important;
   border-radius: var(--radius-btn)     !important;
@@ -828,26 +1277,38 @@ header p { color: var(--text-secondary) !important; }
   background: var(--btn-danger-border) !important;
   color: #fff !important;
 }
+.admin-refresh-btn {
+  background:    var(--bg-input)     !important;
+  border-color:  var(--border-muted) !important;
+  color:         var(--text-secondary) !important;
+  border-radius: var(--radius-btn)   !important;
+}
+.admin-danger-btn {
+  border-color: var(--btn-danger-border) !important;
+  color:        var(--btn-danger-color)  !important;
+  border-radius: var(--radius-btn)       !important;
+}
+.admin-danger-btn:hover {
+  background: var(--btn-danger-border) !important;
+  color: #fff !important;
+}
 
-.admin-order-client { color: var(--text-heading)   !important; }
-.admin-order-items  { color: var(--text-secondary) !important; }
-.admin-order-total  { color: var(--text-price)     !important; }
-
+/* Logs */
 .admin-log-card {
-  background:    var(--bg-card) !important;
+  background:    var(--bg-card)    !important;
   border-radius: var(--radius-btn) !important;
 }
 .log-message { color: var(--text-secondary) !important; }
 .log-time    { color: var(--text-muted)     !important; }
-
-.admin-log-card.log-register { border-left-color: var(--text-success)  !important; }
-.admin-log-card.log-login    { border-left-color: var(--accent-primary) !important; }
-.admin-log-card.log-order    { border-left-color: var(--text-warning)   !important; }
-.admin-log-card.log-delete   { border-left-color: var(--text-error)     !important; }
+.admin-log-card.log-register { border-left-color: var(--text-success)    !important; }
+.admin-log-card.log-login    { border-left-color: var(--accent-primary)  !important; }
+.admin-log-card.log-order    { border-left-color: var(--text-warning)    !important; }
+.admin-log-card.log-delete   { border-left-color: var(--text-error)      !important; }
 .admin-log-card.log-token    { border-left-color: var(--accent-secondary) !important; }
 .admin-log-card.log-edit     { border-left-color: var(--text-secondary)  !important; }
 .admin-log-card.log-transfer { border-left-color: var(--accent-secondary) !important; }
 
+/* Settings */
 .settings-card {
   background:    var(--bg-card)        !important;
   border-color:  var(--border-default) !important;
@@ -858,30 +1319,70 @@ header p { color: var(--text-secondary) !important; }
   border-color: var(--border-default) !important;
 }
 .token-display {
-  background:   var(--bg-panel)      !important;
-  border-color: var(--border-muted)  !important;
-  color:        var(--text-price)    !important;
-  border-radius: var(--radius-btn)   !important;
+  background:    var(--bg-panel)    !important;
+  border-color:  var(--border-muted) !important;
+  color:         var(--text-price)  !important;
+  border-radius: var(--radius-btn)  !important;
 }
 .admin-action-btn {
   background:    var(--btn-primary-bg) !important;
   border-radius: var(--radius-btn)     !important;
 }
 
-/* Status result cards (cliente) */
+/* ================================================
+   STATUS RESULT (cliente)
+================================================ */
 .status-result-card {
-  background:    var(--bg-card)             !important;
-  border-color:  var(--accent-glow-soft)    !important;
-  border-radius: var(--radius-card)         !important;
+  background:    var(--bg-card)          !important;
+  border-color:  var(--accent-glow-soft) !important;
+  border-radius: var(--radius-card)      !important;
 }
-.status-smith      { color: var(--text-secondary) !important; }
-.status-item       { color: var(--text-secondary) !important; border-color: var(--border-muted) !important; background: var(--bg-input) !important; }
-.status-total      { color: var(--text-warning)   !important; }
-.status-time       { color: var(--text-muted)     !important; }
+.status-smith        { color: var(--text-secondary) !important; }
+.status-item         { color: var(--text-secondary) !important; border-color: var(--border-muted) !important; background: var(--bg-input) !important; }
+.status-total        { color: var(--text-warning)   !important; }
+.status-time         { color: var(--text-muted)     !important; }
 .status-history-item { color: var(--text-secondary) !important; }
 .status-history-item span { color: var(--text-muted) !important; }
 
-/* Transfer badges */
+/* ================================================
+   REGISTER + MISC
+================================================ */
+.register-divider::before,
+.register-divider::after { background: var(--border-default) !important; }
+.register-divider span   { color: var(--text-muted) !important; }
+.toggle-pass-btn {
+  background:    var(--bg-input)       !important;
+  border-color:  var(--border-muted)   !important;
+  color:         var(--text-secondary) !important;
+  border-radius: var(--radius-btn)     !important;
+}
+.toggle-pass-btn:hover {
+  border-color: var(--accent-primary) !important;
+  background:   var(--bg-hover)       !important;
+}
+.login-error {
+  background:    rgba(255,0,0,0.08)  !important;
+  border-color:  var(--text-error)   !important;
+  color:         var(--text-error)   !important;
+  border-radius: var(--radius-btn)   !important;
+}
+.reg-success {
+  background:    rgba(0,200,0,0.08)   !important;
+  border-color:  var(--text-success)  !important;
+  color:         var(--text-success)  !important;
+  border-radius: var(--radius-btn)    !important;
+}
+.notif {
+  background:    var(--notif-bg)   !important;
+  border-radius: var(--radius-btn) !important;
+}
+.empty-state      { color: var(--text-muted) !important; }
+.register-link    { color: var(--text-heading) !important; }
+.register-link-text { color: var(--text-secondary) !important; }
+.my-order-history { border-color: var(--border-default) !important; }
+.my-order-history-item { color: var(--text-muted) !important; }
+
+/* Transfer */
 .my-order-transfer-badge,
 .order-transfer-badge,
 .status-transfer-badge {
@@ -889,14 +1390,12 @@ header p { color: var(--text-secondary) !important; }
   border-color: var(--accent-glow)      !important;
   color:        var(--text-secondary)   !important;
 }
-
-/* Transfer modal */
 .smith-transfer-option {
   background:    var(--bg-card)        !important;
   border-color:  var(--border-default) !important;
   border-radius: var(--radius-btn)     !important;
 }
-.smith-transfer-option:hover  { border-color: var(--accent-glow) !important; }
+.smith-transfer-option:hover   { border-color: var(--accent-glow) !important; }
 .smith-transfer-option.selected {
   border-color: var(--accent-primary) !important;
   background:   var(--bg-hover)       !important;
@@ -907,133 +1406,41 @@ header p { color: var(--text-secondary) !important; }
   background:    var(--btn-primary-bg) !important;
   border-radius: var(--radius-btn)     !important;
 }
-.transfer-confirm-btn {
-  background: var(--btn-primary-bg) !important;
+
+/* Weapon image */
+.weapon-img-wrap {
+  background:    var(--accent-glow-soft) !important;
+  border-color:  var(--accent-glow)      !important;
+  border-radius: var(--radius-card)      !important;
 }
 
 /* Weapon preview modal */
 .wp-box {
-  background:    var(--modal-bg)    !important;
+  background:    var(--modal-bg)     !important;
   border-color:  var(--modal-border) !important;
   box-shadow:    0 0 60px var(--modal-shadow) !important;
-  border-radius: var(--radius-card) !important;
+  border-radius: var(--radius-card)  !important;
 }
 .wp-img-wrap {
-  background:   var(--accent-glow-soft) !important;
-  border-color: var(--accent-glow)      !important;
-  border-radius: var(--radius-btn)      !important;
+  background:    var(--accent-glow-soft) !important;
+  border-color:  var(--accent-glow)      !important;
+  border-radius: var(--radius-btn)       !important;
 }
-.wp-name { color: var(--text-heading) !important; }
-.wp-close {
-  background:   rgba(255,255,255,0.06) !important;
-  border-color: rgba(255,255,255,0.12) !important;
-  color:        var(--text-muted)      !important;
-}
+.wp-name  { color: var(--text-heading) !important; }
+.wp-close { color: var(--text-muted)   !important; }
 
-/* Scrollbars */
-::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb) !important; }
-::-webkit-scrollbar-track { background: var(--scrollbar-track) !important; }
-
-/* Empty state */
-.empty-state { color: var(--text-muted) !important; }
-
-/* Register link */
-.register-link-text { color: var(--text-secondary) !important; }
-.register-link      { color: var(--text-heading)   !important; }
-
-/* My order history */
-.my-order-history       { border-color: var(--border-default) !important; }
-.my-order-history-item  { color: var(--text-muted) !important; }
-
-/* Weapon image */
-.weapon-img-wrap {
-  background:   var(--accent-glow-soft) !important;
-  border-color: var(--accent-glow)      !important;
-  border-radius: var(--radius-card)     !important;
-}
-
-/* ========================
-   EFEITOS ESPECIAIS POR TEMA
-======================== */
-
-/* Cyberpunk — scanlines e glow nos títulos */
-[data-theme="cyberpunk"] header h1,
-[data-theme="cyberpunk"] .selector-box h1,
-[data-theme="cyberpunk"] .panel h2 {
-  letter-spacing: 4px !important;
-  text-transform: uppercase !important;
-}
-[data-theme="cyberpunk"] .weapon-card {
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
-}
-[data-theme="cyberpunk"] .btn-primary,
-[data-theme="cyberpunk"] .send-btn,
-[data-theme="cyberpunk"] .copy-btn {
-  text-transform: uppercase !important;
-  letter-spacing: 2px !important;
-}
-[data-theme="cyberpunk"] .panel {
-  border-left: 2px solid var(--accent-primary) !important;
-}
-
-/* Blood — bordas mais pesadas */
-[data-theme="blood"] .panel h2 {
-  border-bottom: 2px solid var(--accent-primary) !important;
-}
-[data-theme="blood"] .weapon-card.selected {
-  box-shadow: 0 0 20px var(--accent-glow), inset 0 0 20px rgba(204,0,51,0.05) !important;
-}
-[data-theme="blood"] header {
-  border-bottom-width: 3px !important;
-}
-
-/* Forest — bordas arredondadas e suaves */
-[data-theme="forest"] .panel {
-  border: 1px solid var(--border-default) !important;
-  box-shadow: 0 4px 20px rgba(34,170,68,0.08) !important;
-}
-[data-theme="forest"] .weapon-card:hover {
-  box-shadow: 0 4px 20px var(--accent-glow), 0 0 0 1px var(--accent-primary) !important;
-}
-
-/* Gold — bordas duplas estilo medieval */
-[data-theme="gold"] .panel {
-  border: 1px solid var(--border-default) !important;
-  box-shadow: 0 0 0 1px var(--accent-glow-soft), 0 4px 20px rgba(204,153,0,0.1) !important;
-}
-[data-theme="gold"] .selector-box {
-  box-shadow: 0 0 0 1px var(--accent-glow), 0 0 40px var(--accent-glow-soft) !important;
-}
-[data-theme="gold"] header h1,
-[data-theme="gold"] .selector-box h1 {
-  letter-spacing: 4px !important;
-}
-
-/* Ice — efeito glassmorphism leve */
-[data-theme="ice"] .panel {
-  backdrop-filter: blur(4px) !important;
-  box-shadow: 0 4px 20px rgba(34,153,204,0.1), inset 0 1px 0 rgba(255,255,255,0.05) !important;
-}
-[data-theme="ice"] .weapon-card {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05) !important;
-}
-[data-theme="ice"] .weapon-card:hover {
-  box-shadow: 0 4px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.08) !important;
-}
-
-/* ========================
-   SELETOR DE TEMA NO PAINEL ADMIN
-======================== */
+/* ================================================
+   SELECTOR DE TEMA NO ADMIN
+================================================ */
 .theme-selector-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 12px;
   margin-top: 8px;
 }
-
 .theme-option {
-  border-radius: var(--radius-card);
-  border: 2px solid var(--border-default);
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.15);
   padding: 14px 10px;
   cursor: pointer;
   transition: all 0.25s;
@@ -1083,11 +1490,107 @@ header p { color: var(--text-secondary) !important; }
   display: inline-block;
   box-shadow: 0 0 6px currentColor;
 }
+.theme-opt-arcana   { background: linear-gradient(135deg, #12122a, #1a0033); }
+.theme-opt-cyberpunk { background: linear-gradient(135deg, #050510, #001122); }
+.theme-opt-blood    { background: linear-gradient(135deg, #100810, #1a0008); }
+.theme-opt-forest   { background: linear-gradient(135deg, #0a1a0c, #061408); }
+.theme-opt-gold     { background: linear-gradient(135deg, #1a1206, #0e0a04); }
+.theme-opt-ice      { background: linear-gradient(135deg, #2299cc, #55bbee); }
 
-/* Cores dos cards de preview */
-.theme-opt-arcana  { background: linear-gradient(135deg, #12122a, #1a0033); border-color: #7b2fff55 !important; }
-.theme-opt-cyberpunk { background: linear-gradient(135deg, #050510, #001122); border-color: #00ffff55 !important; }
-.theme-opt-blood   { background: linear-gradient(135deg, #100810, #1a0008); border-color: #cc003355 !important; }
-.theme-opt-forest  { background: linear-gradient(135deg, #0a1a0c, #061408); border-color: #22aa4455 !important; }
-.theme-opt-gold    { background: linear-gradient(135deg, #1a1206, #0e0a04); border-color: #cc990055 !important; }
-.theme-opt-ice     { background: linear-gradient(135deg, #050f1e, #021020); border-color: #2299cc55 !important; }
+/* ================================================
+   ARROW SECTION
+================================================ */
+.arrow-section {
+  background:    var(--bg-input)     !important;
+  border-color:  var(--border-muted) !important;
+  border-style:  dashed              !important;
+  border-radius: var(--radius-card)  !important;
+}
+.arrow-section h3      { color: var(--text-secondary) !important; }
+.arrow-input-row label { color: var(--text-secondary) !important; }
+.arrow-input-row input {
+  background:    var(--bg-panel)    !important;
+  border-color:  var(--border-muted) !important;
+  color:         var(--text-primary) !important;
+  border-radius: var(--radius-input) !important;
+}
+.arrow-info { color: var(--text-muted) !important; }
+
+/* ================================================
+   ICE — overrides globais (tema claro)
+================================================ */
+[data-theme="ice"] .panel             { background: #fff !important; border-color: var(--border-default) !important; }
+[data-theme="ice"] .weapon-card       { background: #fff !important; border-color: var(--border-default) !important; }
+[data-theme="ice"] .selected-item-row { background: var(--bg-input) !important; }
+[data-theme="ice"] .order-card        { background: #fff !important; }
+[data-theme="ice"] .my-order-card     { background: #fff !important; }
+[data-theme="ice"] .arrow-section     { background: var(--bg-input) !important; border-color: var(--border-default) !important; }
+[data-theme="ice"] .webhook-config    { background: var(--bg-input) !important; }
+[data-theme="ice"] .total-box         { background: var(--bg-input) !important; }
+[data-theme="ice"] .material-item     { background: var(--bg-input) !important; }
+[data-theme="ice"] .admin-smith-card,
+[data-theme="ice"] .admin-order-card,
+[data-theme="ice"] .admin-log-card,
+[data-theme="ice"] .settings-card     { background: #fff !important; border-color: var(--border-default) !important; }
+[data-theme="ice"] .admin-panel       { background: #fff !important; }
+[data-theme="ice"] .tab-btn           { color: var(--text-secondary) !important; }
+[data-theme="ice"] .status-item       { background: var(--bg-input) !important; color: var(--text-primary) !important; }
+[data-theme="ice"] header             { background: #fff !important; }
+[data-theme="ice"] header h1          { color: var(--text-heading) !important; text-shadow: none !important; }
+[data-theme="ice"] .login-error       { background: rgba(204,34,68,0.08) !important; }
+[data-theme="ice"] .reg-success       { background: rgba(17,119,85,0.08) !important; }
+[data-theme="ice"] .empty-state       { color: var(--text-muted) !important; }
+[data-theme="ice"] .modal-box         { background: #fff !important; }
+[data-theme="ice"] .wp-box            { background: #fff !important; border-color: var(--border-default) !important; }
+[data-theme="ice"] .wp-name           { color: var(--text-heading) !important; }
+[data-theme="ice"] .wp-close          { color: var(--text-muted) !important; }
+[data-theme="ice"] .back-btn          { color: var(--text-secondary) !important; border-color: var(--border-muted) !important; }
+[data-theme="ice"] .change-pass-btn   { color: var(--text-secondary) !important; }
+[data-theme="ice"] .qty-display       { color: var(--text-primary) !important; }
+[data-theme="ice"] .smith-card-name   { color: var(--text-heading) !important; }
+[data-theme="ice"] .order-client-name { color: var(--text-heading) !important; }
+[data-theme="ice"] .token-display     { color: var(--text-price) !important; background: var(--bg-input) !important; }
+
+/* ================================================
+   RESPONSIVE
+================================================ */
+@media (max-width: 900px) {
+  [data-theme="cyberpunk"] .container {
+    grid-template-columns: 1fr !important;
+  }
+  [data-theme="cyberpunk"] .summary-panel {
+    height: auto !important;
+    position: static !important;
+    border-right: none !important;
+    border-bottom: 2px solid var(--accent-primary) !important;
+  }
+  [data-theme="cyberpunk"] .left-col {
+    border-left: none !important;
+    border-top: 1px solid var(--accent-primary) !important;
+  }
+
+  .container { grid-template-columns: 1fr !important; }
+  .summary-panel { position: static !important; }
+  header { padding: 12px 16px !important; }
+  header h1 { font-size: 1.2rem !important; }
+  .header-right { gap: 6px !important; }
+  .change-pass-btn,
+  .back-btn-header { padding: 6px 10px !important; font-size: 0.78rem !important; }
+}
+
+@media (max-width: 700px) {
+  .admin-smith-card   { flex-direction: column !important; align-items: flex-start !important; }
+  .smith-card-actions { width: 100% !important; }
+  .admin-edit-btn,
+  .admin-delete-btn   { flex: 1 !important; text-align: center !important; }
+  .settings-grid      { grid-template-columns: 1fr !important; }
+  .theme-selector-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 500px) {
+  header h1        { font-size: 1rem !important; }
+  .weapons-grid    { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important; }
+  .selector-box    { padding: 30px 20px !important; }
+  .selector-box h1 { font-size: 1.7rem !important; }
+  .header-right    { flex-direction: column !important; gap: 4px !important; }
+}
