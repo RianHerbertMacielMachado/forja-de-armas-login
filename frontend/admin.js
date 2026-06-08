@@ -1,6 +1,5 @@
 // ========================
 // ADMIN CREDENTIALS
-// Salvas no Firebase em config/admin
 // ========================
 const DEFAULT_ADMIN_USER = "admin";
 const DEFAULT_ADMIN_PASS = "admin123";
@@ -11,7 +10,6 @@ let currentAdmin = null;
 // INIT FIREBASE PARA O ADMIN
 // ========================
 async function initFirebaseAdmin() {
-  // Se já foi inicializado (forjador logou antes), reutiliza
   if (window.firebaseDB) return true;
 
   try {
@@ -31,12 +29,12 @@ async function initFirebaseAdmin() {
     const app = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
     const db  = getDatabase(app);
 
-    window.firebaseDB     = db;
-    window.firebaseRef    = ref;
-    window.firebaseSet    = set;
-    window.firebaseGet    = get;
-    window.firebasePush   = push;
-    window.firebaseRemove = remove;
+    window.firebaseDB      = db;
+    window.firebaseRef     = ref;
+    window.firebaseSet     = set;
+    window.firebaseGet     = get;
+    window.firebasePush    = push;
+    window.firebaseRemove  = remove;
     window.firebaseOnValue = onValue;
 
     console.log("✅ Firebase admin inicializado (sem auth).");
@@ -66,7 +64,6 @@ async function doAdminLogin() {
   setLoading(btn, true, "Verificando...");
 
   try {
-    // ✅ Garante que o Firebase está pronto antes de qualquer operação
     const ready = await initFirebaseAdmin();
     if (!ready) {
       errEl.textContent = "Erro ao conectar ao banco de dados.";
@@ -337,6 +334,10 @@ async function loadAdminOrders() {
         ? `<div style="font-size:0.75rem;color:#c4b5fd;margin-bottom:6px;">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
         : "";
 
+      const smithLine = order.smithName
+        ? `<div style="font-size:0.78rem;color:#6d6d9a;margin-bottom:4px;">🔨 Forjador: ${order.smithName}</div>`
+        : `<div style="font-size:0.78rem;color:#6d6d9a;margin-bottom:4px;">⏳ Aguardando forjador</div>`;
+
       return `
         <div class="admin-order-card">
           <div class="admin-order-header">
@@ -346,6 +347,7 @@ async function loadAdminOrders() {
             </div>
             <span class="admin-order-time">🕐 ${order.timestamp}</span>
           </div>
+          ${smithLine}
           ${transferBadge}
           <div class="admin-order-items">${weaponLines}${arrowLine}</div>
           <div class="admin-order-total">💰 ${total}</div>
@@ -380,7 +382,6 @@ async function adminDeleteOrder(id, clientName) {
 // LOGS
 // ========================
 async function addLog(type, message) {
-  // ✅ Verifica se o Firebase está pronto antes de tentar gravar
   if (!window.firebaseDB || !window.firebasePush || !window.firebaseSet) {
     console.warn("⚠️ addLog ignorado — Firebase não inicializado.");
     return;
@@ -402,7 +403,6 @@ async function loadAdminLogs() {
   const container = document.getElementById("adminLogsList");
   container.innerHTML = `<div class="empty-state">Carregando...</div>`;
 
-  // ✅ Garante Firebase pronto antes de carregar logs
   if (!window.firebaseDB) {
     container.innerHTML = `<div class="empty-state">❌ Firebase não inicializado.</div>`;
     return;
@@ -420,7 +420,6 @@ async function loadAdminLogs() {
     snap.forEach(child => logs.push({ id: child.key, ...child.val() }));
     logs.reverse();
 
-    // ✅ Adicionado ícone para "transfer"
     const icons = {
       register: "✅",
       login:    "🔐",
