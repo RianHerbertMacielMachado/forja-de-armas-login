@@ -6,6 +6,20 @@ const TOKEN_WEBHOOK = "https://discord.com/api/webhooks/1510332405754499142/IegW
 let currentSmith = null;
 
 // ========================
+// CARREGAR TEMA SALVO
+// ========================
+async function loadSavedTheme() {
+  try {
+    const snap = await firebaseGet(firebaseRef(firebaseDB, "config/theme"));
+    const theme = snap.exists() ? snap.val() : "arcana";
+    document.body.setAttribute("data-theme", theme);
+    console.log("🎨 Tema carregado:", theme);
+  } catch (e) {
+    document.body.setAttribute("data-theme", "arcana");
+  }
+}
+
+// ========================
 // INIT FIREBASE PÚBLICO (cliente sem login)
 // ========================
 async function initFirebasePublic() {
@@ -37,9 +51,11 @@ async function initFirebasePublic() {
     window.firebaseOnValue = onValue;
 
     console.log("✅ Firebase público inicializado (leitura anônima).");
+    await loadSavedTheme();
     return true;
   } catch (e) {
     console.error("❌ Erro ao inicializar Firebase público:", e);
+    document.body.setAttribute("data-theme", "arcana");
     return false;
   }
 }
@@ -80,6 +96,7 @@ async function initFirebaseClient(customToken) {
   window.firebaseSignOut = signOut;
 
   console.log("✅ Firebase client autenticado via customToken.");
+  await loadSavedTheme();
 }
 
 // ========================
@@ -223,7 +240,6 @@ function goTo(screen) {
       break;
     case "client":
       showScreen("screen-client");
-      // ✅ Garante Firebase inicializado antes de clientInit
       initFirebasePublic().then(() => {
         if (typeof clientInit === "function") clientInit();
       });
@@ -554,6 +570,11 @@ function authInit() {
   if (lp) lp.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
   if (lu) lu.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
 
+  // Aplica tema padrão enquanto carrega
+  if (!document.body.getAttribute("data-theme")) {
+    document.body.setAttribute("data-theme", "arcana");
+  }
+
   showScreen("screen-selector");
 }
 
@@ -567,7 +588,6 @@ if (document.readyState === "complete") {
 // API URL + FIREBASE READY
 // ========================
 window.API_URL = "/api";
-
 window._firebaseReady = true;
 document.dispatchEvent(new Event("firebaseReady"));
 window._appLoaded = true;
@@ -705,10 +725,7 @@ function openWeaponPreview(name, imgSrc, icon) {
           src="${imgSrc}"
           alt="${name}"
           class="wp-img"
-          onerror="
-            this.style.display='none';
-            document.getElementById('wpImgFallback').style.display='flex';
-          "
+          onerror="this.style.display='none';document.getElementById('wpImgFallback').style.display='flex';"
         />
         <div id="wpImgFallback" class="wp-img-fallback" style="display:none;">${icon}</div>
       </div>
@@ -748,7 +765,7 @@ function sanitizeId(name) {
 function showNotif(msg, color) {
   const el = document.getElementById("notif");
   el.textContent = msg;
-  el.style.background = color || "#7b2fff";
+  el.style.background = color || "var(--accent-primary)";
   el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 2800);
 }
@@ -881,7 +898,7 @@ function buildWeaponGrid(prefix, selectedWeapons, activeCategory, searchVal) {
   });
 
   if (!list.length) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#4a4a7a;padding:30px;">Nenhuma arma encontrada.</div>`;
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:30px;">Nenhuma arma encontrada.</div>`;
     return;
   }
 
@@ -905,11 +922,7 @@ function buildWeaponGrid(prefix, selectedWeapons, activeCategory, searchVal) {
             class="weapon-img"
             onerror="this.style.display='none';document.getElementById('${imgId}-fallback').style.display='flex';"
           />
-          <div
-            id="${imgId}-fallback"
-            class="weapon-img-fallback"
-            style="display:none;"
-          >${w.icon}</div>
+          <div id="${imgId}-fallback" class="weapon-img-fallback" style="display:none;">${w.icon}</div>
         </div>
         <div class="name">${w.name}</div>
         <div class="category-tag">${w.category}</div>

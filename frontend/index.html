@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Forja de Armas - RP Shop</title>
   <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="themes.css"/>
   <link rel="icon" href="data:,"/>
 </head>
 <body>
@@ -139,6 +140,15 @@
       </div>
       <div class="settings-grid">
 
+        <!-- CARD: TEMA -->
+        <div class="settings-card" style="grid-column: 1 / -1;">
+          <h4>🎨 Tema do Site</h4>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">
+            Escolha o visual do sistema. A mudança é aplicada imediatamente para todos os usuários.
+          </p>
+          <div id="adminThemeSelector"></div>
+        </div>
+
         <div class="settings-card">
           <h4>🔑 Token de Cadastro Atual</h4>
           <div class="token-display" id="adminTokenDisplay">Carregando...</div>
@@ -166,6 +176,7 @@
 
       </div>
     </div>
+
 
   </div>
 </div>

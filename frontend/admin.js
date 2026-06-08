@@ -7,6 +7,54 @@ const DEFAULT_ADMIN_PASS = "admin123";
 let currentAdmin = null;
 
 // ========================
+// TEMAS DISPONÍVEIS
+// ========================
+const THEMES = [
+  {
+    id:   "arcana",
+    name: "Forja Arcana",
+    desc: "Roxo místico",
+    dots: ["#7b2fff","#c084fc","#4ade80"],
+    cls:  "theme-opt-arcana"
+  },
+  {
+    id:   "cyberpunk",
+    name: "Cyberpunk",
+    desc: "Neon futurista",
+    dots: ["#00ffff","#ff00ff","#ffff00"],
+    cls:  "theme-opt-cyberpunk"
+  },
+  {
+    id:   "blood",
+    name: "Sangue & Trevas",
+    desc: "Gótico sombrio",
+    dots: ["#cc0033","#ff3366","#ff6600"],
+    cls:  "theme-opt-blood"
+  },
+  {
+    id:   "forest",
+    name: "Floresta Élfica",
+    desc: "Verde natureza",
+    dots: ["#22aa44","#66cc77","#aadd44"],
+    cls:  "theme-opt-forest"
+  },
+  {
+    id:   "gold",
+    name: "Ouro Imperial",
+    desc: "Dourado medieval",
+    dots: ["#cc9900","#ffcc33","#ffaa00"],
+    cls:  "theme-opt-gold"
+  },
+  {
+    id:   "ice",
+    name: "Gelo Eterno",
+    desc: "Azul gélido",
+    dots: ["#2299cc","#55bbee","#55eebb"],
+    cls:  "theme-opt-ice"
+  }
+];
+
+// ========================
 // INIT FIREBASE PARA O ADMIN
 // ========================
 async function initFirebaseAdmin() {
@@ -38,6 +86,7 @@ async function initFirebaseAdmin() {
     window.firebaseOnValue = onValue;
 
     console.log("✅ Firebase admin inicializado (sem auth).");
+    await loadSavedTheme();
     return true;
   } catch (e) {
     console.error("❌ Erro ao inicializar Firebase admin:", e);
@@ -331,19 +380,19 @@ async function loadAdminOrders() {
       });
 
       const transferBadge = order.transferredFrom
-        ? `<div style="font-size:0.75rem;color:#c4b5fd;margin-bottom:6px;">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
+        ? `<div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:6px;">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
         : "";
 
       const smithLine = order.smithName
-        ? `<div style="font-size:0.78rem;color:#6d6d9a;margin-bottom:4px;">🔨 Forjador: ${order.smithName}</div>`
-        : `<div style="font-size:0.78rem;color:#6d6d9a;margin-bottom:4px;">⏳ Aguardando forjador</div>`;
+        ? `<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">🔨 Forjador: ${order.smithName}</div>`
+        : `<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">⏳ Aguardando forjador</div>`;
 
       return `
         <div class="admin-order-card">
           <div class="admin-order-header">
             <div>
               <span class="admin-order-client">👤 ${order.clientName}</span>
-              <span style="font-size:0.78rem;color:#6d6d9a;margin-left:8px;">🪪 ${order.passport}</span>
+              <span style="font-size:0.78rem;color:var(--text-muted);margin-left:8px;">🪪 ${order.passport}</span>
             </div>
             <span class="admin-order-time">🕐 ${order.timestamp}</span>
           </div>
@@ -459,6 +508,7 @@ async function clearAllLogs() {
 // SETTINGS
 // ========================
 async function loadAdminSettings() {
+  // Token
   try {
     const snap = await firebaseGet(
       firebaseRef(firebaseDB, "config/registerToken")
@@ -471,6 +521,54 @@ async function loadAdminSettings() {
     }
   } catch (e) {
     console.error(e);
+  }
+
+  // Tema atual
+  try {
+    const snap = await firebaseGet(firebaseRef(firebaseDB, "config/theme"));
+    const currentTheme = snap.exists() ? snap.val() : "arcana";
+    renderThemeSelector(currentTheme);
+  } catch (e) {
+    renderThemeSelector("arcana");
+  }
+}
+
+// ========================
+// SELETOR DE TEMA
+// ========================
+function renderThemeSelector(currentTheme) {
+  const container = document.getElementById("adminThemeSelector");
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="theme-selector-grid">
+      ${THEMES.map(t => `
+        <div
+          class="theme-option ${t.cls} ${currentTheme === t.id ? "active" : ""}"
+          onclick="applyTheme('${t.id}')"
+          title="${t.name}"
+        >
+          <div class="theme-preview-dots">
+            ${t.dots.map(c => `<span style="background:${c};color:${c};"></span>`).join("")}
+          </div>
+          <div class="theme-option-name">${t.name}</div>
+          <div class="theme-option-desc">${t.desc}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+async function applyTheme(themeId) {
+  try {
+    await firebaseSet(firebaseRef(firebaseDB, "config/theme"), themeId);
+    document.body.setAttribute("data-theme", themeId);
+    renderThemeSelector(themeId);
+    await addLog("edit", `Admin alterou o tema do site para "${themeId}".`);
+    showNotif("🎨 Tema aplicado com sucesso!", "#059669");
+  } catch (e) {
+    console.error(e);
+    showNotif("❌ Erro ao salvar tema.", "#f87171");
   }
 }
 
