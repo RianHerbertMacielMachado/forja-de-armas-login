@@ -10,49 +10,76 @@ const admin   = require("firebase-admin");
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// ── Firebase Admin SDK ────────────────────────────────────────
+// ── Firebase Admin SDK (inicialização segura) ─────────────────
+let firebaseReady = false;
+
 function initFirebaseAdmin() {
-  if (admin.apps.length) return; // já inicializado
+  if (admin.apps.length) { firebaseReady = true; return; }
 
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
 
   if (!raw || raw.trim() === "" || raw.trim() === "{}") {
     console.error("❌ FIREBASE_SERVICE_ACCOUNT não configurada ou vazia.");
-    console.error("   Configure a variável de ambiente no Railway com o conteúdo do serviceAccount.json");
-    process.exit(1);
+    console.error("   Tamanho da variável:", raw ? raw.length : 0);
+    console.error("   Servidor iniciará mas /api/firebase-token não funcionará.");
+    return;
   }
 
   let serviceAccount;
   try {
-    // Corrige chave privada que pode ter \\n ao invés de \n
     const normalized = raw.replace(/\\n/g, "\n");
     serviceAccount   = JSON.parse(normalized);
   } catch (e) {
-    console.error("❌ Falha ao fazer JSON.parse do FIREBASE_SERVICE_ACCOUNT:", e.message);
-    process.exit(1);
+    console.error("❌ JSON.parse falhou:", e.message);
+    console.error("   Primeiros 100 chars:", raw.substring(0, 100));
+    return;
   }
 
-  // Valida campos obrigatórios
   const required = ["project_id", "client_email", "private_key"];
   const missing  = required.filter(k => !serviceAccount[k]);
   if (missing.length) {
     console.error(`❌ Service account faltando campos: ${missing.join(", ")}`);
-    console.error("   Verifique se colou o JSON completo na variável FIREBASE_SERVICE_ACCOUNT");
-    process.exit(1);
+    return;
   }
 
-  admin.initializeApp({
-    credential:  admin.credential.cert(serviceAccount),
-    databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
-  });
-
-  console.log(`✅ Firebase Admin inicializado — projeto: ${serviceAccount.project_id}`);
+  try {
+    admin.initializeApp({
+      credential:  admin.credential.cert(serviceAccount),
+      databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
+    });
+    firebaseReady = true;
+    console.log(`✅ Firebase Admin inicializado — projeto: ${serviceAccount.project_id}`);
+  } catch (e) {
+    console.error("❌ Erro ao inicializar Firebase Admin:", e.message);
+  }
 }
 
 initFirebaseAdmin();
 
 // ── Middlewares ───────────────────────────────────────────────
 app.use(express.json());
+
+// ── Diagnóstico (remover após confirmar funcionamento) ────────
+app.get("/api/check-env", (req, res) => {
+  const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
+  let parsed = null;
+  let parseError = null;
+  try {
+    if (raw) parsed = JSON.parse(raw.replace(/\\n/g, "\n"));
+  } catch (e) {
+    parseError = e.message;
+  }
+  res.json({
+    variavelExiste:  !!raw,
+    tamanho:         raw ? raw.length : 0,
+    primeiros50:     raw ? raw.substring(0, 50) : "VAZIO",
+    firebaseReady,
+    temProjectId:    parsed ? !!parsed.project_id   : false,
+    temClientEmail:  parsed ? !!parsed.client_email  : false,
+    temPrivateKey:   parsed ? !!parsed.private_key   : false,
+    parseError,
+  });
+});
 
 // ── Rota de imagens (case-insensitive) ────────────────────────
 app.get("/image/:filename", (req, res) => {
@@ -81,6 +108,11 @@ app.get("/api/debug-images", (req, res) => {
 
 // ── Gerar token Firebase para forjador ────────────────────────
 app.post("/api/firebase-token", async (req, res) => {
+  if (!firebaseReady) {
+    return res.status(503).json({
+      error: "Firebase Admin não inicializado. Verifique a variável FIREBASE_SERVICE_ACCOUNT no Railway."
+    });
+  }
   const { uid } = req.body;
   if (!uid) return res.status(400).json({ error: "uid obrigatório" });
   try {
@@ -92,7 +124,7 @@ app.post("/api/firebase-token", async (req, res) => {
   }
 });
 
-// ── Static (frontend) — depois das rotas específicas ─────────
+// ── Static (frontend) ─────────────────────────────────────────
 app.use(express.static(path.join(__dirname, "frontend")));
 
 // ── SPA fallback ──────────────────────────────────────────────
@@ -102,4 +134,5 @@ app.get("*", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🔥 Servidor rodando na porta ${PORT}`);
+  console.log(`🔥 Firebase pronto: ${firebaseReady}`);
 });
