@@ -1,215 +1,4 @@
 // ========================
-// TOKEN WEBHOOK
-// ========================
-const TOKEN_WEBHOOK = "https://discord.com/api/webhooks/1510332405754499142/IegWcsQp-JSkI1aBJH08B3fN-yifPXdRwmXt1n_cXUwn9L0cCTr905UffrhBxjr9HRum";
-
-let currentSmith = null;
-
-// ========================
-// INIT FIREBASE CLIENT (pós-login via customToken)
-// ========================
-async function initFirebaseClient(customToken) {
-  const { initializeApp, getApps } =
-    await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-  const { getDatabase, ref, set, get, push, remove, onValue } =
-    await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-  const { getAuth, signInWithCustomToken, signOut } =
-    await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
-
-  const firebaseConfig = {
-    apiKey:      "AIzaSyA2C9_me50ygxsjS_95vQfJ7raRT_1UGlA",
-    authDomain:  "forjadores-1a9ce.firebaseapp.com",
-    databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
-    projectId:   "forjadores-1a9ce"
-  };
-
-  const existingApps = getApps();
-  const app  = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
-  const db   = getDatabase(app);
-  const auth = getAuth(app);
-
-  await signInWithCustomToken(auth, customToken);
-
-  window.firebaseDB      = db;
-  window.firebaseAuth    = auth;
-  window.firebaseRef     = ref;
-  window.firebaseSet     = set;
-  window.firebaseGet     = get;
-  window.firebasePush    = push;
-  window.firebaseRemove  = remove;
-  window.firebaseOnValue = onValue;
-  window.firebaseSignOut = signOut;
-
-  console.log("✅ Firebase client autenticado via customToken.");
-}
-
-// ========================
-// TOKEN DE CADASTRO
-// ========================
-function generateToken() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let token = "";
-  for (let i = 0; i < 8; i++)
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
-  return token;
-}
-
-async function sendOrUpdateTokenMessage(token, isUpdate) {
-  const now = new Date().toLocaleString("pt-BR");
-  const payload = {
-    username:   "⚔️ Forja de Armas",
-    avatar_url: "https://i.imgur.com/AfFp7pu.png",
-    embeds: [{
-      title: isUpdate ? "🔄 Chave de Cadastro Atualizada" : "🔑 Chave de Cadastro Gerada",
-      description:
-        `${isUpdate
-          ? "A chave anterior foi utilizada e uma nova foi gerada automaticamente."
-          : "Uma nova chave de cadastro está disponível."
-        }\n\n**🗝️ Chave atual:**\n\`\`\`\n${token}\n\`\`\`\n> Use esta chave para cadastrar um novo forjador.\n> A chave é de **uso único** — ao ser usada, uma nova será gerada.`,
-      color:     isUpdate ? 0xf59e0b : 0x7b2fff,
-      footer:    { text: `Gerada em: ${now}` },
-      timestamp: new Date().toISOString()
-    }]
-  };
-  try {
-    const snapMsg   = await firebaseGet(firebaseRef(firebaseDB, "config/tokenMessageId"));
-    const messageId = snapMsg.exists() ? snapMsg.val() : null;
-    if (messageId && isUpdate) {
-      const editRes = await fetch(
-        `${TOKEN_WEBHOOK}/messages/${messageId}`,
-        { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
-      );
-      if (editRes.ok) { console.log("✅ Token atualizado."); return; }
-    }
-    const res = await fetch(`${TOKEN_WEBHOOK}?wait=true`, {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
-    });
-    if (res.ok) {
-      const data = await res.json();
-      await firebaseSet(firebaseRef(firebaseDB, "config/tokenMessageId"), data.id);
-    }
-  } catch (e) { console.error("Erro token:", e); }
-}
-
-async function saveTokenToFirebase(token) {
-  await firebaseSet(firebaseRef(firebaseDB, "config/registerToken"), {
-    token, used: false, createdAt: new Date().toISOString()
-  });
-}
-
-async function getRegisterToken() {
-  try {
-    const snap = await firebaseGet(firebaseRef(firebaseDB, "config/registerToken"));
-    return snap.exists() ? snap.val() : null;
-  } catch (e) { return null; }
-}
-
-async function initToken() {
-  if (!window.firebaseDB) return;
-  const data = await getRegisterToken();
-  if (!data) {
-    const token = generateToken();
-    await saveTokenToFirebase(token);
-    await sendOrUpdateTokenMessage(token, false);
-  }
-}
-
-async function rotateToken() {
-  const newToken = generateToken();
-  await saveTokenToFirebase(newToken);
-  await sendOrUpdateTokenMessage(newToken, true);
-}
-
-// ========================
-// PERFIL
-// ========================
-async function getSmithProfile(uid) {
-  try {
-    const snap = await firebaseGet(firebaseRef(firebaseDB, `smiths/${uid}`));
-    return snap.exists() ? { id: uid, ...snap.val() } : null;
-  } catch (e) { return null; }
-}
-
-async function getAllSmiths() {
-  try {
-    const snap = await firebaseGet(firebaseRef(firebaseDB, "smiths"));
-    if (!snap.exists()) return [];
-    return Object.entries(snap.val()).map(([id, val]) => ({ id, ...val }));
-  } catch (e) { return []; }
-}
-
-async function getSmiths() { return getAllSmiths(); }
-
-// ========================
-// NAVEGAÇÃO
-// ========================
-function showScreen(screenId) {
-  const all = [
-    "screen-selector", "screen-login", "screen-register",
-    "screen-client", "screen-smith", "screen-admin-login", "screen-admin"
-  ];
-  all.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
-  const target = document.getElementById(screenId);
-  if (!target) { console.error("Tela não encontrada:", screenId); return; }
-  const flexScreens = [
-    "screen-selector", "screen-login", "screen-register", "screen-admin-login"
-  ];
-  target.style.display = flexScreens.includes(screenId) ? "flex" : "block";
-}
-
-function goTo(screen) {
-  const editModal = document.getElementById("editSmithModal");
-  if (editModal) editModal.style.display = "none";
-
-  switch (screen) {
-    case "selector":
-      showScreen("screen-selector");
-      break;
-    case "login": {
-      const u = document.getElementById("loginUser");
-      const p = document.getElementById("loginPass");
-      const e = document.getElementById("loginError");
-      if (u) u.value = "";
-      if (p) p.value = "";
-      if (e) { e.textContent = ""; e.classList.add("hidden"); e.style.display = "none"; }
-      showScreen("screen-login");
-      break;
-    }
-    case "register":
-      clearRegisterForm();
-      showScreen("screen-register");
-      break;
-    case "client":
-      showScreen("screen-client");
-      if (typeof clientInit === "function") clientInit();
-      break;
-    case "smith":
-      showScreen("screen-smith");
-      if (typeof smithInit === "function") smithInit();
-      break;
-    case "admin-login": {
-      const au = document.getElementById("adminLoginUser");
-      const ap = document.getElementById("adminLoginPass");
-      const ae = document.getElementById("adminLoginError");
-      if (au) au.value = "";
-      if (ap) ap.value = "";
-      if (ae) { ae.textContent = ""; ae.classList.add("hidden"); ae.style.display = "none"; }
-      showScreen("screen-admin-login");
-      break;
-    }
-    case "admin":
-      showScreen("screen-admin");
-      if (typeof adminInit === "function") adminInit();
-      break;
-    default:
-      showScreen("screen-selector");
-  }
-}
-
-// ========================
 // LOGIN FORJADOR
 // ========================
 function clearLoginForm() {
@@ -323,7 +112,6 @@ async function doChangePassword() {
   setLoading(btn, true, "Salvando...");
 
   try {
-    // Verifica senha atual
     const checkRes = await fetch(`${window.API_URL}/login`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
@@ -335,7 +123,6 @@ async function doChangePassword() {
       return;
     }
 
-    // Altera senha
     const res  = await fetch(`${window.API_URL}/change-password`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
@@ -420,7 +207,6 @@ async function doRegister() {
       return;
     }
 
-    // Rotaciona token via servidor
     await fetch(`${window.API_URL}/rotate-token`, { method: "POST" });
 
     const sEl = document.getElementById("regSuccess");
