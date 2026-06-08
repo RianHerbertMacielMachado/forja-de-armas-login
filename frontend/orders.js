@@ -294,13 +294,12 @@ async function consultarStatusPedido() {
         ? `<div class="status-smith">🔨 Forjador: <strong>${order.smithName}</strong></div>`
         : `<div class="status-smith">⏳ Aguardando forjador...</div>`;
 
-      const transferBadge = order.transferredFrom
-        ? `<div class="status-transfer-badge">🔄 Transferido de <strong>${order.transferredFrom}</strong></div>`
-        : "";
-
-      const historyHtml = (order.statusHistory || []).map(h =>
-        `<div class="status-history-item">${h.emoji} <strong>${h.label}</strong> <span>${h.time}</span></div>`
-      ).join("");
+      // ✅ Filtra transferências — cliente só vê status relevantes
+      const historyHtml = (order.statusHistory || [])
+        .filter(h => h.key !== "transfer")
+        .map(h =>
+          `<div class="status-history-item">${h.emoji} <strong>${h.label}</strong> <span>${h.time}</span></div>`
+        ).join("");
 
       return `
         <div class="status-result-card">
@@ -311,7 +310,6 @@ async function consultarStatusPedido() {
             <span class="status-order-id">#${order.shortId || order.id.slice(-6).toUpperCase()}</span>
           </div>
           ${smithLine}
-          ${transferBadge}
           <div class="status-items-row">${weaponLines}${arrowLine}</div>
           <div class="status-total">💰 ${totalFormatted}</div>
           ${historyHtml ? `<div class="status-history">${historyHtml}</div>` : ""}
