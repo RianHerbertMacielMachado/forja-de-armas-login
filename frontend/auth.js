@@ -277,35 +277,11 @@ function setLoading(btn, loading, text) {
 }
 
 // ========================
-// INIT
+// LISTENERS DE TECLADO LOGIN
 // ========================
-function authInit() {
-  console.log("🔐 authInit rodando...");
-
-  [
-    "loginError", "adminLoginError", "regError", "regSuccess",
-    "editSmithError", "adminPassError", "adminPassSuccess",
-    "cpError", "cpSuccess"
-  ].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.classList.add("hidden"); el.style.display = "none"; }
-  });
-
-  ["editSmithModal", "changePassModal"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.style.display = "none"; }
-  });
-
+(function() {
   const lp = document.getElementById("loginPass");
   const lu = document.getElementById("loginUser");
   if (lp) lp.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
   if (lu) lu.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
-
-  showScreen("screen-selector");
-}
-
-if (document.readyState === "complete") {
-  authInit();
-} else {
-  window.addEventListener("load", authInit);
-}
+})();
