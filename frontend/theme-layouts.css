@@ -1,597 +1,417 @@
-/* ========================
-   TRANSFORMAÇÕES ESTRUTURAIS COMPLETAS POR TEMA
-   Cada tema reconstrói visualmente o site mantendo funcionalidades
-======================== */
+/* ================================================================
+   THEME-LAYOUTS.CSS — TRANSFORMAÇÕES DE LAYOUT POR TEMA
+   Cada tema reimagina a estrutura visual mantendo a funcionalidade
+================================================================ */
 
-/* ═══════════════════════════════════════════════════════════════════
-   TEMA CYBERPUNK - HUD Futurista com Scanlines e Layout Invertido
-═══════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   CYBERPUNK — Lista HUD Horizontal + Painel Esquerdo
+════════════════════════════════════════════════════════════════ */
 
-/* Scanlines globais */
-[data-theme="cyberpunk"] body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,255,255,0.02) 2px,
-    rgba(0,255,255,0.02) 4px
-  );
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* Layout principal invertido */
 [data-theme="cyberpunk"] .container {
   display: flex !important;
   flex-direction: row-reverse !important;
   max-width: 100% !important;
-  gap: 15px;
+  padding: 12px 16px !important;
+  gap: 12px !important;
+  align-items: start;
 }
 
-[data-theme="cyberpunk"] .left-col {
-  flex: 1;
-  order: 2;
-}
-
+[data-theme="cyberpunk"] .left-col { flex: 1; min-width: 0; order: 2; }
 [data-theme="cyberpunk"] .summary-panel {
-  width: 350px;
+  width: 340px;
   flex-shrink: 0;
   order: 1;
   position: sticky;
-  top: 20px;
+  top: 68px;
 }
 
-/* Produtos como lista HUD */
 [data-theme="cyberpunk"] .weapons-grid {
   display: flex !important;
   flex-direction: column !important;
-  gap: 8px;
-  max-height: 600px;
+  gap: 6px !important;
+  max-height: 640px !important;
 }
 
 [data-theme="cyberpunk"] .weapon-card {
   display: grid !important;
-  grid-template-columns: 60px 1fr auto auto !important;
-  grid-template-areas: "img info price controls" !important;
-  align-items: center;
+  grid-template-columns: 52px 1fr auto auto !important;
+  grid-template-areas: "img name price controls" !important;
+  align-items: center !important;
   text-align: left !important;
-  padding: 8px 15px !important;
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)) !important;
-  border-left: 3px solid var(--accent-primary) !important;
-  transition: all 0.2s;
-}
-
-[data-theme="cyberpunk"] .weapon-card:hover {
-  transform: translateX(8px) !important;
-  box-shadow: 4px 0 15px rgba(0,255,255,0.3) !important;
+  padding: 8px 16px !important;
+  gap: 0 12px !important;
+  height: 64px !important;
 }
 
 [data-theme="cyberpunk"] .weapon-img-wrap {
-  grid-area: img;
+  grid-area: img !important;
   margin: 0 !important;
-  width: 50px !important;
-  height: 50px !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 0 !important;
+  flex-shrink: 0 !important;
 }
 
 [data-theme="cyberpunk"] .weapon-card .name {
-  grid-area: info;
-  font-size: 0.85rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1px !important;
+  grid-area: name !important;
   margin: 0 !important;
+  font-size: 0.78rem !important;
 }
 
-[data-theme="cyberpunk"] .weapon-card .category-tag {
-  display: none !important;
-}
+[data-theme="cyberpunk"] .weapon-card .category-tag { display: none !important; }
 
 [data-theme="cyberpunk"] .weapon-card .price-tag {
-  grid-area: price;
-  font-size: 0.8rem !important;
+  grid-area: price !important;
   margin: 0 !important;
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
 }
 
 [data-theme="cyberpunk"] .weapon-card .qty-controls {
-  grid-area: controls;
+  grid-area: controls !important;
   margin: 0 !important;
-  justify-content: flex-end;
 }
 
-/* Header compacto estilo terminal */
-[data-theme="cyberpunk"] header {
-  padding: 8px 20px !important;
-  border-bottom-width: 1px !important;
-}
-
-[data-theme="cyberpunk"] header h1 {
-  font-size: 1.1rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 4px !important;
-}
-
-[data-theme="cyberpunk"] header p {
+[data-theme="cyberpunk"] .weapon-card.selected::before {
   display: none !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   TEMA BLOOD - Painel de Comando Fixo Inferior
-═══════════════════════════════════════════════════════════════════ */
+[data-theme="cyberpunk"] .enchanted-badge {
+  grid-area: name;
+  position: static;
+  width: 6px;
+  height: 6px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+[data-theme="cyberpunk"] header {
+  padding: 10px 20px !important;
+}
+
+[data-theme="cyberpunk"] .category-tabs {
+  gap: 4px !important;
+  margin-bottom: 14px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BLOOD — Layout de Duas Colunas Expandido + Painel Fixo Inferior
+════════════════════════════════════════════════════════════════ */
 
 [data-theme="blood"] .container {
   display: block !important;
-  padding-bottom: 380px !important;
-  max-width: 1200px;
+  max-width: 1200px !important;
+  padding-bottom: 360px !important;
 }
 
-[data-theme="blood"] .left-col {
-  width: 100%;
-}
+[data-theme="blood"] .left-col { width: 100%; }
 
-/* Painel fixo no rodapé */
 [data-theme="blood"] .summary-panel {
   position: fixed !important;
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
   width: 100% !important;
-  height: 350px;
-  background: linear-gradient(180deg, var(--bg-panel), #050308) !important;
-  border-top: 4px solid var(--accent-primary) !important;
+  height: 340px !important;
+  max-height: 340px !important;
+  z-index: 90 !important;
   display: flex !important;
-  gap: 20px;
-  padding: 20px 30px !important;
-  overflow-x: auto;
-  z-index: 1000;
-  box-shadow: 0 -15px 60px rgba(0,0,0,0.9) !important;
+  flex-direction: row !important;
+  gap: 16px !important;
+  padding: 16px 28px !important;
+  background: linear-gradient(0deg, var(--bg-panel) 0%, rgba(6,2,8,0.97) 100%) !important;
+  border-top: 2px solid rgba(204,0,51,0.4) !important;
+  box-shadow: 0 -20px 60px rgba(0,0,0,0.9), 0 -4px 0 rgba(204,0,51,0.2) !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  align-items: start !important;
+  backdrop-filter: blur(20px) !important;
 }
 
 [data-theme="blood"] .summary-panel > .panel {
-  flex: 1;
-  min-width: 280px;
-  max-height: 300px;
-  overflow-y: auto;
+  flex: 1 !important;
+  min-width: 260px !important;
+  max-height: 296px !important;
+  overflow-y: auto !important;
   margin-bottom: 0 !important;
-  border-top: 2px solid var(--accent-secondary) !important;
+  border-top: 2px solid rgba(204,0,51,0.3) !important;
 }
 
-/* Grid de armas expandido */
 [data-theme="blood"] .weapons-grid {
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
-  gap: 16px !important;
+  max-height: 580px !important;
+  gap: 14px !important;
 }
 
-[data-theme="blood"] .weapon-card {
-  border-top: 4px solid transparent !important;
-  border-image: linear-gradient(90deg, var(--accent-primary), transparent) 1 !important;
-  transition: all 0.3s !important;
-}
-
-[data-theme="blood"] .weapon-card:hover {
-  border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)) 1 !important;
-  box-shadow: inset 0 0 20px rgba(204,0,51,0.1) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   TEMA FOREST - Cards Orgânicos em Formato de Arco
-═══════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   FOREST — Cards Orgânicos em Grade Aberta
+════════════════════════════════════════════════════════════════ */
 
 [data-theme="forest"] .weapons-grid {
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)) !important;
-  gap: 20px !important;
-  padding: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  gap: 18px !important;
+  max-height: 560px !important;
+  padding: 8px !important;
 }
 
-/* Cards em formato de arco élfico */
 [data-theme="forest"] .weapon-card {
-  border-radius: 80px 80px 20px 20px !important;
-  padding: 20px 15px 15px !important;
-  position: relative;
-  overflow: visible !important;
-  transform-origin: bottom center;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-}
-
-[data-theme="forest"] .weapon-card::before {
-  content: "";
-  position: absolute;
-  top: -5px;
-  left: 20%;
-  right: 20%;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-  border-radius: 50%;
-}
-
-[data-theme="forest"] .weapon-card:hover {
-  transform: translateY(-8px) rotate(1deg) scale(1.02) !important;
-  box-shadow: 
-    0 15px 30px rgba(34,170,68,0.3),
-    0 0 20px rgba(34,170,68,0.1) !important;
+  padding: 18px 14px !important;
 }
 
 [data-theme="forest"] .weapon-img-wrap {
+  width: 84px !important;
+  height: 84px !important;
   border-radius: 50% !important;
-  width: 80px !important;
-  height: 80px !important;
-  margin: 0 auto 12px !important;
-  border: 3px solid var(--accent-glow) !important;
-  overflow: hidden;
-  position: relative;
+  border: 2px solid rgba(34,170,68,0.3) !important;
 }
 
-[data-theme="forest"] .weapon-img-wrap::after {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
-  z-index: -1;
-}
-
-/* Filtros como pílulas flutuantes */
 [data-theme="forest"] .category-tabs {
   justify-content: center !important;
-  margin-bottom: 25px !important;
 }
 
 [data-theme="forest"] .tab-btn {
-  border-radius: 50px !important;
-  padding: 8px 18px !important;
-  position: relative;
-  overflow: hidden;
+  font-style: italic !important;
 }
 
-[data-theme="forest"] .tab-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s;
-}
-
-[data-theme="forest"] .tab-btn:hover::before {
-  transform: translateX(100%);
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   TEMA GOLD - Estilo Pergaminho com Lista Densa Medieval
-═══════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   GOLD — Lista Densa de Duas Colunas (Estilo Inventário)
+════════════════════════════════════════════════════════════════ */
 
 [data-theme="gold"] .weapons-grid {
-  display: block !important;
-  columns: 2;
-  column-gap: 30px;
-  column-fill: balance;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0 !important;
+  max-height: 600px !important;
+  border: 1px solid rgba(204,153,0,0.2);
 }
 
 [data-theme="gold"] .weapon-card {
   display: grid !important;
-  grid-template-columns: 45px 1fr auto !important;
-  grid-template-areas: 
+  grid-template-columns: 40px 1fr auto !important;
+  grid-template-rows: auto auto !important;
+  grid-template-areas:
     "img name controls"
-    "img details controls" !important;
-  align-items: center;
+    "img meta controls" !important;
+  align-items: center !important;
   text-align: left !important;
-  padding: 10px 15px !important;
-  margin-bottom: 8px;
+  padding: 10px 14px !important;
+  gap: 0 10px !important;
   border-radius: 0 !important;
   border: none !important;
-  border-bottom: 1px solid var(--border-muted) !important;
+  border-bottom: 1px solid rgba(204,153,0,0.15) !important;
+  border-right: 1px solid rgba(204,153,0,0.15) !important;
   background: transparent !important;
-  break-inside: avoid;
-  page-break-inside: avoid;
-}
-
-[data-theme="gold"] .weapon-card::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--accent-primary), transparent);
+  height: auto !important;
+  min-height: 58px !important;
 }
 
 [data-theme="gold"] .weapon-card:hover {
-  background: rgba(204,153,0,0.05) !important;
-  border-bottom-color: var(--accent-primary) !important;
+  background: rgba(204,153,0,0.04) !important;
+  transform: none !important;
+}
+
+[data-theme="gold"] .weapon-card:nth-child(2n) {
+  border-right: none !important;
 }
 
 [data-theme="gold"] .weapon-img-wrap {
-  grid-area: img;
-  width: 35px !important;
-  height: 35px !important;
+  grid-area: img !important;
+  grid-row: 1 / 3 !important;
   margin: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
   border-radius: 0 !important;
+  flex-shrink: 0 !important;
 }
 
 [data-theme="gold"] .weapon-card .name {
-  grid-area: name;
-  font-size: 0.9rem !important;
-  margin: 0 0 2px 0 !important;
-  font-style: italic;
-}
-
-[data-theme="gold"] .weapon-card .category-tag,
-[data-theme="gold"] .weapon-card .price-tag {
-  grid-area: details;
-  font-size: 0.75rem !important;
+  grid-area: name !important;
   margin: 0 !important;
+  font-size: 0.82rem !important;
+  font-style: italic !important;
+  align-self: end !important;
 }
 
-[data-theme="gold"] .weapon-card .category-tag::after {
-  content: " • ";
-  color: var(--text-muted);
+[data-theme="gold"] .weapon-card .category-tag {
+  grid-area: meta !important;
+  margin: 0 !important;
+  align-self: start !important;
+  display: inline !important;
+}
+
+[data-theme="gold"] .weapon-card .price-tag {
+  display: none !important;
 }
 
 [data-theme="gold"] .weapon-card .qty-controls {
-  grid-area: controls;
+  grid-area: controls !important;
+  grid-row: 1 / 3 !important;
   margin: 0 !important;
+  flex-direction: column !important;
+  gap: 4px !important;
 }
 
-/* Bordas duplas medievais nos painéis */
-[data-theme="gold"] .panel {
-  border: 3px double var(--accent-primary) !important;
-  position: relative;
+[data-theme="gold"] .weapon-card.selected::before {
+  display: none !important;
 }
 
-[data-theme="gold"] .panel::before {
-  content: "";
+[data-theme="gold"] .weapon-card .enchanted-badge {
   position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(204,153,0,0.3);
-  pointer-events: none;
+  top: 4px;
+  right: 4px;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   TEMA ICE - Carrossel Horizontal Panorâmico
-═══════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   ICE — Layout Vertical + Carrossel Horizontal de Armas
+════════════════════════════════════════════════════════════════ */
 
 [data-theme="ice"] .container {
-  max-width: 95% !important;
+  max-width: 100% !important;
   display: flex !important;
-  flex-direction: column;
+  flex-direction: column !important;
+  gap: 20px !important;
 }
 
-[data-theme="ice"] .left-col {
-  order: 2;
-}
+[data-theme="ice"] .left-col { order: 2; width: 100%; }
 
 [data-theme="ice"] .summary-panel {
-  order: 1;
+  order: 1 !important;
   position: static !important;
+  top: auto !important;
   width: 100% !important;
-  margin-bottom: 20px;
-}
-
-[data-theme="ice"] .summary-panel .panel {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 16px !important;
 }
 
-/* Carrossel horizontal */
 [data-theme="ice"] .weapons-grid {
   display: flex !important;
   flex-wrap: nowrap !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
-  gap: 20px !important;
-  padding: 20px 10px 30px !important;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  gap: 16px !important;
+  padding: 16px 8px 24px !important;
+  scroll-snap-type: x mandatory !important;
+  max-height: none !important;
+}
+
+[data-theme="ice"] .weapons-grid::-webkit-scrollbar { height: 10px !important; }
+[data-theme="ice"] .weapons-grid::-webkit-scrollbar-track {
+  background: rgba(34,153,204,0.08) !important;
+  border-radius: 10px !important;
+}
+[data-theme="ice"] .weapons-grid::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #2299cc, #55bbee) !important;
+  border-radius: 10px !important;
 }
 
 [data-theme="ice"] .weapon-card {
-  flex: 0 0 200px !important;
-  scroll-snap-align: start;
-  height: 280px !important;
+  flex: 0 0 180px !important;
+  height: 270px !important;
+  scroll-snap-align: start !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: space-between;
-  backdrop-filter: blur(15px) !important;
-  border-radius: 20px !important;
-  position: relative;
-  overflow: hidden;
-}
-
-[data-theme="ice"] .weapon-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, 
-    rgba(255,255,255,0.1) 0%, 
-    transparent 50%, 
-    rgba(34,153,204,0.1) 100%);
-  pointer-events: none;
+  justify-content: space-between !important;
+  padding: 16px 12px !important;
 }
 
 [data-theme="ice"] .weapon-img-wrap {
-  width: 120px !important;
-  height: 120px !important;
-  margin: 15px auto !important;
+  width: 110px !important;
+  height: 110px !important;
   border-radius: 50% !important;
-  background: rgba(34,153,204,0.1) !important;
-  backdrop-filter: blur(10px);
+  margin: 0 auto 10px !important;
+  flex-shrink: 0 !important;
+  border: 1px solid rgba(34,153,204,0.25) !important;
 }
 
-/* Scrollbar customizada para o carrossel */
-[data-theme="ice"] .weapons-grid::-webkit-scrollbar {
-  height: 12px !important;
+/* ════════════════════════════════════════════════════════════════
+   ARCANA — Layout Base com Animações e Efeitos Místicos Melhorados
+════════════════════════════════════════════════════════════════ */
+
+[data-theme="arcana"] .weapons-grid {
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)) !important;
 }
 
-[data-theme="ice"] .weapons-grid::-webkit-scrollbar-track {
-  background: rgba(34,153,204,0.1) !important;
-  border-radius: 10px !important;
+[data-theme="arcana"] .weapon-card.selected .weapon-img-wrap {
+  box-shadow: 0 0 20px rgba(168,85,247,0.5), 0 0 40px rgba(123,47,255,0.2) !important;
+  border-color: rgba(168,85,247,0.5) !important;
 }
 
-[data-theme="ice"] .weapons-grid::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)) !important;
-  border-radius: 10px !important;
-  border: 2px solid transparent !important;
-  background-clip: content-box !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   TEMA ARCANA - Layout Base Melhorado com Efeitos Místicos
-═══════════════════════════════════════════════════════════════════ */
-
-[data-theme="arcana"] .weapon-card.selected {
-  animation: arcana-pulse 2s ease-in-out infinite !important;
-}
-
-@keyframes arcana-pulse {
-  0%, 100% { 
-    box-shadow: 0 0 15px rgba(168,85,247,0.4);
-    transform: scale(1);
-  }
-  50% { 
-    box-shadow: 0 0 30px rgba(168,85,247,0.8), 0 0 60px rgba(123,47,255,0.3);
-    transform: scale(1.02);
-  }
-}
-
-[data-theme="arcana"] .weapon-img-wrap {
-  position: relative;
-  overflow: visible !important;
-}
-
-[data-theme="arcana"] .weapon-card.selected .weapon-img-wrap::after {
-  content: "";
-  position: absolute;
-  inset: -5px;
-  border-radius: inherit;
-  background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
-  z-index: -1;
-  opacity: 0.3;
-  filter: blur(8px);
-}
-
-/* ========================
-   RESPONSIVIDADE GLOBAL
-======================== */
+/* ════════════════════════════════════════════════════════════════
+   RESPONSIVIDADE DOS LAYOUTS
+════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 1200px) {
   [data-theme="cyberpunk"] .container {
     flex-direction: column !important;
   }
-  
   [data-theme="cyberpunk"] .summary-panel {
     width: 100% !important;
-    order: 1;
+    order: 1 !important;
     position: static !important;
+    top: auto !important;
   }
-  
-  [data-theme="gold"] .weapons-grid {
-    columns: 1 !important;
-  }
-  
-  [data-theme="ice"] .weapon-card {
-    flex: 0 0 160px !important;
+  [data-theme="cyberpunk"] .left-col {
+    order: 2 !important;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   [data-theme="blood"] .summary-panel {
-    height: 280px !important;
+    height: 300px !important;
     flex-direction: column !important;
-    overflow-y: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
-  
   [data-theme="blood"] .container {
-    padding-bottom: 300px !important;
+    padding-bottom: 320px !important;
   }
-  
+
+  [data-theme="gold"] .weapons-grid {
+    grid-template-columns: 1fr !important;
+  }
+  [data-theme="gold"] .weapon-card:nth-child(2n) {
+    border-right: none !important;
+  }
+  [data-theme="gold"] .weapon-card {
+    border-right: none !important;
+  }
+
+  [data-theme="ice"] .summary-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  [data-theme="ice"] .weapon-card {
+    flex: 0 0 155px !important;
+    height: 240px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  [data-theme="cyberpunk"] .weapon-card {
+    grid-template-columns: 40px 1fr auto !important;
+    grid-template-areas: "img name controls" !important;
+    height: 54px !important;
+  }
+
+  [data-theme="cyberpunk"] .weapon-card .price-tag { display: none !important; }
+
   [data-theme="forest"] .weapons-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)) !important;
+    gap: 12px !important;
   }
-  
-  [data-theme="ice"] .weapons-grid {
-    padding: 10px 5px 20px !important;
-  }
-  
+
   [data-theme="ice"] .weapon-card {
     flex: 0 0 140px !important;
-    height: 220px !important;
+    height: 210px !important;
   }
-}
 
-/* ========================
-   EFEITOS ESPECIAIS ADICIONAIS
-======================== */
-
-/* Cyberpunk: Glitch effect nos hovers */
-[data-theme="cyberpunk"] .weapon-card:hover .name {
-  animation: glitch 0.3s ease-in-out !important;
-}
-
-@keyframes glitch {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-2px); }
-  40% { transform: translateX(2px); }
-  60% { transform: translateX(-1px); }
-  80% { transform: translateX(1px); }
-}
-
-/* Blood: Efeito de sangue pingando */
-[data-theme="blood"] .weapon-card.selected::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 2px;
-  height: 0;
-  background: linear-gradient(180deg, var(--accent-primary), transparent);
-  animation: blood-drip 3s ease-in-out infinite;
-}
-
-@keyframes blood-drip {
-  0%, 70% { height: 0; }
-  100% { height: 20px; }
-}
-
-/* Forest: Folhas flutuantes */
-[data-theme="forest"] .weapon-card:hover::after {
-  content: "🍃";
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  font-size: 0.8rem;
-  animation: leaf-float 2s ease-in-out infinite;
-}
-
-@keyframes leaf-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-5px) rotate(10deg); }
-}
-
-/* Gold: Brilho dourado */
-[data-theme="gold"] .weapon-card.selected {
-  animation: gold-shimmer 3s ease-in-out infinite !important;
-}
-
-@keyframes gold-shimmer {
-  0%, 100% { 
-    box-shadow: 0 0 10px rgba(204,153,0,0.3);
+  [data-theme="blood"] .summary-panel {
+    height: 260px !important;
+    padding: 12px 16px !important;
   }
-  50% { 
-    box-shadow: 
-      0 0 25px rgba(255,204,51,0.6), 
-      0 0 50px rgba(204,153,0,0.3),
-      inset 0 0 20px rgba(255,204,51,0.1);
+  [data-theme="blood"] .container {
+    padding-bottom: 280px !important;
   }
-}
-
-/* Ice: Cristais de gelo */
-[data-theme="ice"] .weapon-card:hover::before {
-  background: linear-gradient(135deg, 
-    rgba(255,255,255,0.2) 0%, 
-    transparent 30%, 
-    rgba(34,153,204,0.2) 70%,
-    rgba(255,255,255,0.1) 100%) !important;
 }

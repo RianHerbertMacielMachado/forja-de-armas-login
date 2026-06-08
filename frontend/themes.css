@@ -1,471 +1,780 @@
-/* ========================
-   SISTEMA DE TEMAS - REDESIGN TOTAL
-   Cada tema tem layout, tipografia e visual únicos
-======================== */
+/* ================================================================
+   THEMES.CSS — SISTEMA DE TEMAS PROFISSIONAL
+   Usa CSS Custom Properties para máxima consistência e performance
+================================================================ */
 
 /* ========================
-   VARIÁVEIS POR TEMA
+   ARCANA — FORJA MÍSTICA
+   Roxo profundo, aura mágica, elegante
 ======================== */
-
-/* TEMA 1 — FORJA ARCANA (Místico Roxo) */
 [data-theme="arcana"], :root {
-  --bg-base: #0d0d1a; --bg-panel: #12122a; --bg-input: #1a1a3a; --bg-card: #1a1a3a; --bg-hover: #2a1a4a;
-  --bg-selector: radial-gradient(ellipse at center, #1a0033 0%, #0d0d1a 70%);
-  --border-default: #2e2e5e; --border-focus: #7b2fff; --border-muted: #3d3d7a;
-  --accent-primary: #7b2fff; --accent-secondary: #a855f7; --accent-glow: rgba(123,47,255,0.35); --accent-glow-soft: rgba(123,47,255,0.15);
-  --text-primary: #e0e0ff; --text-secondary: #a78bfa; --text-muted: #6d6d9a; --text-heading: #c084fc;
-  --text-price: #4ade80; --text-total: #4ade80; --text-warning: #f59e0b; --text-error: #f87171; --text-success: #4ade80;
-  --header-bg: linear-gradient(135deg, #1a0033, #0d0d1a); --header-border: #7b2fff;
-  --btn-primary-bg: linear-gradient(135deg, #7b2fff, #a855f7); --btn-success-bg: linear-gradient(135deg, #059669, #10b981);
-  --total-box-bg: linear-gradient(135deg, #1a0033, #0d1a33); --enchanted-color: #f59e0b; --notif-bg: #7b2fff;
-  --font-main: 'Segoe UI', sans-serif; --radius-base: 16px; --radius-btn: 10px;
+  --bg-base:    #080818;
+  --bg-panel:   #0f0f26;
+  --bg-input:   #161630;
+  --bg-card:    #161630;
+  --bg-hover:   #221a40;
+  --bg-selector: radial-gradient(ellipse at 50% 0%, #1a0040 0%, #080818 65%);
+
+  --border-default: #252550;
+  --border-focus:   #7b2fff;
+  --border-muted:   #32326a;
+
+  --accent-primary:   #7b2fff;
+  --accent-secondary: #a855f7;
+  --accent-glow:      rgba(123,47,255,0.35);
+  --accent-glow-soft: rgba(123,47,255,0.12);
+
+  --text-primary:  #e8e8ff;
+  --text-secondary:#a78bfa;
+  --text-muted:    #5a5a90;
+  --text-heading:  #c084fc;
+  --text-price:    #4ade80;
+  --text-total:    #4ade80;
+  --text-warning:  #f59e0b;
+  --text-error:    #f87171;
+  --text-success:  #4ade80;
+
+  --header-bg:     linear-gradient(180deg, #100028 0%, rgba(8,8,24,0.95) 100%);
+  --header-border: rgba(123,47,255,0.5);
+
+  --btn-primary-bg: linear-gradient(135deg, #6d28d9, #7b2fff, #a855f7);
+  --btn-success-bg: linear-gradient(135deg, #047857, #059669, #10b981);
+  --total-box-bg:   linear-gradient(135deg, #12002a, #0a1428);
+
+  --enchanted-color: #f59e0b;
+  --notif-bg:        #6d28d9;
+
+  --font-main: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
-/* TEMA 2 — CYBERPUNK (Neon Futurista) */
-[data-theme="cyberpunk"] {
-  --bg-base: #050510; --bg-panel: #0a0a1a; --bg-input: #0f0f25; --bg-card: #0f0f25; --bg-hover: #1a0a2a;
-  --bg-selector: radial-gradient(ellipse at center, #00ffff11 0%, #050510 70%);
-  --border-default: #00ffff33; --border-focus: #00ffff; --border-muted: #00ffff44;
-  --accent-primary: #00ffff; --accent-secondary: #ff00ff; --accent-glow: rgba(0,255,255,0.35); --accent-glow-soft: rgba(0,255,255,0.1);
-  --text-primary: #e0ffff; --text-secondary: #00ffff; --text-muted: #006666; --text-heading: #00ffff;
-  --text-price: #ffff00; --text-total: #ffff00; --text-warning: #ff9900; --text-error: #ff0055; --text-success: #00ff88;
-  --header-bg: linear-gradient(135deg, #000022, #050510); --header-border: #00ffff;
-  --btn-primary-bg: linear-gradient(135deg, #00cccc, #00ffff); --btn-success-bg: linear-gradient(135deg, #00aa55, #00ff88);
-  --total-box-bg: linear-gradient(135deg, #000022, #001122); --enchanted-color: #ff00ff; --notif-bg: #00cccc;
-  --font-main: 'Courier New', monospace; --radius-base: 0px; --radius-btn: 0px;
-}
-
-/* TEMA 3 — SANGUE & TREVAS (Gótico Sombrio) */
-[data-theme="blood"] {
-  --bg-base: #080308; --bg-panel: #100810; --bg-input: #180a10; --bg-card: #180a10; --bg-hover: #280a18;
-  --bg-selector: radial-gradient(ellipse at center, #330011 0%, #080308 70%);
-  --border-default: #3d0a1a; --border-focus: #cc0033; --border-muted: #550022;
-  --accent-primary: #cc0033; --accent-secondary: #ff3366; --accent-glow: rgba(204,0,51,0.4); --accent-glow-soft: rgba(204,0,51,0.15);
-  --text-primary: #ffe0e8; --text-secondary: #ff6688; --text-muted: #662233; --text-heading: #ff3366;
-  --text-price: #ff6600; --text-total: #ff6600; --text-warning: #ff6600; --text-error: #ff0022; --text-success: #cc4400;
-  --header-bg: linear-gradient(135deg, #1a0008, #080308); --header-border: #cc0033;
-  --btn-primary-bg: linear-gradient(135deg, #990022, #cc0033); --btn-success-bg: linear-gradient(135deg, #882200, #cc3300);
-  --total-box-bg: linear-gradient(135deg, #1a0008, #110008); --enchanted-color: #ff6600; --notif-bg: #990022;
-  --font-main: 'Georgia', serif; --radius-base: 4px; --radius-btn: 4px;
-}
-
-/* TEMA 4 — FLORESTA ÉLFICA (Verde Natureza) */
-[data-theme="forest"] {
-  --bg-base: #060e08; --bg-panel: #0a1a0c; --bg-input: #0f2212; --bg-card: #0f2212; --bg-hover: #1a3320;
-  --bg-selector: radial-gradient(ellipse at center, #0a2a10 0%, #060e08 70%);
-  --border-default: #1a3d20; --border-focus: #22cc55; --border-muted: #224d2a;
-  --accent-primary: #22aa44; --accent-secondary: #44dd66; --accent-glow: rgba(34,170,68,0.35); --accent-glow-soft: rgba(34,170,68,0.12);
-  --text-primary: #e0ffe8; --text-secondary: #88dd99; --text-muted: #336644; --text-heading: #66cc77;
-  --text-price: #aadd44; --text-total: #aadd44; --text-warning: #ddaa22; --text-error: #cc4444; --text-success: #44cc66;
-  --header-bg: linear-gradient(135deg, #061408, #060e08); --header-border: #22aa44;
-  --btn-primary-bg: linear-gradient(135deg, #1a8833, #22aa44); --btn-success-bg: linear-gradient(135deg, #228833, #33aa55);
-  --total-box-bg: linear-gradient(135deg, #061408, #081808); --enchanted-color: #aadd44; --notif-bg: #1a8833;
-  --font-main: 'Palatino Linotype', 'Book Antiqua', serif; --radius-base: 30px; --radius-btn: 24px;
-}
-
-/* TEMA 5 — OURO IMPERIAL (Dourado Medieval) */
-[data-theme="gold"] {
-  --bg-base: #0e0a04; --bg-panel: #1a1206; --bg-input: #221808; --bg-card: #221808; --bg-hover: #332210;
-  --bg-selector: radial-gradient(ellipse at center, #2a1a05 0%, #0e0a04 70%);
-  --border-default: #4a3010; --border-focus: #cc9900; --border-muted: #553a14;
-  --accent-primary: #cc9900; --accent-secondary: #ffcc33; --accent-glow: rgba(204,153,0,0.4); --accent-glow-soft: rgba(204,153,0,0.15);
-  --text-primary: #fff5cc; --text-secondary: #ddaa44; --text-muted: #665522; --text-heading: #ffcc44;
-  --text-price: #ffaa00; --text-total: #ffaa00; --text-warning: #ff8800; --text-error: #cc3300; --text-success: #88aa00;
-  --header-bg: linear-gradient(135deg, #1a1004, #0e0a04); --header-border: #cc9900;
-  --btn-primary-bg: linear-gradient(135deg, #aa7700, #cc9900); --btn-success-bg: linear-gradient(135deg, #667700, #889900);
-  --total-box-bg: linear-gradient(135deg, #1a1004, #120e04); --enchanted-color: #ffcc33; --notif-bg: #aa7700;
-  --font-main: 'Times New Roman', 'Georgia', serif; --radius-base: 0px; --radius-btn: 0px;
-}
-
-/* TEMA 6 — GELO ETERNO (Azul Gélido) */
-[data-theme="ice"] {
-  --bg-base: #020810; --bg-panel: #050f1e; --bg-input: #081525; --bg-card: #081525; --bg-hover: #102030;
-  --bg-selector: radial-gradient(ellipse at center, #081830 0%, #020810 70%);
-  --border-default: #0e2a44; --border-focus: #44aadd; --border-muted: #103355;
-  --accent-primary: #2299cc; --accent-secondary: #55bbee; --accent-glow: rgba(34,153,204,0.35); --accent-glow-soft: rgba(34,153,204,0.12);
-  --text-primary: #ddf0ff; --text-secondary: #88ccee; --text-muted: #2a5577; --text-heading: #aaddff;
-  --text-price: #55eebb; --text-total: #55eebb; --text-warning: #aaccff; --text-error: #ee4477; --text-success: #33bbaa;
-  --header-bg: linear-gradient(135deg, #021020, #020810); --header-border: #2299cc;
-  --btn-primary-bg: linear-gradient(135deg, #1177aa, #2299cc); --btn-success-bg: linear-gradient(135deg, #117766, #229988);
-  --total-box-bg: linear-gradient(135deg, #021020, #031525); --enchanted-color: #aaddff; --notif-bg: #1177aa;
-  --font-main: 'Segoe UI', 'Arial', sans-serif; --radius-base: 20px; --radius-btn: 20px;
-}
-
-/* ========================
-   APLICAÇÃO DAS VARIÁVEIS BASE
-======================== */
-body { font-family: var(--font-main) !important; background: var(--bg-base) !important; color: var(--text-primary) !important; }
-#screen-selector, #screen-login, #screen-register, #screen-admin-login { background: var(--bg-selector) !important; }
-.selector-box, .login-box, .panel, .admin-panel, .settings-card, .modal-box { background: var(--bg-panel) !important; border-color: var(--border-default) !important; }
-.selector-box h1, .login-box h2, .panel h2 { color: var(--text-heading) !important; font-family: var(--font-main) !important; }
-header { background: var(--header-bg) !important; border-color: var(--header-border) !important; }
-.form-group input, .search-bar input { background: var(--bg-input) !important; border-color: var(--border-muted) !important; color: var(--text-primary) !important; }
-.form-group input:focus, .search-bar input:focus { border-color: var(--border-focus) !important; }
-.btn-primary { background: var(--btn-primary-bg) !important; color: #fff !important; }
-.send-btn { background: var(--btn-success-bg) !important; }
-.weapon-card, .order-card, .my-order-card { background: var(--bg-card) !important; border-color: var(--border-default) !important; }
-.weapon-card:hover { border-color: var(--accent-primary) !important; }
-.weapon-card.selected { border-color: var(--accent-secondary) !important; background: var(--bg-hover) !important; box-shadow: 0 0 15px var(--accent-glow) !important; }
-.total-box { background: var(--total-box-bg) !important; border-color: var(--accent-primary) !important; }
-.total-box .value { color: var(--text-total) !important; }
-
-/* ========================
-   TRANSFORMAÇÕES VISUAIS ESPECÍFICAS POR TEMA
-======================== */
-
-/* ═══════════════════════════════════════════════════════════════════════════════════════
-   ARCANA — Místico com glow pulsante e bordas suaves
-═══════════════════════════════════════════════════════════════════════════════════════ */
-[data-theme="arcana"] .selector-box,
-[data-theme="arcana"] .login-box,
+/* Efeitos específicos Arcana */
 [data-theme="arcana"] .panel,
-[data-theme="arcana"] .modal-box {
-  border-radius: var(--radius-base) !important;
-  box-shadow: 0 8px 32px rgba(123,47,255,0.2), 0 0 60px rgba(123,47,255,0.1) !important;
-}
-
-[data-theme="arcana"] .btn-primary,
-[data-theme="arcana"] .send-btn,
-[data-theme="arcana"] .copy-btn {
-  border-radius: var(--radius-btn) !important;
-  box-shadow: 0 4px 15px rgba(123,47,255,0.3) !important;
-}
-
-[data-theme="arcana"] .weapon-card {
-  border-radius: 12px !important;
-  transition: all 0.3s ease !important;
+[data-theme="arcana"] .modal-box,
+[data-theme="arcana"] .selector-box,
+[data-theme="arcana"] .login-box {
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.4),
+    0 10px 40px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(123,47,255,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.04) !important;
 }
 
 [data-theme="arcana"] .weapon-card.selected {
-  animation: arcana-pulse 2s ease-in-out infinite !important;
+  animation: arcana-card-glow 2.5s ease-in-out infinite;
 }
 
-@keyframes arcana-pulse {
-  0%, 100% { box-shadow: 0 0 15px rgba(168,85,247,0.4); }
-  50% { box-shadow: 0 0 30px rgba(168,85,247,0.8), 0 0 60px rgba(123,47,255,0.3); }
+@keyframes arcana-card-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px #a855f7,
+      0 4px 20px rgba(123,47,255,0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px #c084fc,
+      0 4px 35px rgba(168,85,247,0.6),
+      0 0 60px rgba(123,47,255,0.2);
+  }
 }
 
 [data-theme="arcana"] .total-box .value {
-  text-shadow: 0 0 15px rgba(74,222,128,0.6) !important;
+  text-shadow: 0 0 20px rgba(74,222,128,0.7) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════════════════
-   CYBERPUNK — Futurista com scanlines e cantos cortados
-═══════════════════════════════════════════════════════════════════════════════════════ */
+[data-theme="arcana"] .enchanted-badge {
+  box-shadow: 0 0 10px #f59e0b, 0 0 20px rgba(245,158,11,0.5) !important;
+}
+
+/* ========================
+   CYBERPUNK — HUD NEON
+   Ciano/Magenta, cantos cortados, terminal
+======================== */
+[data-theme="cyberpunk"] {
+  --bg-base:    #030308;
+  --bg-panel:   #070714;
+  --bg-input:   #0b0b1c;
+  --bg-card:    #0b0b1c;
+  --bg-hover:   #14142a;
+  --bg-selector: linear-gradient(180deg, #00ffff06 0%, #030308 40%);
+
+  --border-default: rgba(0,255,255,0.15);
+  --border-focus:   #00ffff;
+  --border-muted:   rgba(0,255,255,0.25);
+
+  --accent-primary:   #00ffff;
+  --accent-secondary: #ff00ff;
+  --accent-glow:      rgba(0,255,255,0.4);
+  --accent-glow-soft: rgba(0,255,255,0.1);
+
+  --text-primary:  #d0f8ff;
+  --text-secondary:#00cccc;
+  --text-muted:    #004444;
+  --text-heading:  #00ffff;
+  --text-price:    #ffff00;
+  --text-total:    #ffff00;
+  --text-warning:  #ff9900;
+  --text-error:    #ff0055;
+  --text-success:  #00ff88;
+
+  --header-bg:     linear-gradient(180deg, #000a10 0%, rgba(3,3,8,0.97) 100%);
+  --header-border: rgba(0,255,255,0.4);
+
+  --btn-primary-bg: linear-gradient(135deg, #007777, #00aaaa, #00ffff);
+  --btn-success-bg: linear-gradient(135deg, #007733, #00aa55, #00ff88);
+  --total-box-bg:   linear-gradient(135deg, #000a10, #00100a);
+
+  --enchanted-color: #ff00ff;
+  --notif-bg:        #007777;
+
+  --font-main: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* Scanlines */
 [data-theme="cyberpunk"] body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,255,255,0.02) 2px,
-    rgba(0,255,255,0.02) 4px
-  );
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,255,255,0.018) 3px,
+      rgba(0,255,255,0.018) 4px
+    );
   pointer-events: none;
-  z-index: 9999;
+  z-index: 9998;
 }
 
-[data-theme="cyberpunk"] .selector-box,
-[data-theme="cyberpunk"] .login-box,
+/* Cantos cortados */
 [data-theme="cyberpunk"] .panel,
-[data-theme="cyberpunk"] .modal-box {
+[data-theme="cyberpunk"] .settings-card,
+[data-theme="cyberpunk"] .admin-panel {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px)) !important;
   border-radius: 0 !important;
-  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px)) !important;
-  border: 1px solid var(--accent-primary) !important;
-  box-shadow: 4px 4px 0 rgba(0,255,255,0.2), 0 0 20px rgba(0,255,255,0.1) !important;
+  border: 1px solid rgba(0,255,255,0.2) !important;
+  box-shadow:
+    4px 4px 0 rgba(0,255,255,0.08),
+    0 0 30px rgba(0,255,255,0.06),
+    inset 0 0 40px rgba(0,0,0,0.6) !important;
 }
 
-[data-theme="cyberpunk"] header h1,
-[data-theme="cyberpunk"] .selector-box h1,
-[data-theme="cyberpunk"] .panel h2 {
+[data-theme="cyberpunk"] .login-box,
+[data-theme="cyberpunk"] .selector-box,
+[data-theme="cyberpunk"] .modal-box {
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)) !important;
+  border-radius: 0 !important;
+  border: 1px solid rgba(0,255,255,0.3) !important;
+  box-shadow: 0 0 60px rgba(0,255,255,0.12) !important;
+}
+
+[data-theme="cyberpunk"] header {
+  border-bottom: 1px solid rgba(0,255,255,0.3) !important;
+  box-shadow: 0 2px 30px rgba(0,255,255,0.12) !important;
+}
+
+[data-theme="cyberpunk"] header > div:first-child h1,
+[data-theme="cyberpunk"] .selector-box h1 {
   text-transform: uppercase !important;
-  letter-spacing: 4px !important;
-  text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff !important;
+  letter-spacing: 0.15em !important;
+  text-shadow: 0 0 15px #00ffff, 0 0 40px rgba(0,255,255,0.5) !important;
+  animation: cyberpunk-flicker 8s ease-in-out infinite;
+}
+
+@keyframes cyberpunk-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.85; }
+  97% { opacity: 1; }
+  98% { opacity: 0.9; }
+  99% { opacity: 1; }
 }
 
 [data-theme="cyberpunk"] .btn-primary,
 [data-theme="cyberpunk"] .send-btn,
-[data-theme="cyberpunk"] .copy-btn {
+[data-theme="cyberpunk"] .copy-btn,
+[data-theme="cyberpunk"] .clear-btn {
   border-radius: 0 !important;
-  transform: skewX(-5deg) !important;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)) !important;
   text-transform: uppercase !important;
-  letter-spacing: 2px !important;
-  border: 1px solid var(--accent-primary) !important;
+  letter-spacing: 0.08em !important;
   font-weight: 900 !important;
-}
-
-[data-theme="cyberpunk"] .btn-primary:hover,
-[data-theme="cyberpunk"] .send-btn:hover {
-  transform: skewX(-5deg) scale(1.05) !important;
-  box-shadow: 0 0 15px var(--accent-glow) !important;
 }
 
 [data-theme="cyberpunk"] .weapon-card {
   border-radius: 0 !important;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)) !important;
-  border-left: 3px solid var(--accent-primary) !important;
+  border-left: 2px solid rgba(0,255,255,0.4) !important;
+  transition: all 0.15s ease !important;
 }
 
-[data-theme="cyberpunk"] .form-group input {
+[data-theme="cyberpunk"] .weapon-card:hover {
+  border-left-color: #00ffff !important;
+  box-shadow: 4px 0 20px rgba(0,255,255,0.3), inset 0 0 15px rgba(0,0,0,0.8) !important;
+  transform: translateX(4px) translateY(-2px) !important;
+}
+
+[data-theme="cyberpunk"] .weapon-card .name {
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+}
+
+[data-theme="cyberpunk"] .tab-btn,
+[data-theme="cyberpunk"] .qty-btn,
+[data-theme="cyberpunk"] .back-btn {
   border-radius: 0 !important;
-  border-bottom: 2px solid var(--border-muted) !important;
-  border-left: 2px solid var(--accent-primary) !important;
 }
 
 [data-theme="cyberpunk"] .total-box .value {
   color: #ffff00 !important;
-  text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff0088 !important;
-  letter-spacing: 2px !important;
+  text-shadow: 0 0 15px #ffff00, 0 0 40px rgba(255,255,0,0.5) !important;
+  letter-spacing: 0.05em !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════════════════
-   BLOOD — Gótico com bordas pesadas e sombras dramáticas
-═══════════════════════════════════════════════════════════════════════════════════════ */
-[data-theme="blood"] .selector-box,
-[data-theme="blood"] .login-box,
+[data-theme="cyberpunk"] .form-group input {
+  border-radius: 0 !important;
+  border-bottom: 2px solid rgba(0,255,255,0.4) !important;
+  border-left: 2px solid rgba(0,255,255,0.3) !important;
+  border-top: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  background: rgba(0,255,255,0.03) !important;
+}
+
+[data-theme="cyberpunk"] .form-group input:focus {
+  border-bottom-color: #00ffff !important;
+  border-left-color: #00ffff !important;
+  box-shadow: 0 2px 0 #00ffff, -2px 0 0 rgba(0,255,255,0.3) !important;
+}
+
+/* ========================
+   BLOOD — SANGUE & TREVAS
+   Vermelho sombrio, gótico, dramático
+======================== */
+[data-theme="blood"] {
+  --bg-base:    #060208;
+  --bg-panel:   #0c0510;
+  --bg-input:   #120810;
+  --bg-card:    #120810;
+  --bg-hover:   #1e0814;
+  --bg-selector: radial-gradient(ellipse at 50% 100%, #2a0010 0%, #060208 60%);
+
+  --border-default: #2a0814;
+  --border-focus:   #cc0033;
+  --border-muted:   #440018;
+
+  --accent-primary:   #cc0033;
+  --accent-secondary: #ff3366;
+  --accent-glow:      rgba(204,0,51,0.45);
+  --accent-glow-soft: rgba(204,0,51,0.15);
+
+  --text-primary:  #ffe8f0;
+  --text-secondary:#ff8099;
+  --text-muted:    #551828;
+  --text-heading:  #ff3366;
+  --text-price:    #ff6600;
+  --text-total:    #ff6600;
+  --text-warning:  #ff8800;
+  --text-error:    #ff0033;
+  --text-success:  #dd4422;
+
+  --header-bg:     linear-gradient(180deg, #160006 0%, rgba(6,2,8,0.97) 100%);
+  --header-border: rgba(204,0,51,0.5);
+
+  --btn-primary-bg: linear-gradient(135deg, #880020, #aa0028, #cc0033);
+  --btn-success-bg: linear-gradient(135deg, #771400, #992200, #cc3300);
+  --total-box-bg:   linear-gradient(135deg, #160006, #0e0410);
+
+  --enchanted-color: #ff6600;
+  --notif-bg:        #880020;
+
+  --font-main: 'Georgia', 'Times New Roman', serif;
+}
+
 [data-theme="blood"] .panel,
-[data-theme="blood"] .modal-box {
-  border-radius: var(--radius-base) !important;
-  border-top: 4px solid var(--accent-primary) !important;
-  border-bottom: 4px solid var(--accent-primary) !important;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(204,0,51,0.05) !important;
+[data-theme="blood"] .settings-card,
+[data-theme="blood"] .admin-panel {
+  border-top: 2px solid rgba(204,0,51,0.4) !important;
+  border-bottom: 2px solid rgba(204,0,51,0.3) !important;
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.8),
+    inset 0 0 40px rgba(204,0,51,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
 }
 
 [data-theme="blood"] header {
-  border-bottom: 3px solid var(--accent-primary) !important;
-  box-shadow: 0 4px 20px rgba(204,0,51,0.4) !important;
+  box-shadow: 0 4px 30px rgba(204,0,51,0.3) !important;
 }
 
-[data-theme="blood"] .btn-primary,
-[data-theme="blood"] .send-btn,
-[data-theme="blood"] .copy-btn {
-  border-radius: var(--radius-btn) !important;
-  border: 2px solid var(--accent-secondary) !important;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 4px 15px rgba(204,0,51,0.4) !important;
-  font-weight: 900 !important;
+[data-theme="blood"] .selector-box h1,
+[data-theme="blood"] header > div:first-child h1 {
+  text-shadow: 0 0 25px rgba(204,0,51,0.8), 0 2px 4px rgba(0,0,0,0.9) !important;
 }
 
 [data-theme="blood"] .weapon-card {
-  border-radius: var(--radius-base) !important;
-  border: 1px solid var(--border-default) !important;
+  border-radius: 4px !important;
 }
 
 [data-theme="blood"] .weapon-card.selected {
-  box-shadow: inset 0 0 20px rgba(204,0,51,0.3), 0 0 15px var(--accent-glow) !important;
-  animation: blood-pulse 2s ease-in-out infinite !important;
+  animation: blood-throb 2s ease-in-out infinite !important;
 }
 
-@keyframes blood-pulse {
-  0%, 100% { box-shadow: inset 0 0 20px rgba(204,0,51,0.2), 0 0 10px rgba(204,0,51,0.4); }
-  50% { box-shadow: inset 0 0 30px rgba(204,0,51,0.5), 0 0 25px rgba(204,0,51,0.8); }
+@keyframes blood-throb {
+  0%, 100% {
+    box-shadow: 0 0 0 1px #ff3366, 0 4px 20px rgba(204,0,51,0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 2px #ff3366, 0 4px 35px rgba(204,0,51,0.7),
+      inset 0 0 20px rgba(204,0,51,0.08);
+  }
+}
+
+[data-theme="blood"] .btn-primary,
+[data-theme="blood"] .send-btn {
+  box-shadow: 0 4px 20px rgba(204,0,51,0.4), inset 0 1px 0 rgba(255,255,255,0.1) !important;
 }
 
 [data-theme="blood"] .total-box .value {
-  text-shadow: 0 0 15px rgba(255,102,0,0.8), 0 0 30px rgba(204,0,51,0.4) !important;
+  text-shadow: 0 0 20px rgba(255,102,0,0.8) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════════════════
-   FOREST — Orgânico com bordas assimétricas e curvas naturais
-═══════════════════════════════════════════════════════════════════════════════════════ */
-[data-theme="forest"] .selector-box,
-[data-theme="forest"] .login-box,
+[data-theme="blood"] .panel h2,
+[data-theme="blood"] .admin-panel-header h3 {
+  font-style: italic;
+}
+
+/* ========================
+   FOREST — FLORESTA ÉLFICA
+   Verde orgânico, natural, suave
+======================== */
+[data-theme="forest"] {
+  --bg-base:    #040c06;
+  --bg-panel:   #081408;
+  --bg-input:   #0d1e0e;
+  --bg-card:    #0d1e0e;
+  --bg-hover:   #162a18;
+  --bg-selector: radial-gradient(ellipse at 50% 100%, #0a2a0c 0%, #040c06 60%);
+
+  --border-default: #163a18;
+  --border-focus:   #22cc55;
+  --border-muted:   #1e4422;
+
+  --accent-primary:   #22aa44;
+  --accent-secondary: #44dd66;
+  --accent-glow:      rgba(34,170,68,0.4);
+  --accent-glow-soft: rgba(34,170,68,0.12);
+
+  --text-primary:  #e4fce8;
+  --text-secondary:#88dd99;
+  --text-muted:    #2e5535;
+  --text-heading:  #66cc77;
+  --text-price:    #aadd44;
+  --text-total:    #aadd44;
+  --text-warning:  #ddaa22;
+  --text-error:    #cc4444;
+  --text-success:  #44cc66;
+
+  --header-bg:     linear-gradient(180deg, #051406 0%, rgba(4,12,6,0.97) 100%);
+  --header-border: rgba(34,170,68,0.4);
+
+  --btn-primary-bg: linear-gradient(135deg, #166622, #1e8833, #22aa44);
+  --btn-success-bg: linear-gradient(135deg, #1a7722, #228833, #2daa44);
+  --total-box-bg:   linear-gradient(135deg, #051406, #061808);
+
+  --enchanted-color: #aadd44;
+  --notif-bg:        #166622;
+
+  --font-main: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+}
+
 [data-theme="forest"] .panel,
+[data-theme="forest"] .settings-card,
+[data-theme="forest"] .admin-panel {
+  border-radius: 24px 6px 24px 6px !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(34,170,68,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+[data-theme="forest"] .login-box,
+[data-theme="forest"] .selector-box {
+  border-radius: 30px 8px 30px 8px !important;
+}
+
 [data-theme="forest"] .modal-box {
-  border-radius: 30px 5px 30px 5px !important;
-  border: 2px solid var(--border-default) !important;
-  box-shadow: 0 10px 30px rgba(34,170,68,0.15), 0 0 60px rgba(34,170,68,0.05) !important;
+  border-radius: 24px 6px 24px 6px !important;
+}
+
+[data-theme="forest"] .weapon-card {
+  border-radius: 20px 4px 20px 4px !important;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+[data-theme="forest"] .weapon-card:hover {
+  transform: translateY(-5px) rotate(0.5deg) !important;
+  box-shadow: 0 10px 30px rgba(34,170,68,0.3) !important;
+}
+
+[data-theme="forest"] .weapon-card.selected {
+  animation: forest-breathe 3s ease-in-out infinite !important;
+}
+
+@keyframes forest-breathe {
+  0%, 100% { box-shadow: 0 0 0 1px #44dd66, 0 4px 20px rgba(34,170,68,0.3); }
+  50% { box-shadow: 0 0 0 2px #66ff88, 0 8px 35px rgba(34,170,68,0.55); }
 }
 
 [data-theme="forest"] .btn-primary,
-[data-theme="forest"] .send-btn,
-[data-theme="forest"] .copy-btn {
-  border-radius: var(--radius-btn) !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
-  box-shadow: 0 4px 15px rgba(34,170,68,0.3) !important;
+[data-theme="forest"] .send-btn {
+  border-radius: 20px 4px 20px 4px !important;
+  box-shadow: 0 4px 20px rgba(34,170,68,0.35) !important;
 }
 
 [data-theme="forest"] .btn-primary:hover,
 [data-theme="forest"] .send-btn:hover {
-  transform: translateY(-2px) rotate(1deg) !important;
-  box-shadow: 0 8px 25px rgba(34,170,68,0.5) !important;
+  transform: translateY(-2px) rotate(0.3deg) !important;
 }
 
-[data-theme="forest"] .weapon-card {
-  border-radius: 20px 5px 20px 5px !important;
-  transition: all 0.3s ease !important;
-}
-
-[data-theme="forest"] .weapon-card:hover {
-  transform: translateY(-3px) rotate(0.5deg) !important;
-  box-shadow: 0 8px 25px rgba(34,170,68,0.3) !important;
+[data-theme="forest"] .tab-btn {
+  border-radius: 20px !important;
 }
 
 [data-theme="forest"] .form-group input {
-  border-radius: 20px !important;
-  padding-left: 20px !important;
+  border-radius: 16px !important;
 }
 
 [data-theme="forest"] .total-box .value {
-  text-shadow: 0 0 15px rgba(170,221,68,0.6) !important;
+  text-shadow: 0 0 20px rgba(170,221,68,0.7) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════════════════
-   GOLD — Medieval com bordas duplas e textura de pergaminho
-═══════════════════════════════════════════════════════════════════════════════════════ */
-[data-theme="gold"] .selector-box,
-[data-theme="gold"] .login-box,
+[data-theme="forest"] .selector-box h1,
+[data-theme="forest"] header > div:first-child h1 {
+  font-style: italic;
+}
+
+/* ========================
+   GOLD — OURO IMPERIAL
+   Dourado medieval, pergaminho, grandioso
+======================== */
+[data-theme="gold"] {
+  --bg-base:    #0a0802;
+  --bg-panel:   #141004;
+  --bg-input:   #1c1606;
+  --bg-card:    #1c1606;
+  --bg-hover:   #281e08;
+  --bg-selector: radial-gradient(ellipse at 50% 0%, #28180a 0%, #0a0802 60%);
+
+  --border-default: #382808;
+  --border-focus:   #cc9900;
+  --border-muted:   #4a3410;
+
+  --accent-primary:   #cc9900;
+  --accent-secondary: #ffcc33;
+  --accent-glow:      rgba(204,153,0,0.45);
+  --accent-glow-soft: rgba(204,153,0,0.15);
+
+  --text-primary:  #fff8e8;
+  --text-secondary:#ddaa44;
+  --text-muted:    #5a4820;
+  --text-heading:  #ffcc44;
+  --text-price:    #ffaa00;
+  --text-total:    #ffaa00;
+  --text-warning:  #ff8800;
+  --text-error:    #cc3300;
+  --text-success:  #88aa00;
+
+  --header-bg:     linear-gradient(180deg, #1a1202 0%, rgba(10,8,2,0.98) 100%);
+  --header-border: rgba(204,153,0,0.5);
+
+  --btn-primary-bg: linear-gradient(135deg, #885500, #aa7700, #cc9900);
+  --btn-success-bg: linear-gradient(135deg, #557700, #668800, #88aa00);
+  --total-box-bg:   linear-gradient(135deg, #160e02, #120e04);
+
+  --enchanted-color: #ffcc33;
+  --notif-bg:        #885500;
+
+  --font-main: 'Times New Roman', Georgia, serif;
+}
+
 [data-theme="gold"] .panel,
-[data-theme="gold"] .modal-box {
+[data-theme="gold"] .settings-card,
+[data-theme="gold"] .admin-panel {
   border-radius: 0 !important;
-  border: 3px double var(--accent-primary) !important;
-  box-shadow: inset 0 0 30px rgba(0,0,0,0.6), 0 0 40px rgba(204,153,0,0.2) !important;
+  border: 2px solid rgba(204,153,0,0.3) !important;
   position: relative !important;
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.8),
+    inset 0 0 30px rgba(204,153,0,0.04),
+    inset 0 1px 0 rgba(255,204,51,0.06) !important;
 }
 
-[data-theme="gold"] .selector-box::before,
-[data-theme="gold"] .login-box::before,
-[data-theme="gold"] .panel::before,
-[data-theme="gold"] .modal-box::before {
-  content: "";
+[data-theme="gold"] .panel::after,
+[data-theme="gold"] .settings-card::after {
+  content: '';
   position: absolute;
-  inset: 6px;
-  border: 1px solid rgba(204,153,0,0.3);
+  inset: 5px;
+  border: 1px solid rgba(204,153,0,0.15);
   pointer-events: none;
   z-index: 0;
 }
 
-[data-theme="gold"] .btn-primary,
-[data-theme="gold"] .send-btn,
-[data-theme="gold"] .copy-btn {
+[data-theme="gold"] .login-box,
+[data-theme="gold"] .selector-box,
+[data-theme="gold"] .modal-box {
   border-radius: 0 !important;
-  border: 2px solid var(--accent-secondary) !important;
-  text-transform: uppercase !important;
-  font-style: italic !important;
-  letter-spacing: 1px !important;
-  box-shadow: inset 0 1px 0 rgba(255,204,51,0.2), 0 4px 15px rgba(204,153,0,0.3) !important;
+  border: 3px double rgba(204,153,0,0.5) !important;
+  box-shadow: 0 0 60px rgba(204,153,0,0.15) !important;
+}
+
+[data-theme="gold"] header {
+  box-shadow: 0 2px 30px rgba(204,153,0,0.2) !important;
+}
+
+[data-theme="gold"] .selector-box h1,
+[data-theme="gold"] header > div:first-child h1 {
+  font-variant: small-caps !important;
+  letter-spacing: 0.08em !important;
+  text-shadow: 0 0 30px rgba(204,153,0,0.7), 0 2px 4px rgba(0,0,0,0.9) !important;
 }
 
 [data-theme="gold"] .weapon-card {
   border-radius: 0 !important;
-  border: 2px solid var(--border-muted) !important;
-  position: relative !important;
+  border: 1px solid rgba(204,153,0,0.2) !important;
+  transition: all 0.3s ease !important;
 }
 
-[data-theme="gold"] .weapon-card::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border: 1px solid rgba(204,153,0,0.2);
-  pointer-events: none;
+[data-theme="gold"] .weapon-card:hover {
+  border-color: rgba(255,204,51,0.5) !important;
+  box-shadow: 0 4px 20px rgba(204,153,0,0.25), inset 0 0 15px rgba(204,153,0,0.04) !important;
 }
 
 [data-theme="gold"] .weapon-card.selected {
-  border: 2px dashed var(--accent-primary) !important;
   animation: gold-shimmer 3s ease-in-out infinite !important;
 }
 
 @keyframes gold-shimmer {
-  0%, 100% { box-shadow: 0 0 10px rgba(204,153,0,0.3); }
-  50% { box-shadow: 0 0 25px rgba(255,204,51,0.6), 0 0 50px rgba(204,153,0,0.3); }
+  0%, 100% {
+    box-shadow: 0 0 0 1px #ffcc33, 0 4px 20px rgba(204,153,0,0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 2px #ffdd66, 0 4px 40px rgba(255,204,51,0.6),
+      inset 0 0 15px rgba(204,153,0,0.08);
+  }
+}
+
+[data-theme="gold"] .btn-primary,
+[data-theme="gold"] .send-btn {
+  border-radius: 0 !important;
+  font-variant: small-caps !important;
+  letter-spacing: 0.05em !important;
+  border: 1px solid rgba(255,204,51,0.3) !important;
+  box-shadow: 0 4px 20px rgba(204,153,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+[data-theme="gold"] .tab-btn,
+[data-theme="gold"] .form-group input,
+[data-theme="gold"] .qty-btn,
+[data-theme="gold"] .back-btn {
+  border-radius: 0 !important;
 }
 
 [data-theme="gold"] .total-box .value {
-  text-shadow: 0 0 15px rgba(255,170,0,0.8), 0 0 30px rgba(204,153,0,0.4) !important;
+  text-shadow: 0 0 20px rgba(255,170,0,0.8), 0 0 50px rgba(204,153,0,0.4) !important;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════════════════
-   ICE — Glassmorphism com efeito de vidro fosco
-═══════════════════════════════════════════════════════════════════════════════════════ */
-[data-theme="ice"] .selector-box,
-[data-theme="ice"] .login-box,
+[data-theme="gold"] .panel h2,
+[data-theme="gold"] .admin-panel-header h3 {
+  font-variant: small-caps !important;
+  letter-spacing: 0.06em !important;
+}
+
+/* ========================
+   ICE — GELO ETERNO
+   Glassmorphism, azul translúcido, cristalino
+======================== */
+[data-theme="ice"] {
+  --bg-base:    #01050d;
+  --bg-panel:   rgba(4,12,24,0.80);
+  --bg-input:   rgba(6,16,30,0.70);
+  --bg-card:    rgba(6,16,30,0.65);
+  --bg-hover:   rgba(12,24,42,0.85);
+  --bg-selector: radial-gradient(ellipse at 50% 0%, #061830 0%, #01050d 60%);
+
+  --border-default: rgba(34,153,204,0.2);
+  --border-focus:   rgba(85,187,238,0.7);
+  --border-muted:   rgba(34,153,204,0.3);
+
+  --accent-primary:   #2299cc;
+  --accent-secondary: #55bbee;
+  --accent-glow:      rgba(34,153,204,0.4);
+  --accent-glow-soft: rgba(34,153,204,0.12);
+
+  --text-primary:  #ddeeff;
+  --text-secondary:#88ccee;
+  --text-muted:    #224466;
+  --text-heading:  #aaddff;
+  --text-price:    #55eebb;
+  --text-total:    #55eebb;
+  --text-warning:  #88aaff;
+  --text-error:    #ee4488;
+  --text-success:  #33bbaa;
+
+  --header-bg:     linear-gradient(180deg, rgba(2,10,22,0.95) 0%, rgba(1,5,13,0.95) 100%);
+  --header-border: rgba(34,153,204,0.35);
+
+  --btn-primary-bg: linear-gradient(135deg, rgba(20,100,160,0.9), rgba(34,153,204,0.95));
+  --btn-success-bg: linear-gradient(135deg, rgba(15,100,100,0.9), rgba(30,150,130,0.95));
+  --total-box-bg:   linear-gradient(135deg, rgba(2,10,24,0.9), rgba(3,14,28,0.9));
+
+  --enchanted-color: rgba(170,221,255,0.9);
+  --notif-bg:        rgba(20,100,160,0.95);
+
+  --font-main: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+[data-theme="ice"] body {
+  background: radial-gradient(ellipse at 50% 0%, #061830 0%, #01050d 50%) !important;
+  background-attachment: fixed !important;
+}
+
+/* Glassmorphism base */
 [data-theme="ice"] .panel,
+[data-theme="ice"] .settings-card,
+[data-theme="ice"] .admin-panel {
+  background: rgba(4,12,24,0.65) !important;
+  backdrop-filter: blur(20px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+  border: 1px solid rgba(34,153,204,0.2) !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    inset 0 -1px 0 rgba(34,153,204,0.06) !important;
+}
+
+[data-theme="ice"] .login-box,
+[data-theme="ice"] .selector-box,
 [data-theme="ice"] .modal-box {
-  border-radius: var(--radius-base) !important;
-  background: rgba(5, 15, 30, 0.7) !important;
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important;
-  border: 1px solid rgba(68, 170, 221, 0.3) !important;
+  background: rgba(4,12,24,0.8) !important;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  border: 1px solid rgba(34,153,204,0.3) !important;
   border-top: 1px solid rgba(255,255,255,0.1) !important;
-  box-shadow: 
-    0 8px 32px rgba(34,153,204,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 rgba(34,153,204,0.05) !important;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.7),
+    0 0 80px rgba(34,153,204,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+[data-theme="ice"] header {
+  background: rgba(1,8,18,0.85) !important;
+  backdrop-filter: blur(30px) !important;
+  box-shadow: 0 2px 30px rgba(34,153,204,0.15) !important;
+}
+
+[data-theme="ice"] .weapon-card {
+  background: rgba(6,16,30,0.6) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(34,153,204,0.18) !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  transition: all 0.3s ease !important;
+}
+
+[data-theme="ice"] .weapon-card:hover {
+  background: rgba(12,24,42,0.8) !important;
+  border-color: rgba(85,187,238,0.45) !important;
+  box-shadow:
+    0 8px 25px rgba(34,153,204,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+[data-theme="ice"] .weapon-card.selected {
+  animation: ice-crystal 2.5s ease-in-out infinite !important;
+}
+
+@keyframes ice-crystal {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(85,187,238,0.5), 0 4px 20px rgba(34,153,204,0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(170,221,255,0.7), 0 4px 35px rgba(34,153,204,0.55),
+      0 0 60px rgba(34,153,204,0.15);
+  }
 }
 
 [data-theme="ice"] .btn-primary,
-[data-theme="ice"] .send-btn,
-[data-theme="ice"] .copy-btn {
-  border-radius: var(--radius-btn) !important;
-  background: rgba(34, 153, 204, 0.25) !important;
-  border: 1px solid rgba(34,153,204,0.5) !important;
+[data-theme="ice"] .send-btn {
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(34,153,204,0.4) !important;
   border-top: 1px solid rgba(255,255,255,0.15) !important;
-  backdrop-filter: blur(8px) !important;
-  color: #ddf0ff !important;
-  box-shadow: 0 4px 15px rgba(34,153,204,0.2), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+  box-shadow: 0 4px 15px rgba(34,153,204,0.25), inset 0 1px 0 rgba(255,255,255,0.1) !important;
 }
 
 [data-theme="ice"] .btn-primary:hover,
 [data-theme="ice"] .send-btn:hover {
-  background: rgba(34,153,204,0.4) !important;
-  box-shadow: 0 8px 25px rgba(34,153,204,0.35), inset 0 1px 0 rgba(255,255,255,0.15) !important;
-}
-
-[data-theme="ice"] .weapon-card {
-  border-radius: 16px !important;
-  background: rgba(8, 21, 37, 0.6) !important;
-  backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(34,153,204,0.2) !important;
-  border-top: 1px solid rgba(255,255,255,0.05) !important;
-}
-
-[data-theme="ice"] .weapon-card:hover {
-  background: rgba(16,32,48,0.8) !important;
-  border-color: rgba(34,153,204,0.5) !important;
-  box-shadow: 0 8px 25px rgba(34,153,204,0.2), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+  box-shadow: 0 8px 30px rgba(34,153,204,0.4), inset 0 1px 0 rgba(255,255,255,0.15) !important;
 }
 
 [data-theme="ice"] .form-group input {
-  background: rgba(8,21,37,0.6) !important;
+  background: rgba(6,16,30,0.6) !important;
   backdrop-filter: blur(8px) !important;
   border: 1px solid rgba(34,153,204,0.2) !important;
-  border-top: 1px solid rgba(255,255,255,0.05) !important;
-  border-radius: var(--radius-btn) !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+[data-theme="ice"] .total-box {
+  background: rgba(2,8,18,0.7) !important;
+  backdrop-filter: blur(15px) !important;
 }
 
 [data-theme="ice"] .total-box .value {
-  text-shadow: 0 0 15px rgba(85,238,187,0.8), 0 0 30px rgba(34,153,204,0.4) !important;
+  text-shadow: 0 0 20px rgba(85,238,187,0.8), 0 0 50px rgba(34,153,204,0.4) !important;
+}
+
+[data-theme="ice"] .selector-box h1,
+[data-theme="ice"] header > div:first-child h1 {
+  text-shadow: 0 0 30px rgba(170,221,255,0.6), 0 2px 4px rgba(0,0,0,0.9) !important;
 }
 
 /* ========================
-   APLICAÇÃO DAS DEMAIS CLASSES
+   APLICAÇÃO GLOBAL TEMÁTICA
 ======================== */
-.tab-btn { border-radius: var(--radius-btn) !important; }
-.notif { border-radius: var(--radius-btn) !important; background: var(--notif-bg) !important; }
-.clear-btn { border-color: var(--text-error) !important; color: var(--text-error) !important; border-radius: var(--radius-btn) !important; }
-.clear-btn:hover { background: var(--text-error) !important; color: #fff !important; }
-.back-btn { border-radius: var(--radius-btn) !important; }
-.change-pass-btn { border-radius: var(--radius-btn) !important; }
+body { background: var(--bg-base); color: var(--text-primary); }
 
-/* Scrollbars */
+.form-group input { background: var(--bg-input); border-color: var(--border-muted); color: var(--text-primary); }
+.form-group input:focus { border-color: var(--border-focus); }
+
+.btn-primary { background: var(--btn-primary-bg); }
+.send-btn    { background: var(--btn-success-bg); }
+.copy-btn    { border-color: var(--border-focus); color: var(--text-heading); }
+.clear-btn   { border-color: rgba(248,113,113,0.35); color: var(--text-error); }
+
+.tab-btn        { background: var(--bg-input); border-color: var(--border-muted); color: var(--text-secondary); }
+.tab-btn:hover  { border-color: var(--border-focus); color: var(--text-heading); background: var(--accent-glow-soft); }
+.tab-btn.active { background: var(--btn-primary-bg); color: #fff; }
+
+.weapon-card          { background: var(--bg-card); border-color: var(--border-default); }
+.weapon-card:hover    { border-color: var(--border-focus); }
+.weapon-card.selected { background: var(--bg-hover); border-color: var(--accent-secondary); }
+
+.panel          { background: var(--bg-panel); border-color: var(--border-default); }
+.panel h2       { color: var(--text-heading); border-color: var(--border-default); }
+.total-box      { background: var(--total-box-bg); border-color: var(--border-focus); }
+.total-box .value { color: var(--text-total); }
+
+.admin-panel    { background: var(--bg-panel); border-color: var(--border-default); }
+.settings-card  { background: var(--bg-input); border-color: var(--border-default); }
+.admin-tab.active { background: var(--btn-primary-bg); }
+.modal-box      { background: var(--bg-panel); border-color: var(--border-default); }
+.modal-box h3   { color: var(--text-heading); }
+
+.notif { background: var(--notif-bg); }
+.token-display { color: var(--text-price); }
+.text-heading  { color: var(--text-heading); }
+
+/* ========================
+   SCROLLBARS TEMÁTICAS
+======================== */
 ::-webkit-scrollbar-thumb { background: var(--accent-primary) !important; }
 ::-webkit-scrollbar-track { background: var(--bg-input) !important; }
-
-/* Seletor de tema no admin */
-.theme-selector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-.theme-option { border-radius: var(--radius-base); border: 2px solid var(--border-default); padding: 14px 10px; cursor: pointer; transition: all 0.25s; text-align: center; position: relative; }
-.theme-option:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-.theme-option.active { border-color: #fff !important; box-shadow: 0 0 0 3px rgba(255,255,255,0.3) !important; }
-.theme-option.active::after { content: "✓"; position: absolute; top: 6px; right: 8px; font-size: 0.85rem; color: #fff; font-weight: 900; }
-.theme-option-name { font-size: 0.8rem; font-weight: 700; color: #fff; margin-top: 6px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-.theme-option-desc { font-size: 0.68rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
-.theme-preview-dots { display: flex; justify-content: center; gap: 5px; margin-bottom: 6px; }
-.theme-preview-dots span { width: 12px; height: 12px; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px currentColor; }
-
-.theme-opt-arcana { background: linear-gradient(135deg, #12122a, #1a0033); border-color: #7b2fff55 !important; }
-.theme-opt-cyberpunk { background: linear-gradient(135deg, #050510, #001122); border-color: #00ffff55 !important; }
-.theme-opt-blood { background: linear-gradient(135deg, #100810, #1a0008); border-color: #cc003355 !important; }
-.theme-opt-forest { background: linear-gradient(135deg, #0a1a0c, #061408); border-color: #22aa4455 !important; }
-.theme-opt-gold { background: linear-gradient(135deg, #1a1206, #0e0a04); border-color: #cc990055 !important; }
-.theme-opt-ice { background: linear-gradient(135deg, #050f1e, #021020); border-color: #2299cc55 !important; }
+* { scrollbar-color: var(--accent-primary) var(--bg-input); }
