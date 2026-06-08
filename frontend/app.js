@@ -1,212 +1,169 @@
-// ============================================================
-// FORGE APP — app.js
-// ============================================================
+// ========================
+// TOKEN WEBHOOK
+// ========================
+const TOKEN_WEBHOOK = "https://discord.com/api/webhooks/1510332405754499142/IegWcsQp-JSkI1aBJH08B3fN-yifPXdRwmXt1n_cXUwn9L0cCTr905UffrhBxjr9HRum";
 
-const TOKEN_WEBHOOK =
-  "https://discord.com/api/webhooks/1510332405754499142/IegWcsQp-JSkI1aBJH08B3fN-yifPXdRwmXt1n_cXUwn9L0cCTr905UffrhBxjr9HRum";
+let currentSmith = null;
 
-// ── Tema ─────────────────────────────────────────────────────
+// ========================
+// CARREGAR TEMA SALVO
+// ========================
 async function loadSavedTheme() {
   try {
-    if (window.firebaseDB && window.firebaseGet && window.firebaseRef) {
-      const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDB, "config/theme"));
-      const theme = snap.exists() ? snap.val() : "arcana";
-      applyThemeLayout(theme);
-      console.log("🎨 Tema carregado:", theme);
-    } else {
-      applyThemeLayout("arcana");
-    }
-  } catch {
-    applyThemeLayout("arcana");
+    const snap = await firebaseGet(firebaseRef(firebaseDB, "config/theme"));
+    const theme = snap.exists() ? snap.val() : "arcana";
+    document.body.setAttribute("data-theme", theme);
+    console.log("🎨 Tema carregado:", theme);
+  } catch (e) {
+    document.body.setAttribute("data-theme", "arcana");
   }
 }
 
-function applyThemeLayout(themeId) {
-  document.body.setAttribute("data-theme", themeId);
-  document.body.className = document.body.className
-    .replace(/theme-\S+/g, "")
-    .trim();
-  document.body.classList.add(`theme-${themeId}`);
-  window._currentTheme = themeId;
-
-  // Reordenar DOM por tema
-  const layouts = {
-    cyberpunk: applyCyberpunkLayout,
-    blood:     applyBloodLayout,
-    forest:    applyForestLayout,
-    gold:      applyGoldLayout,
-    ice:       applyIceLayout,
-    arcana:    applyArcanaLayout,
-  };
-  if (layouts[themeId]) layouts[themeId]();
-}
-
-function applyArcanaLayout() {
-  document.querySelectorAll(".theme-sidebar").forEach(el => el.remove());
-  const app = document.getElementById("app");
-  if (app) app.className = "app-arcana";
-}
-
-function applyCyberpunkLayout() {
-  document.querySelectorAll(".theme-sidebar").forEach(el => el.remove());
-  const smithScreen = document.getElementById("screen-smith");
-  if (!smithScreen) return;
-  let sidebar = smithScreen.querySelector(".theme-sidebar");
-  if (!sidebar) {
-    sidebar = document.createElement("div");
-    sidebar.className = "theme-sidebar";
-    sidebar.innerHTML = `
-      <div class="sidebar-logo">⚔ FORGE</div>
-      <nav class="sidebar-nav">
-        <button onclick="showSmithTab('tab-orders')" class="sb-btn">📋 PEDIDOS</button>
-        <button onclick="showSmithTab('tab-history')" class="sb-btn">📜 HISTÓRICO</button>
-        <button onclick="openChangePasswordModal()" class="sb-btn">🔐 SENHA</button>
-        <button onclick="doLogout()" class="sb-btn sb-logout">⏻ SAIR</button>
-      </nav>`;
-    smithScreen.insertBefore(sidebar, smithScreen.firstChild);
-  }
-}
-
-function applyBloodLayout() {
-  document.querySelectorAll(".theme-sidebar").forEach(el => el.remove());
-}
-
-function applyForestLayout() {
-  document.querySelectorAll(".theme-sidebar").forEach(el => el.remove());
-}
-
-function applyGoldLayout() {
-  document.querySelectorAll(".theme-sidebar").forEach(el => el.remove());
-}
-
-function applyIceLayout() {
-  document.querySelectorAll(".theme-sidebar").forEach(el => el.remove());
-}
-
-// ── Firebase Público ──────────────────────────────────────────
+// ========================
+// INIT FIREBASE PÚBLICO (cliente sem login)
+// ========================
 async function initFirebasePublic() {
   if (window.firebaseDB) return true;
+
   try {
-    const { initializeApp, getApps } = await import(
-      "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"
-    );
-    const { getDatabase, ref, set, get, push, remove, onValue } = await import(
-      "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"
-    );
+    const { initializeApp, getApps } =
+      await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getDatabase, ref, set, get, push, remove, onValue } =
+      await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
     const firebaseConfig = {
-      apiKey: "AIzaSyA2C9_me50ygxsjS_95vQfJ7raRT_1UGlA",
-      authDomain: "forjadores-1a9ce.firebaseapp.com",
+      apiKey:      "AIzaSyA2C9_me50ygxsjS_95vQfJ7raRT_1UGlA",
+      authDomain:  "forjadores-1a9ce.firebaseapp.com",
       databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
-      projectId: "forjadores-1a9ce",
+      projectId:   "forjadores-1a9ce"
     };
-    const app =
-      getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-    const db = getDatabase(app);
-    window.firebaseDB       = db;
-    window.firebaseRef      = ref;
-    window.firebaseSet      = set;
-    window.firebaseGet      = get;
-    window.firebasePush     = push;
-    window.firebaseRemove   = remove;
-    window.firebaseOnValue  = onValue;
-    await loadSavedTheme();
+
+    const existingApps = getApps();
+    const app = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+
+    window.firebaseDB      = db;
+    window.firebaseRef     = ref;
+    window.firebaseSet     = set;
+    window.firebaseGet     = get;
+    window.firebasePush    = push;
+    window.firebaseRemove  = remove;
+    window.firebaseOnValue = onValue;
+
     console.log("✅ Firebase público inicializado (leitura anônima).");
-    return true;
-  } catch (err) {
-    console.error("❌ Erro ao inicializar Firebase público:", err);
-    return false;
-  }
-}
-
-// ── Firebase Cliente (autenticado) ────────────────────────────
-async function initFirebaseClient(customToken) {
-  try {
-    const { initializeApp, getApps } = await import(
-      "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"
-    );
-    const { getDatabase, ref, set, get, push, remove, onValue } = await import(
-      "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"
-    );
-    const { getAuth, signInWithCustomToken } = await import(
-      "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"
-    );
-    const firebaseConfig = {
-      apiKey: "AIzaSyA2C9_me50ygxsjS_95vQfJ7raRT_1UGlA",
-      authDomain: "forjadores-1a9ce.firebaseapp.com",
-      databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
-      projectId: "forjadores-1a9ce",
-    };
-    const app =
-      getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-    const db   = getDatabase(app);
-    const auth = getAuth(app);
-    window.firebaseDB       = db;
-    window.firebaseRef      = ref;
-    window.firebaseSet      = set;
-    window.firebaseGet      = get;
-    window.firebasePush     = push;
-    window.firebaseRemove   = remove;
-    window.firebaseOnValue  = onValue;
-    window.firebaseAuth     = auth;
-    window.firebaseSignOut  = () => import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js").then(m => m.signOut(auth));
-    if (customToken) await signInWithCustomToken(auth, customToken);
     await loadSavedTheme();
     return true;
-  } catch (err) {
-    console.error("❌ Erro ao inicializar Firebase cliente:", err);
+  } catch (e) {
+    console.error("❌ Erro ao inicializar Firebase público:", e);
+    document.body.setAttribute("data-theme", "arcana");
     return false;
   }
 }
 
-// ── Token de Cadastro ─────────────────────────────────────────
+// ========================
+// INIT FIREBASE CLIENT (pós-login via customToken)
+// ========================
+async function initFirebaseClient(customToken) {
+  const { initializeApp, getApps } =
+    await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+  const { getDatabase, ref, set, get, push, remove, onValue } =
+    await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+  const { getAuth, signInWithCustomToken, signOut } =
+    await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+
+  const firebaseConfig = {
+    apiKey:      "AIzaSyA2C9_me50ygxsjS_95vQfJ7raRT_1UGlA",
+    authDomain:  "forjadores-1a9ce.firebaseapp.com",
+    databaseURL: "https://forjadores-1a9ce-default-rtdb.firebaseio.com",
+    projectId:   "forjadores-1a9ce"
+  };
+
+  const existingApps = getApps();
+  const app  = existingApps.length ? existingApps[0] : initializeApp(firebaseConfig);
+  const db   = getDatabase(app);
+  const auth = getAuth(app);
+
+  await signInWithCustomToken(auth, customToken);
+
+  window.firebaseDB      = db;
+  window.firebaseAuth    = auth;
+  window.firebaseRef     = ref;
+  window.firebaseSet     = set;
+  window.firebaseGet     = get;
+  window.firebasePush    = push;
+  window.firebaseRemove  = remove;
+  window.firebaseOnValue = onValue;
+  window.firebaseSignOut = signOut;
+
+  console.log("✅ Firebase client autenticado via customToken.");
+  await loadSavedTheme();
+}
+
+// ========================
+// TOKEN DE CADASTRO
+// ========================
 function generateToken() {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  return Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  let token = "";
+  for (let i = 0; i < 8; i++)
+    token += chars.charAt(Math.floor(Math.random() * chars.length));
+  return token;
+}
+
+async function sendOrUpdateTokenMessage(token, isUpdate) {
+  const now = new Date().toLocaleString("pt-BR");
+  const payload = {
+    username:   "⚔️ Forja de Armas",
+    avatar_url: "https://i.imgur.com/AfFp7pu.png",
+    embeds: [{
+      title: isUpdate ? "🔄 Chave de Cadastro Atualizada" : "🔑 Chave de Cadastro Gerada",
+      description:
+        `${isUpdate
+          ? "A chave anterior foi utilizada e uma nova foi gerada automaticamente."
+          : "Uma nova chave de cadastro está disponível."
+        }\n\n**🗝️ Chave atual:**\n\`\`\`\n${token}\n\`\`\`\n> Use esta chave para cadastrar um novo forjador.\n> A chave é de **uso único** — ao ser usada, uma nova será gerada.`,
+      color:     isUpdate ? 0xf59e0b : 0x7b2fff,
+      footer:    { text: `Gerada em: ${now}` },
+      timestamp: new Date().toISOString()
+    }]
+  };
+  try {
+    const snapMsg   = await firebaseGet(firebaseRef(firebaseDB, "config/tokenMessageId"));
+    const messageId = snapMsg.exists() ? snapMsg.val() : null;
+    if (messageId && isUpdate) {
+      const editRes = await fetch(
+        `${TOKEN_WEBHOOK}/messages/${messageId}`,
+        { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
+      );
+      if (editRes.ok) { console.log("✅ Token atualizado."); return; }
+    }
+    const res = await fetch(`${TOKEN_WEBHOOK}?wait=true`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      await firebaseSet(firebaseRef(firebaseDB, "config/tokenMessageId"), data.id);
+    }
+  } catch (e) { console.error("Erro token:", e); }
 }
 
 async function saveTokenToFirebase(token) {
-  await window.firebaseSet(window.firebaseRef(window.firebaseDB, "config/registerToken"), {
-    token, usado: false, createdAt: Date.now(),
+  await firebaseSet(firebaseRef(firebaseDB, "config/registerToken"), {
+    token, used: false, createdAt: new Date().toISOString()
   });
 }
 
 async function getRegisterToken() {
-  const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDB, "config/registerToken"));
-  return snap.exists() ? snap.val() : null;
-}
-
-async function sendOrUpdateTokenMessage(token, isUpdate = false) {
   try {
-    const msgIdSnap = await window.firebaseGet(window.firebaseRef(window.firebaseDB, "config/tokenMessageId"));
-    const msgId     = msgIdSnap.exists() ? msgIdSnap.val() : null;
-    const payload   = {
-      embeds: [{
-        title: isUpdate ? "🔄 Chave de Cadastro Atualizada" : "🔑 Chave de Cadastro Gerada",
-        description: `\`\`\`\n${token}\n\`\`\`\n> Use esta chave para registrar um novo forjador.\n> A chave é de uso único e expira ao ser utilizada.`,
-        color: isUpdate ? 0xf59e0b : 0x7b2fff,
-        footer: { text: `Gerada em: ${new Date().toLocaleString("pt-BR")}` },
-      }],
-    };
-    if (msgId) {
-      const res = await fetch(`${TOKEN_WEBHOOK}/messages/${msgId}`, {
-        method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("patch failed");
-    } else {
-      const res  = await fetch(`${TOKEN_WEBHOOK}?wait=true`, {
-        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      await window.firebaseSet(window.firebaseRef(window.firebaseDB, "config/tokenMessageId"), data.id);
-    }
-  } catch (err) {
-    console.warn("Erro ao enviar token para Discord:", err);
-  }
+    const snap = await firebaseGet(firebaseRef(firebaseDB, "config/registerToken"));
+    return snap.exists() ? snap.val() : null;
+  } catch (e) { return null; }
 }
 
 async function initToken() {
-  const existing = await getRegisterToken();
-  if (!existing || existing.usado) {
+  if (!window.firebaseDB) return;
+  const data = await getRegisterToken();
+  if (!data) {
     const token = generateToken();
     await saveTokenToFirebase(token);
     await sendOrUpdateTokenMessage(token, false);
@@ -214,381 +171,777 @@ async function initToken() {
 }
 
 async function rotateToken() {
-  const token = generateToken();
-  await saveTokenToFirebase(token);
-  await sendOrUpdateTokenMessage(token, true);
-  return token;
+  const newToken = generateToken();
+  await saveTokenToFirebase(newToken);
+  await sendOrUpdateTokenMessage(newToken, true);
 }
 
-// ── Perfis de Forjadores ──────────────────────────────────────
-async function getSmithProfile(userId) {
-  const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDB, `smiths/${userId}`));
-  return snap.exists() ? snap.val() : null;
+// ========================
+// PERFIL
+// ========================
+async function getSmithProfile(uid) {
+  try {
+    const snap = await firebaseGet(firebaseRef(firebaseDB, `smiths/${uid}`));
+    return snap.exists() ? { id: uid, ...snap.val() } : null;
+  } catch (e) { return null; }
 }
 
 async function getAllSmiths() {
-  const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDB, "smiths"));
-  if (!snap.exists()) return [];
-  const obj = snap.val();
-  return Object.entries(obj).map(([id, data]) => ({ id, ...data }));
-}
-
-window.getSmiths = getAllSmiths;
-
-// ── Navegação ─────────────────────────────────────────────────
-let currentSmith = null;
-
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  const el = document.getElementById(id);
-  if (el) el.classList.add("active");
-}
-
-async function goTo(screen) {
-  if (screen === "selector") { showScreen("screen-selector"); return; }
-  if (screen === "client") {
-    showScreen("screen-client");
-    await initFirebasePublic();
-    if (typeof clientInit === "function") clientInit();
-    return;
-  }
-  if (screen === "smith") {
-    showScreen("screen-smith");
-    if (typeof smithInit === "function") smithInit();
-    return;
-  }
-  if (screen === "admin") {
-    showScreen("screen-admin");
-    if (typeof adminInit === "function") adminInit();
-    return;
-  }
-  if (screen === "login") { showScreen("screen-login"); return; }
-  if (screen === "register") { showScreen("screen-register"); return; }
-}
-
-// ── Auth Init ─────────────────────────────────────────────────
-async function authInit() {
-  console.log("🔐 authInit rodando...");
-  await initFirebasePublic();
-  const saved = sessionStorage.getItem("currentSmith");
-  if (saved) {
-    try {
-      currentSmith = JSON.parse(saved);
-      await initFirebaseClient(currentSmith.customToken);
-      goTo("smith");
-      return;
-    } catch { sessionStorage.removeItem("currentSmith"); }
-  }
-  goTo("selector");
-}
-
-// ── Login / Logout ────────────────────────────────────────────
-async function doLogin() {
-  const user = document.getElementById("login-user")?.value.trim();
-  const pass = document.getElementById("login-pass")?.value.trim();
-  const err  = document.getElementById("login-error");
-  if (!user || !pass) { if (err) err.textContent = "Preencha todos os campos."; return; }
   try {
-    const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDB, "smiths"));
-    if (!snap.exists()) { if (err) err.textContent = "Usuário ou senha incorretos."; return; }
-    const smiths = snap.val();
-    const entry  = Object.entries(smiths).find(([, v]) => v.user === user && v.pass === pass);
-    if (!entry) { if (err) err.textContent = "Usuário ou senha incorretos."; return; }
-    const [id, data] = entry;
-    const res = await fetch("/api/firebase-token", {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ uid: id }),
-    });
-    const { customToken } = await res.json();
-    currentSmith = { id, ...data, customToken };
-    sessionStorage.setItem("currentSmith", JSON.stringify(currentSmith));
-    await initFirebaseClient(customToken);
-    goTo("smith");
-  } catch (e) {
-    if (err) err.textContent = "Erro ao fazer login.";
-    console.error(e);
-  }
+    const snap = await firebaseGet(firebaseRef(firebaseDB, "smiths"));
+    if (!snap.exists()) return [];
+    return Object.entries(snap.val()).map(([id, val]) => ({ id, ...val }));
+  } catch (e) { return []; }
 }
 
-async function doLogout() {
-  sessionStorage.removeItem("currentSmith");
-  currentSmith = null;
-  if (window.firebaseSignOut) await window.firebaseSignOut();
-  goTo("selector");
-}
+async function getSmiths() { return getAllSmiths(); }
 
-// ── Registro ──────────────────────────────────────────────────
-async function doRegister() {
-  const name     = document.getElementById("reg-name")?.value.trim();
-  const passport = document.getElementById("reg-passport")?.value.trim();
-  const user     = document.getElementById("reg-user")?.value.trim();
-  const pass     = document.getElementById("reg-pass")?.value.trim();
-  const token    = document.getElementById("reg-token")?.value.trim().toUpperCase();
-  const err      = document.getElementById("reg-error");
-  if (!name || !passport || !user || !pass || !token) {
-    if (err) err.textContent = "Preencha todos os campos."; return;
-  }
-  try {
-    const tokenData = await getRegisterToken();
-    if (!tokenData || tokenData.token !== token || tokenData.usado) {
-      if (err) err.textContent = "Chave de cadastro inválida ou já utilizada."; return;
-    }
-    const smithsSnap = await window.firebaseGet(window.firebaseRef(window.firebaseDB, "smiths"));
-    if (smithsSnap.exists()) {
-      const smiths = smithsSnap.val();
-      if (Object.values(smiths).some(s => s.user === user)) {
-        if (err) err.textContent = "Nome de usuário já existe."; return;
-      }
-      if (Object.values(smiths).some(s => s.passport === passport)) {
-        if (err) err.textContent = "Passaporte já cadastrado."; return;
-      }
-    }
-    const newRef = window.firebasePush(window.firebaseRef(window.firebaseDB, "smiths"));
-    await window.firebaseSet(newRef, {
-      displayName: name, passport, user, pass, createdAt: Date.now(),
-    });
-    await window.firebaseSet(window.firebaseRef(window.firebaseDB, "config/registerToken"), {
-      ...tokenData, usado: true,
-    });
-    await rotateToken();
-    document.getElementById("reg-success").style.display = "block";
-    setTimeout(() => goTo("login"), 2000);
-  } catch (e) {
-    if (err) err.textContent = "Erro ao registrar.";
-    console.error(e);
-  }
-}
-
-// ── Alterar Senha (Forjador) ──────────────────────────────────
-async function doChangePassword() {
-  const oldP = document.getElementById("cp-old")?.value.trim();
-  const newP = document.getElementById("cp-new")?.value.trim();
-  const cnf  = document.getElementById("cp-confirm")?.value.trim();
-  const err  = document.getElementById("cp-error");
-  const ok   = document.getElementById("cp-success");
-  if (!oldP || !newP || !cnf) { if (err) err.textContent = "Preencha todos os campos."; return; }
-  if (newP !== cnf)            { if (err) err.textContent = "As senhas não coincidem."; return; }
-  if (currentSmith?.pass !== oldP) { if (err) err.textContent = "Senha atual incorreta."; return; }
-  try {
-    await window.firebaseSet(window.firebaseRef(window.firebaseDB, `smiths/${currentSmith.id}/pass`), newP);
-    currentSmith.pass = newP;
-    sessionStorage.setItem("currentSmith", JSON.stringify(currentSmith));
-    if (ok) { ok.style.display = "block"; setTimeout(() => { ok.style.display = "none"; }, 2500); }
-    if (err) err.textContent = "";
-    closeChangePasswordModal();
-  } catch (e) {
-    if (err) err.textContent = "Erro ao alterar senha.";
-  }
-}
-
-function openChangePasswordModal() {
-  const m = document.getElementById("modal-change-password");
-  if (m) m.style.display = "flex";
-}
-function closeChangePasswordModal() {
-  const m = document.getElementById("modal-change-password");
-  if (m) m.style.display = "none";
-  ["cp-old","cp-new","cp-confirm"].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = "";
+// ========================
+// NAVEGAÇÃO
+// ========================
+function showScreen(screenId) {
+  const all = [
+    "screen-selector", "screen-login", "screen-register",
+    "screen-client", "screen-smith", "screen-admin-login", "screen-admin"
+  ];
+  all.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
   });
-  const err = document.getElementById("cp-error"); if (err) err.textContent = "";
+  const target = document.getElementById(screenId);
+  if (!target) { console.error("Tela não encontrada:", screenId); return; }
+  const flexScreens = [
+    "screen-selector", "screen-login", "screen-register", "screen-admin-login"
+  ];
+  target.style.display = flexScreens.includes(screenId) ? "flex" : "block";
 }
 
-// ── Dados de Armas ────────────────────────────────────────────
+function goTo(screen) {
+  const editModal = document.getElementById("editSmithModal");
+  if (editModal) editModal.style.display = "none";
+
+  switch (screen) {
+    case "selector":
+      showScreen("screen-selector");
+      break;
+    case "login": {
+      const u = document.getElementById("loginUser");
+      const p = document.getElementById("loginPass");
+      const e = document.getElementById("loginError");
+      if (u) u.value = "";
+      if (p) p.value = "";
+      if (e) { e.textContent = ""; e.classList.add("hidden"); e.style.display = "none"; }
+      showScreen("screen-login");
+      break;
+    }
+    case "register":
+      clearRegisterForm();
+      showScreen("screen-register");
+      break;
+    case "client":
+      showScreen("screen-client");
+      initFirebasePublic().then(() => {
+        if (typeof clientInit === "function") clientInit();
+      });
+      break;
+    case "smith":
+      showScreen("screen-smith");
+      if (typeof smithInit === "function") smithInit();
+      break;
+    case "admin-login": {
+      const au = document.getElementById("adminLoginUser");
+      const ap = document.getElementById("adminLoginPass");
+      const ae = document.getElementById("adminLoginError");
+      if (au) au.value = "";
+      if (ap) ap.value = "";
+      if (ae) { ae.textContent = ""; ae.classList.add("hidden"); ae.style.display = "none"; }
+      showScreen("screen-admin-login");
+      break;
+    }
+    case "admin":
+      showScreen("screen-admin");
+      if (typeof adminInit === "function") adminInit();
+      break;
+    default:
+      showScreen("screen-selector");
+  }
+}
+
+// ========================
+// LOGIN FORJADOR
+// ========================
+function clearLoginForm() {
+  const u = document.getElementById("loginUser");
+  const p = document.getElementById("loginPass");
+  const e = document.getElementById("loginError");
+  if (u) u.value = "";
+  if (p) p.value = "";
+  if (e) { e.textContent = ""; e.classList.add("hidden"); e.style.display = "none"; }
+}
+
+async function doLogin() {
+  const btn  = document.querySelector("#screen-login .btn-primary");
+  const uEl  = document.getElementById("loginUser");
+  const pEl  = document.getElementById("loginPass");
+  const eEl  = document.getElementById("loginError");
+  const user = uEl ? uEl.value.trim() : "";
+  const pass = pEl ? pEl.value.trim() : "";
+
+  if (eEl) { eEl.classList.add("hidden"); eEl.style.display = "none"; }
+
+  if (!user || !pass) {
+    if (eEl) {
+      eEl.textContent = "Preencha usuário e senha.";
+      eEl.classList.remove("hidden");
+      eEl.style.display = "";
+    }
+    return;
+  }
+
+  setLoading(btn, true, "Entrando...");
+
+  try {
+    const res  = await fetch(`${window.API_URL}/login`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ user, password: pass })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (eEl) {
+        eEl.textContent = data.error || "Usuário ou senha incorretos.";
+        eEl.classList.remove("hidden");
+        eEl.style.display = "";
+      }
+      setLoading(btn, false, "🔨 Entrar");
+      return;
+    }
+
+    await initFirebaseClient(data.token);
+
+    currentSmith = data.smith;
+    if (eEl) { eEl.classList.add("hidden"); eEl.style.display = "none"; }
+    setLoading(btn, false, "🔨 Entrar");
+    goTo("smith");
+
+  } catch (err) {
+    console.error("Erro login:", err);
+    if (eEl) {
+      eEl.textContent = "Erro ao conectar. Tente novamente.";
+      eEl.classList.remove("hidden");
+      eEl.style.display = "";
+    }
+    setLoading(btn, false, "🔨 Entrar");
+  }
+}
+
+// ========================
+// ALTERAR SENHA
+// ========================
+function openChangePassModal() {
+  const modal = document.getElementById("changePassModal");
+  if (!modal) return;
+  ["cpOldPass", "cpNewPass", "cpNewPassConfirm"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  const errEl = document.getElementById("cpError");
+  const sucEl = document.getElementById("cpSuccess");
+  if (errEl) { errEl.textContent = ""; errEl.classList.add("hidden"); errEl.style.display = "none"; }
+  if (sucEl) { sucEl.textContent = ""; sucEl.classList.add("hidden"); sucEl.style.display = "none"; }
+  modal.style.display = "block";
+  const overlay = document.getElementById("changePassOverlay");
+  if (overlay) overlay.onclick = e => { if (e.target === overlay) closeChangePassModal(); };
+  setTimeout(() => { const f = document.getElementById("cpOldPass"); if (f) f.focus(); }, 80);
+}
+
+function closeChangePassModal() {
+  const modal = document.getElementById("changePassModal");
+  if (modal) modal.style.display = "none";
+}
+
+async function doChangePassword() {
+  const oldPass    = document.getElementById("cpOldPass")?.value.trim();
+  const newPass    = document.getElementById("cpNewPass")?.value.trim();
+  const newConfirm = document.getElementById("cpNewPassConfirm")?.value.trim();
+  const btn        = document.getElementById("cpSaveBtn");
+  const errEl      = document.getElementById("cpError");
+  const sucEl      = document.getElementById("cpSuccess");
+
+  if (errEl) { errEl.textContent = ""; errEl.classList.add("hidden"); errEl.style.display = "none"; }
+  if (sucEl) { sucEl.textContent = ""; sucEl.classList.add("hidden"); sucEl.style.display = "none"; }
+
+  if (!oldPass)               { showCpError("Preencha a senha atual."); return; }
+  if (!newPass)               { showCpError("Preencha a nova senha."); return; }
+  if (newPass.length < 6)     { showCpError("A nova senha deve ter ao menos 6 caracteres."); return; }
+  if (newPass !== newConfirm) { showCpError("As senhas não coincidem."); return; }
+  if (oldPass === newPass)    { showCpError("A nova senha deve ser diferente da atual."); return; }
+
+  setLoading(btn, true, "Salvando...");
+
+  try {
+    const checkRes = await fetch(`${window.API_URL}/login`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ user: currentSmith.user, password: oldPass })
+    });
+    if (!checkRes.ok) {
+      showCpError("Senha atual incorreta.");
+      setLoading(btn, false, "💾 Salvar Nova Senha");
+      return;
+    }
+
+    const res  = await fetch(`${window.API_URL}/change-password`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ uid: currentSmith.id, newPassword: newPass })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showCpError(data.error || "Erro ao alterar senha.");
+      setLoading(btn, false, "💾 Salvar Nova Senha");
+      return;
+    }
+
+    if (typeof addLog === "function")
+      addLog("edit", `Forjador "${currentSmith.displayName}" alterou a própria senha.`);
+
+    if (sucEl) {
+      sucEl.textContent = "✅ Senha alterada com sucesso!";
+      sucEl.classList.remove("hidden");
+      sucEl.style.display = "";
+    }
+    setLoading(btn, false, "💾 Salvar Nova Senha");
+    setTimeout(() => closeChangePassModal(), 2000);
+
+  } catch (err) {
+    console.error(err);
+    showCpError("Erro ao conectar. Tente novamente.");
+    setLoading(btn, false, "💾 Salvar Nova Senha");
+  }
+}
+
+function showCpError(msg) {
+  const el = document.getElementById("cpError");
+  if (el) { el.textContent = msg; el.classList.remove("hidden"); el.style.display = ""; }
+}
+
+// ========================
+// REGISTRO
+// ========================
+function clearRegisterForm() {
+  ["regDisplayName","regPassport","regUser","regPass","regPassConfirm","regToken"]
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
+  const e = document.getElementById("regError");
+  const s = document.getElementById("regSuccess");
+  if (e) { e.textContent = ""; e.classList.add("hidden"); e.style.display = "none"; }
+  if (s) { s.textContent = ""; s.classList.add("hidden"); s.style.display = "none"; }
+}
+
+async function doRegister() {
+  const displayName = document.getElementById("regDisplayName").value.trim();
+  const passport    = document.getElementById("regPassport").value.trim();
+  const user        = document.getElementById("regUser").value.trim();
+  const pass        = document.getElementById("regPass").value.trim();
+  const passConfirm = document.getElementById("regPassConfirm").value.trim();
+  const token       = document.getElementById("regToken").value.trim().toUpperCase();
+  const btn         = document.getElementById("regBtn");
+
+  hideRegMessages();
+
+  if (!displayName)         { showRegError("Preencha o nome na cidade.");               return; }
+  if (!passport)            { showRegError("Preencha o ID / Passaporte.");              return; }
+  if (!user)                { showRegError("Preencha o usuário de login.");             return; }
+  if (user.length < 3)      { showRegError("Usuário deve ter ao menos 3 caracteres."); return; }
+  if (!pass)                { showRegError("Preencha a senha.");                        return; }
+  if (pass.length < 4)      { showRegError("Senha deve ter ao menos 4 caracteres.");   return; }
+  if (pass !== passConfirm) { showRegError("As senhas não coincidem.");                 return; }
+  if (!token)               { showRegError("Preencha a chave de cadastro.");            return; }
+
+  setLoading(btn, true, "Cadastrando...");
+
+  try {
+    const res  = await fetch(`${window.API_URL}/register`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ displayName, passport, user, password: pass, token })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showRegError(data.error || "Erro ao cadastrar.");
+      setLoading(btn, false, "📝 Cadastrar");
+      return;
+    }
+
+    await fetch(`${window.API_URL}/rotate-token`, { method: "POST" });
+
+    const sEl = document.getElementById("regSuccess");
+    if (sEl) {
+      sEl.textContent = `✅ Forjador "${data.displayName}" cadastrado com sucesso!`;
+      sEl.classList.remove("hidden");
+      sEl.style.display = "";
+    }
+    setLoading(btn, false, "📝 Cadastrar");
+
+    setTimeout(() => {
+      goTo("login");
+      const lu = document.getElementById("loginUser");
+      if (lu) lu.value = data.user;
+    }, 2000);
+
+  } catch (err) {
+    console.error(err);
+    showRegError("Erro ao conectar. Tente novamente.");
+    setLoading(btn, false, "📝 Cadastrar");
+  }
+}
+
+function showRegError(msg) {
+  const el = document.getElementById("regError");
+  if (el) { el.textContent = msg; el.classList.remove("hidden"); el.style.display = ""; }
+}
+
+function hideRegMessages() {
+  const e = document.getElementById("regError");
+  const s = document.getElementById("regSuccess");
+  if (e) { e.textContent = ""; e.classList.add("hidden"); e.style.display = "none"; }
+  if (s) { s.textContent = ""; s.classList.add("hidden"); s.style.display = "none"; }
+}
+
+function toggleRegPassword(fieldId, btnId) {
+  const input = document.getElementById(fieldId);
+  const btn   = document.getElementById(btnId);
+  if (!input || !btn) return;
+  input.type      = input.type === "password" ? "text" : "password";
+  btn.textContent = input.type === "password" ? "👁️" : "🙈";
+}
+
+// ========================
+// LOGOUT
+// ========================
+async function doLogout() {
+  try {
+    if (window.firebaseAuth && window.firebaseSignOut)
+      await window.firebaseSignOut(window.firebaseAuth);
+  } catch (e) { console.error(e); }
+  currentSmith = null;
+  if (window._queueListener) {
+    window._queueListener();
+    window._queueListener = null;
+  }
+  goTo("selector");
+}
+
+// ========================
+// LOADING
+// ========================
+function setLoading(btn, loading, text) {
+  if (!btn) return;
+  btn.disabled      = loading;
+  btn.textContent   = text;
+  btn.style.opacity = loading ? "0.7" : "1";
+}
+
+// ========================
+// INIT
+// ========================
+function authInit() {
+  console.log("🔐 authInit rodando...");
+
+  [
+    "loginError", "adminLoginError", "regError", "regSuccess",
+    "editSmithError", "adminPassError", "adminPassSuccess",
+    "cpError", "cpSuccess"
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.add("hidden"); el.style.display = "none"; }
+  });
+
+  ["editSmithModal", "changePassModal"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.style.display = "none"; }
+  });
+
+  const lp = document.getElementById("loginPass");
+  const lu = document.getElementById("loginUser");
+  if (lp) lp.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
+  if (lu) lu.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
+
+  // Aplica tema padrão enquanto carrega
+  if (!document.body.getAttribute("data-theme")) {
+    document.body.setAttribute("data-theme", "arcana");
+  }
+
+  showScreen("screen-selector");
+}
+
+if (document.readyState === "complete") {
+  authInit();
+} else {
+  window.addEventListener("load", authInit);
+}
+
+// ========================
+// API URL + FIREBASE READY
+// ========================
+window.API_URL = "/api";
+window._firebaseReady = true;
+document.dispatchEvent(new Event("firebaseReady"));
+window._appLoaded = true;
+
+// ========================
+// DATA - RECEITAS
+// ========================
 const MATERIALS_RECIPE = {
-  Espadas:   { titosFundidos: 15, placasAco: 8,  couroReforçado: 5, cristalMagico: 0, penasFenix: 0  },
-  Arcos:     { titosFundidos: 10, placasAco: 5,  couroReforçado: 8, cristalMagico: 2, penasFenix: 3  },
-  Lanças:    { titosFundidos: 12, placasAco: 10, couroReforçado: 4, cristalMagico: 0, penasFenix: 0  },
-  Cajados:   { titosFundidos: 8,  placasAco: 4,  couroReforçado: 3, cristalMagico: 8, penasFenix: 2  },
-  Machados:  { titosFundidos: 18, placasAco: 12, couroReforçado: 6, cristalMagico: 0, penasFenix: 0  },
-  Foices:    { titosFundidos: 14, placasAco: 9,  couroReforçado: 5, cristalMagico: 3, penasFenix: 0  },
-  Adagas:    { titosFundidos: 8,  placasAco: 6,  couroReforçado: 7, cristalMagico: 1, penasFenix: 0  },
-  Tridentes: { titosFundidos: 13, placasAco: 11, couroReforçado: 4, cristalMagico: 0, penasFenix: 0  },
-  Leques:    { titosFundidos: 7,  placasAco: 3,  couroReforçado: 9, cristalMagico: 4, penasFenix: 1  },
+  "Espadas e Machados Encantados": {
+    "Pó Estelar": 3, "Elemento Primordial": 1, "Cristal": 3,
+    "Pedra da Lua": 3, "Essência de Luz": 1, "Pedra Rúnica": 1, "Ferro Mágico": 1
+  },
+  "Espadas e Machados Básicos": {
+    "Cristal": 3, "Ferro Mágico": 1, "Pedra Rúnica": 1, "Elemento Primordial": 1
+  },
+  "Lanças Encantadas": {
+    "Pérola Abissal": 3, "Elemento Primordial": 1, "Cristal": 3,
+    "Pedra da Lua": 3, "Madeira Mágica": 1, "Pó Estelar": 1, "Ferro Mágico": 1
+  },
+  "Lanças Básicas": {
+    "Pérola Abissal": 3, "Elemento Primordial": 1, "Cristal": 3,
+    "Pedra da Lua": 3, "Madeira Mágica": 1
+  },
+  "Adagas e Leques Encantados": {
+    "Pó Estelar": 3, "Elemento Primordial": 1, "Cristal": 3,
+    "Pedra da Lua": 3, "Essência de Luz": 1, "Pedra Rúnica": 1, "Ferro Mágico": 1
+  },
+  "Adagas e Leques Básicos": {
+    "Elemento Primordial": 1, "Cristal": 3, "Pedra Rúnica": 1, "Ferro Mágico": 1
+  },
+  "Foices Encantadas": {
+    "Pó Estelar": 3, "Elemento Primordial": 1, "Cristal": 3,
+    "Pedra da Lua": 3, "Essência de Luz": 1, "Pedra Rúnica": 1, "Ferro Mágico": 1
+  },
+  "Foices Básicas": {
+    "Elemento Primordial": 1, "Cristal": 3, "Pedra Rúnica": 1, "Ferro Mágico": 1
+  },
+  "Tridentes Encantados": {
+    "Pérola Abissal": 3, "Elemento Primordial": 1, "Cristal": 3,
+    "Pedra da Lua": 3, "Madeira Mágica": 1, "Pó Estelar": 1, "Ferro Mágico": 1
+  },
+  "Tridentes Básicos": {
+    "Pérola Abissal": 3, "Elemento Primordial": 1, "Cristal": 3,
+    "Pedra da Lua": 3, "Madeira Mágica": 1
+  },
+  "Arcos Encantados": {
+    "Pena de Anjo": 3, "Elemento Primordial": 3, "Cristal": 3,
+    "Madeira Mágica": 3, "Essência de Luz": 1, "Meteorito": 1,
+    "Ferro Mágico": 1
+  },
+  "Arcos Básicos": {
+    "Pena de Anjo": 3, "Elemento Primordial": 2, "Cristal": 3,
+    "Madeira Mágica": 3
+  },
+  "Flechas": {
+    "Pena de Anjo": 10, "Pedra Rúnica": 10, "Linha Mágica": 10
+  }
 };
 
 const WEAPON_DATA = [
-  { name:"Acheron",         category:"Espadas",   icon:"⚔️",  price:150 },
-  { name:"Ancient Blade",   category:"Espadas",   icon:"⚔️",  price:180 },
-  { name:"Astral Blade",    category:"Espadas",   icon:"⚔️",  price:200 },
-  { name:"Blood King",      category:"Espadas",   icon:"⚔️",  price:220 },
-  { name:"Haran Blade",     category:"Espadas",   icon:"⚔️",  price:170 },
-  { name:"Warglaive",       category:"Espadas",   icon:"⚔️",  price:190 },
-  { name:"Herritt",         category:"Espadas",   icon:"⚔️",  price:160 },
-  { name:"Glowybow",        category:"Arcos",     icon:"🏹",  price:140 },
-  { name:"Skulldragonbow",  category:"Arcos",     icon:"🏹",  price:160 },
-  { name:"Bloodbow",        category:"Arcos",     icon:"🏹",  price:150 },
-  { name:"Colorbow",        category:"Arcos",     icon:"🏹",  price:130 },
-  { name:"Crystalbow",      category:"Arcos",     icon:"🏹",  price:145 },
-  { name:"Dragonbow",       category:"Arcos",     icon:"🏹",  price:170 },
-  { name:"Elegybow",        category:"Arcos",     icon:"🏹",  price:155 },
-  { name:"Eternalbow",      category:"Arcos",     icon:"🏹",  price:180 },
-  { name:"Evilskullbow",    category:"Arcos",     icon:"🏹",  price:165 },
-  { name:"Fantasybow",      category:"Arcos",     icon:"🏹",  price:140 },
-  { name:"Harpbow",         category:"Arcos",     icon:"🏹",  price:150 },
-  { name:"Leviatabow",      category:"Arcos",     icon:"🏹",  price:175 },
-  { name:"Rambow",          category:"Arcos",     icon:"🏹",  price:135 },
-  { name:"Tryandebow",      category:"Arcos",     icon:"🏹",  price:145 },
-  { name:"Vulkanbow",       category:"Arcos",     icon:"🏹",  price:160 },
-  { name:"Wingbow",         category:"Arcos",     icon:"🏹",  price:155 },
-  { name:"Bluefan",         category:"Leques",    icon:"🌀",  price:120 },
-  { name:"Mortalfan",       category:"Leques",    icon:"🌀",  price:135 },
-  { name:"Motherfan",       category:"Leques",    icon:"🌀",  price:125 },
-  { name:"Purplefan",       category:"Leques",    icon:"🌀",  price:130 },
-  { name:"Heavenlyspear",   category:"Lanças",    icon:"🗡️",  price:160 },
-  { name:"Skyspear",        category:"Lanças",    icon:"🗡️",  price:145 },
-  { name:"Bloodspear",      category:"Lanças",    icon:"🗡️",  price:155 },
-  { name:"Spear",           category:"Lanças",    icon:"🗡️",  price:130 },
-  { name:"Gungnir",         category:"Lanças",    icon:"🗡️",  price:200 },
-  { name:"Holystaff",       category:"Cajados",   icon:"🔮",  price:180 },
-  { name:"Scifi",           category:"Cajados",   icon:"🔮",  price:170 },
-  { name:"Bellscyther",     category:"Foices",    icon:"☽",   price:165 },
-  { name:"Chastiefolgear",  category:"Foices",    icon:"☽",   price:155 },
-  { name:"Deathscyther",    category:"Foices",    icon:"☽",   price:175 },
-  { name:"Naturescyther",   category:"Foices",    icon:"☽",   price:160 },
-  { name:"Scifiscyther",    category:"Foices",    icon:"☽",   price:170 },
-  { name:"Venthyrscyther",  category:"Foices",    icon:"☽",   price:180 },
-  { name:"Fantasyknife",    category:"Adagas",    icon:"🗡️",  price:110 },
-  { name:"Killerdagger",    category:"Adagas",    icon:"🗡️",  price:120 },
-  { name:"Bident",          category:"Tridentes", icon:"🔱",  price:150 },
-  { name:"Goldentrident",   category:"Tridentes", icon:"🔱",  price:180 },
-  { name:"Greentrident",    category:"Tridentes", icon:"🔱",  price:160 },
-  { name:"Levitrident",     category:"Tridentes", icon:"🔱",  price:170 },
-  { name:"Tridentberilion", category:"Tridentes", icon:"🔱",  price:175 },
-  { name:"Gryphon",         category:"Machados",  icon:"🪓",  price:190 },
-  { name:"Guts",            category:"Machados",  icon:"🪓",  price:200 },
-  { name:"Guts2",           category:"Machados",  icon:"🪓",  price:210 },
-  { name:"Naha",            category:"Machados",  icon:"🪓",  price:185 },
-  { name:"RWolf",           category:"Machados",  icon:"🪓",  price:195 },
-  { name:"Sekira Axe",      category:"Machados",  icon:"🪓",  price:188 },
-  { name:"Verticeabissal",  category:"Machados",  icon:"🪓",  price:205 },
+  { name: "Skulldragonbow",  category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  { name: "Tryandebow",      category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  { name: "Leviatabow",      category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  { name: "Wingbow",         category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  { name: "Vulkanbow",       category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  { name: "Bloodbow",        category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  { name: "Colorbow",        category: "Arcos Encantados",              icon: "🏹", price: 37000 },
+  { name: "Glowybow",        category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Crystalbow",      category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Fantasybow",      category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Elegybow",        category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Eternalbow",      category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Harpbow",         category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Rambow",          category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Dragonbow",       category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Evilskullbow",    category: "Arcos Básicos",                 icon: "🏹", price: 25000 },
+  { name: "Holystaff",       category: "Lanças Encantadas",             icon: "🔱", price: 27000 },
+  { name: "Gungnir",         category: "Lanças Encantadas",             icon: "🔱", price: 27000 },
+  { name: "Chastiefolgear",  category: "Lanças Encantadas",             icon: "🔱", price: 27000 },
+  { name: "Skyspear",        category: "Lanças Encantadas",             icon: "🔱", price: 27000 },
+  { name: "Spear",           category: "Lanças Básicas",                icon: "🔱", price: 15000 },
+  { name: "Bident",          category: "Lanças Básicas",                icon: "🔱", price: 15000 },
+  { name: "Heavenlyspear",   category: "Lanças Básicas",                icon: "🔱", price: 15000 },
+  { name: "Bloodspear",      category: "Lanças Básicas",                icon: "🔱", price: 15000 },
+  { name: "Mortalfan",       category: "Adagas e Leques Básicos",       icon: "🗡️", price: 15000 },
+  { name: "Fantasyknife",    category: "Adagas e Leques Encantados",    icon: "🗡️", price: 27000 },
+  { name: "Killerdagger",    category: "Adagas e Leques Encantados",    icon: "🗡️", price: 27000 },
+  { name: "Motherfan",       category: "Adagas e Leques Encantados",    icon: "🗡️", price: 27000 },
+  { name: "Bluefan",         category: "Adagas e Leques Encantados",    icon: "🗡️", price: 27000 },
+  { name: "Purplefan",       category: "Adagas e Leques Encantados",    icon: "🗡️", price: 27000 },
+  { name: "Warglaive",       category: "Adagas e Leques Encantados",    icon: "🗡️", price: 27000 },
+  { name: "Scifiscyther",    category: "Foices Básicas",                icon: "⚔️", price: 15000 },
+  { name: "Crimsonmoon",     category: "Foices Básicas",                icon: "⚔️", price: 15000 },
+  { name: "Bellscyther",     category: "Foices Encantadas",             icon: "⚔️", price: 27000 },
+  { name: "Naturescyther",   category: "Foices Encantadas",             icon: "⚔️", price: 27000 },
+  { name: "Deathscyther",    category: "Foices Encantadas",             icon: "⚔️", price: 27000 },
+  { name: "Venthyrscyther",  category: "Foices Encantadas",             icon: "⚔️", price: 27000 },
+  { name: "Tridentberilion", category: "Tridentes Encantados",          icon: "🔱", price: 27000 },
+  { name: "Goldentrident",   category: "Tridentes Encantados",          icon: "🔱", price: 27000 },
+  { name: "Levitrident",     category: "Tridentes Encantados",          icon: "🔱", price: 27000 },
+  { name: "Verticeabissal",  category: "Tridentes Encantados",          icon: "🔱", price: 27000 },
+  { name: "Greentrident",    category: "Tridentes Básicos",             icon: "🔱", price: 15000 },
+  { name: "Ancient Blade",   category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "Scifi",           category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "Blood King",      category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "Astral Blade",    category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "Haran Blade",     category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "Sekira Axe",      category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "Naha",            category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "RWolf",           category: "Espadas e Machados Encantados", icon: "⚔️", price: 27000 },
+  { name: "Guts",            category: "Espadas e Machados Básicos",    icon: "⚔️", price: 15000 },
+  { name: "Guts2",           category: "Espadas e Machados Básicos",    icon: "⚔️", price: 15000 },
+  { name: "Acheron",         category: "Espadas e Machados Básicos",    icon: "⚔️", price: 15000 },
+  { name: "Gryphon",         category: "Espadas e Machados Básicos",    icon: "⚔️", price: 15000 },
 ];
 
 const CATEGORIES = [...new Set(WEAPON_DATA.map(w => w.category))];
 
-// ── Utilitários de Pedido ─────────────────────────────────────
-function formatCurrency(v) {
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+// ========================
+// SHARED UTILS
+// ========================
+function openWeaponPreview(name, imgSrc, icon) {
+  const existing = document.getElementById("weaponPreviewModal");
+  if (existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "weaponPreviewModal";
+  modal.innerHTML = `
+    <div class="wp-backdrop" id="wpBackdrop"></div>
+    <div class="wp-box">
+      <button class="wp-close" id="wpCloseBtn">✕</button>
+      <div class="wp-img-wrap">
+        <img
+          id="wpMainImg"
+          src="${imgSrc}"
+          alt="${name}"
+          class="wp-img"
+          onerror="this.style.display='none';document.getElementById('wpImgFallback').style.display='flex';"
+        />
+        <div id="wpImgFallback" class="wp-img-fallback" style="display:none;">${icon}</div>
+      </div>
+      <div class="wp-name">${name}</div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => modal.classList.add("wp-visible"));
+  document.getElementById("wpBackdrop").addEventListener("click", closeWeaponPreview);
+  document.getElementById("wpCloseBtn").addEventListener("click", closeWeaponPreview);
+  document._wpEscHandler = function(e) {
+    if (e.key === "Escape") closeWeaponPreview();
+  };
+  document.addEventListener("keydown", document._wpEscHandler);
 }
 
-function sanitizeId(str) {
-  return str.replace(/[^a-zA-Z0-9]/g, "_");
+function closeWeaponPreview() {
+  const modal = document.getElementById("weaponPreviewModal");
+  if (!modal) return;
+  modal.classList.remove("wp-visible");
+  modal.classList.add("wp-hiding");
+  setTimeout(() => {
+    modal.remove();
+    document.removeEventListener("keydown", document._wpEscHandler);
+  }, 250);
+}
+
+function formatCurrency(value) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function sanitizeId(name) {
+  return name.replace(/[^a-zA-Z0-9]/g, "_");
+}
+
+function showNotif(msg, color) {
+  const el = document.getElementById("notif");
+  el.textContent = msg;
+  el.style.background = color || "var(--accent-primary)";
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2800);
 }
 
 function calculateMaterials(entries, arrows) {
-  const totals = { titosFundidos: 0, placasAco: 0, couroReforçado: 0, cristalMagico: 0, penasFenix: 0 };
-  entries.forEach(({ category, qty }) => {
-    const recipe = MATERIALS_RECIPE[category];
-    if (!recipe) return;
-    Object.keys(totals).forEach(m => { totals[m] += (recipe[m] || 0) * qty; });
+  const totals = {};
+  const add = (recipe, mult) => {
+    Object.entries(recipe).forEach(([mat, qty]) => {
+      totals[mat] = (totals[mat] || 0) + qty * mult;
+    });
+  };
+  entries.forEach(([name, qty]) => {
+    const w = WEAPON_DATA.find(x => x.name === name);
+    if (w && MATERIALS_RECIPE[w.category]) add(MATERIALS_RECIPE[w.category], qty);
   });
   if (arrows > 0) {
-    totals.couroReforçado += Math.ceil(arrows / 10) * 2;
-    totals.penasFenix     += Math.ceil(arrows / 10);
+    const sets = Math.ceil(arrows / 100);
+    add(MATERIALS_RECIPE["Flechas"], sets);
   }
   return totals;
 }
 
 function buildResumeText(entries, arrows, clientInfo) {
-  const lines   = [];
-  let totalVal  = 0;
-  entries.forEach(({ name, category, qty, price }) => {
-    lines.push(`• ${qty}x ${name} (${category}) — ${formatCurrency(price * qty)}`);
-    totalVal += price * qty;
+  let text = "=== PEDIDO DE ARMAS ===\n";
+  if (clientInfo) {
+    text += `👤 Cliente: ${clientInfo.name}\n`;
+    text += `🪪 Passaporte: ${clientInfo.passport}\n`;
+  }
+  text += "\n📦 ITENS:\n";
+  let total = 0;
+  entries.forEach(([name, qty]) => {
+    const w = WEAPON_DATA.find(x => x.name === name);
+    if (!w) return;
+    const sub = w.price * qty;
+    total += sub;
+    text += `  • ${name} ×${qty} — ${formatCurrency(sub)}\n`;
   });
-  if (arrows > 0) lines.push(`• ${arrows}x Flechas — ${formatCurrency(arrows * 2)}`);
+  if (arrows > 0) {
+    const sets  = Math.ceil(arrows / 100);
+    const cost  = sets * 10000;
+    total      += cost;
+    text       += `  • Flechas ×${arrows} — ${formatCurrency(cost)}\n`;
+  }
   const mats = calculateMaterials(entries, arrows);
-  const matLines = Object.entries(mats)
-    .filter(([, v]) => v > 0)
-    .map(([k, v]) => `  ${k}: ${v}`);
-  return [
-    `👤 Cliente: ${clientInfo.name} | Passaporte: ${clientInfo.passport}`,
-    `📦 Itens:`,
-    ...lines,
-    `💰 Total: ${formatCurrency(totalVal + arrows * 2)}`,
-    `🔩 Materiais necessários:`,
-    ...matLines,
-  ].join("\n");
+  text += "\n⚗️ MATERIAIS NECESSÁRIOS:\n";
+  Object.entries(mats).sort((a,b) => b[1]-a[1])
+    .forEach(([mat, qty]) => { text += `  • ${mat}: ${qty}x\n`; });
+  text += `\n💰 TOTAL: ${formatCurrency(total)}`;
+  return text;
 }
 
-// ── Grid de Armas ─────────────────────────────────────────────
-function buildCategoryTabs(containerId, gridId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = "";
-  const all = document.createElement("button");
-  all.className   = "cat-tab active";
-  all.textContent = "Todas";
-  all.onclick     = () => filterWeapons(null, gridId, containerId);
-  container.appendChild(all);
-  CATEGORIES.forEach(cat => {
-    const btn    = document.createElement("button");
-    btn.className = "cat-tab";
-    btn.textContent = cat;
-    btn.onclick   = () => filterWeapons(cat, gridId, containerId);
-    container.appendChild(btn);
-  });
-}
+function renderSummary(prefix, selectedWeapons, arrowQty, showMaterials = true) {
+  const listEl     = document.getElementById(`${prefix}SelectedList`);
+  const matSection = document.getElementById(`${prefix}MaterialsSection`);
+  const matGrid    = document.getElementById(`${prefix}MaterialGrid`);
+  const entries    = Object.entries(selectedWeapons);
+  const hasArrows  = arrowQty > 0;
+  const hasItems   = entries.length > 0 || hasArrows;
 
-function filterWeapons(cat, gridId, tabsId) {
-  document.querySelectorAll(`#${tabsId} .cat-tab`).forEach(b => b.classList.remove("active"));
-  const activeBtn = cat
-    ? [...document.querySelectorAll(`#${tabsId} .cat-tab`)].find(b => b.textContent === cat)
-    : document.querySelector(`#${tabsId} .cat-tab`);
-  if (activeBtn) activeBtn.classList.add("active");
-  buildWeaponGrid(gridId, cat);
-}
-
-function buildWeaponGrid(containerId, filterCat = null, prefix = "", onSelect = null) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = "";
-  const weapons = filterCat ? WEAPON_DATA.filter(w => w.category === filterCat) : WEAPON_DATA;
-  weapons.forEach(w => {
-    const imgSrc   = `image/${w.name}.png`;
-    const imgId    = `${prefix}img-${sanitizeId(w.name)}`;
-    const safeName = w.name.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-    const card     = document.createElement("div");
-    card.className = "weapon-card";
-    card.innerHTML = `
-      <div class="weapon-img-wrap" onclick="openWeaponPreview('${safeName}','${imgSrc}','${w.icon}')">
-        <img id="${imgId}" src="${imgSrc}" alt="${w.name}"
-          onerror="this.style.display='none';document.getElementById('${imgId}-fb').style.display='flex';">
-        <div id="${imgId}-fb" class="weapon-img-fallback" style="display:none">${w.icon}</div>
-      </div>
-      <div class="weapon-info">
-        <span class="weapon-name">${w.name}</span>
-        <span class="weapon-cat">${w.category}</span>
-        <span class="weapon-price">${formatCurrency(w.price)}</span>
+  if (!hasItems) {
+    listEl.innerHTML = `
+      <div class="empty-state">
+        Nenhum item selecionado.<br/>Clique nas armas para adicionar.
       </div>`;
-    if (onSelect) {
-      const btn    = document.createElement("button");
-      btn.className = "btn-select-weapon";
-      btn.textContent = "Selecionar";
-      btn.onclick  = () => onSelect(w);
-      card.appendChild(btn);
-    }
-    container.appendChild(card);
+    if (matSection) matSection.style.display = "none";
+    document.getElementById(`${prefix}TotalValue`).textContent = "R$ 0,00";
+    document.getElementById(`${prefix}ItemCount`).textContent  = "0 itens selecionados";
+    return;
+  }
+
+  let total = 0, count = 0, html = "";
+
+  entries.forEach(([name, qty]) => {
+    const w = WEAPON_DATA.find(x => x.name === name);
+    if (!w) return;
+    const sub = w.price * qty;
+    total += sub; count += qty;
+    html += `
+      <div class="selected-item-row">
+        <span class="item-name">${w.icon} ${name} ×${qty}</span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <span class="item-price">${formatCurrency(sub)}</span>
+          <button class="remove-btn" onclick="${prefix}RemoveItem('${name.replace(/'/g, "\\'")}')">✕</button>
+        </span>
+      </div>`;
   });
+
+  if (hasArrows) {
+    const sets = Math.ceil(arrowQty / 100);
+    const cost = sets * 10000;
+    total += cost; count += arrowQty;
+    html += `
+      <div class="selected-item-row">
+        <span class="item-name">🏹 Flechas ×${arrowQty}</span>
+        <span class="item-price">${formatCurrency(cost)}</span>
+      </div>`;
+  }
+
+  listEl.innerHTML = html;
+
+  if (matSection) {
+    if (showMaterials) {
+      const mats = calculateMaterials(entries, arrowQty);
+      matSection.style.display = "block";
+      if (matGrid) {
+        matGrid.innerHTML = Object.entries(mats)
+          .sort((a, b) => b[1] - a[1])
+          .map(([mat, qty]) => `
+            <div class="material-item">
+              <span class="mat-name">${mat}</span>
+              <span class="mat-qty">${qty}x</span>
+            </div>`).join("");
+      }
+    } else {
+      matSection.style.display = "none";
+    }
+  }
+
+  document.getElementById(`${prefix}TotalValue`).textContent = formatCurrency(total);
+  document.getElementById(`${prefix}ItemCount`).textContent  =
+    `${entries.length + (hasArrows ? 1 : 0)} tipo(s) — ${count} unidade(s)`;
 }
 
-// ── Preview de Arma ───────────────────────────────────────────
-function openWeaponPreview(name, imgSrc, icon) {
-  const modal = document.getElementById("modal-weapon-preview");
-  if (!modal) return;
-  document.getElementById("preview-title").textContent  = name;
-  const img = document.getElementById("preview-img");
-  img.src = imgSrc;
-  img.onerror = () => {
-    img.style.display = "none";
-    document.getElementById("preview-fallback").textContent = icon;
-  };
-  img.style.display = "block";
-  document.getElementById("preview-fallback").textContent = "";
-  modal.style.display = "flex";
-}
-function closeWeaponPreview() {
-  const m = document.getElementById("modal-weapon-preview");
-  if (m) m.style.display = "none";
+function buildWeaponGrid(prefix, selectedWeapons, activeCategory, searchVal) {
+  const grid = document.getElementById(`${prefix}WeaponsGrid`);
+  const list = WEAPON_DATA.filter(w => {
+    const matchCat    = activeCategory === "Todos" || w.category === activeCategory;
+    const matchSearch = w.name.toLowerCase().includes(searchVal.toLowerCase());
+    return matchCat && matchSearch;
+  });
+
+  if (!list.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:30px;">Nenhuma arma encontrada.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(w => {
+    const qty         = selectedWeapons[w.name] || 0;
+    const isEnchanted = w.category.toLowerCase().includes("encantad");
+    const imgSrc      = `image/${w.name}.png`;
+    const imgId       = `${prefix}img-${sanitizeId(w.name)}`;
+    const safeName    = w.name.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+
+    return `
+      <div class="weapon-card ${qty > 0 ? "selected" : ""}" id="${prefix}card-${sanitizeId(w.name)}">
+        ${isEnchanted ? '<div class="enchanted-badge"></div>' : ""}
+        <div class="weapon-img-wrap"
+          onclick="openWeaponPreview('${safeName}', '${imgSrc}', '${w.icon}')"
+          title="Clique para ampliar">
+          <img
+            id="${imgId}"
+            src="${imgSrc}"
+            alt="${w.name}"
+            class="weapon-img"
+            onerror="this.style.display='none';document.getElementById('${imgId}-fallback').style.display='flex';"
+          />
+          <div id="${imgId}-fallback" class="weapon-img-fallback" style="display:none;">${w.icon}</div>
+        </div>
+        <div class="name">${w.name}</div>
+        <div class="category-tag">${w.category}</div>
+        <div class="price-tag">${formatCurrency(w.price)}</div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="${prefix}ChangeQty('${safeName}', -1, event)">−</button>
+          <span class="qty-display">${qty}</span>
+          <button class="qty-btn" onclick="${prefix}ChangeQty('${safeName}', 1, event)">+</button>
+        </div>
+      </div>`;
+  }).join("");
 }
 
-window._appLoaded = true;
+function buildCategoryTabs(prefix, activeCategory) {
+  const container = document.getElementById(`${prefix}CategoryTabs`);
+  const all = ["Todos", ...CATEGORIES];
+  container.innerHTML = all.map(cat => `
+    <button class="tab-btn ${cat === activeCategory ? "active" : ""}"
+      onclick="${prefix}SetCategory('${cat.replace(/'/g,"\\'")}')">
+      ${cat}
+    </button>`).join("");
+}

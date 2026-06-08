@@ -48,8 +48,8 @@ const THEMES = [
   {
     id:   "ice",
     name: "Gelo Eterno",
-    desc: "Dashboard clean",
-    dots: ["#2299cc","#55bbee","#117755"],
+    desc: "Azul gélido",
+    dots: ["#2299cc","#55bbee","#55eebb"],
     cls:  "theme-opt-ice"
   }
 ];
@@ -508,6 +508,7 @@ async function clearAllLogs() {
 // SETTINGS
 // ========================
 async function loadAdminSettings() {
+  // Token
   try {
     const snap = await firebaseGet(
       firebaseRef(firebaseDB, "config/registerToken")
@@ -522,6 +523,7 @@ async function loadAdminSettings() {
     console.error(e);
   }
 
+  // Tema atual
   try {
     const snap = await firebaseGet(firebaseRef(firebaseDB, "config/theme"));
     const currentTheme = snap.exists() ? snap.val() : "arcana";
