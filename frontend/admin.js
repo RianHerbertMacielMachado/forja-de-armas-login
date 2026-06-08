@@ -566,23 +566,11 @@ async function applyTheme(themeId) {
     renderThemeSelector(themeId);
     await addLog("edit", `Admin alterou o tema do site para "${themeId}".`);
     showNotif("🎨 Tema aplicado com sucesso!", "#059669");
-    
-    // Força re-renderização para aplicar novos layouts
-    setTimeout(() => {
-      if (typeof clientInit === 'function' && document.getElementById('screen-client').style.display !== 'none') {
-        clientInit();
-      }
-      if (typeof smithInit === 'function' && document.getElementById('screen-smith').style.display !== 'none') {
-        smithInit();
-      }
-    }, 100);
-    
   } catch (e) {
     console.error(e);
     showNotif("❌ Erro ao salvar tema.", "#f87171");
   }
 }
-
 
 async function adminRotateToken() {
   if (!confirm("Gerar um novo token de cadastro? O token atual será invalidado.")) return;
